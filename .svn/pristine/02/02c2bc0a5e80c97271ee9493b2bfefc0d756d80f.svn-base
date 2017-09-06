@@ -1,0 +1,58 @@
+qyApp.controller("rechargeRecordController", function($scope, $http, Upload, $compile, $route, $state, $stateParams) {
+	/*编辑分类商品*/
+	$scope.setClassifyPro=function(){
+		$state.go("addClassifyPro",{
+			uiParams:''
+		})
+	}
+	
+	
+	
+	
+			//上传work
+	$scope.uploadWork=function(files,type){
+		if(files){
+			var fileUrl = JSON.parse(keyParams).orgId + "/work/"
+			jsonObject = "{\"fileUrl\":\"" + fileUrl + "\"}";
+			if(files && files.length) {
+				$scope.files = files;
+				for(var i = 0; i < files.length; i++) {
+					Upload.upload({
+						//服务端接收
+						url: pos + 'contract/uploadWork',
+						//上传的同时带的参数
+						data: {
+							keyParams: getKeyParams(jsonObject, keyParams),
+							jsonObject: getJsonObject(jsonObject)
+						},
+						file: files[i]
+					}).success(function(data, status, headers, config) {
+						//上传成功
+						if(data.code == "1") {
+							if(type=='1'){
+								$scope.fileName1=data.data.workName;
+								$scope.fileUrl1=data.data.workPath;
+							}else if(type=='2'){
+								$scope.fileName2=data.data.workName;
+								$scope.fileUrl2=data.data.workPath;
+							}else if(type=='3'){
+								$scope.fileName3=data.data.workName;
+								$scope.fileUrl3=data.data.workPath;
+							}else{
+								$scope.fileName4=data.data.workName;
+								$scope.fileUrl4=data.data.workPath;
+							}
+						} else {
+							alertmsg("上传Work失败", "error");
+						}
+					}).error(function(data, status, headers, config) {
+						//上传失败
+						console.log('error status: ' + status);
+					});
+				}
+			}
+		}
+		
+	}
+
+})

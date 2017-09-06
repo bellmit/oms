@@ -1,0 +1,473 @@
+qyApp.controller('memberController', ['$scope', '$http', '$compile','Upload',function($scope, $http, $compile,Upload) {
+	var userInfo=eval('(' +localStorage.userInfo+ ')');
+	var orgId = JSON.parse(keyParams).orgId;
+	$scope.size="0";
+    $scope.member = {
+        headpicpath: '',
+        memberNo: '',
+        memberId:'',
+        name: '',
+        sex: 'M',
+        gradeId: '',
+        telphone: '',
+        province: '',
+        city: '',
+        district: '',
+        address: '',
+        birthday: '',
+        salesId: '',
+        brandId: '',
+        orgId: '',
+        discount:'0',
+    };
+    $scope.memberQuery = {
+    		orgId: '',
+            memberNo: '',
+            telphone: '',
+            nub:'0',
+            size:'5'
+        };
+    $scope.memberGrade = {
+        orgId: '',
+        gradeId: '',
+        brandId: '',
+        discount: '0',
+        gradeName:'',
+        level:''
+    }
+    function init(user){
+    	$scope.memberGrade.orgId=user.orgId;
+    	$scope.memberQuery.orgId=user.orgId;
+    	$scope.member.orgId=user.orgId;
+    }
+    init(userInfo);
+    $scope.grade;
+    $scope.province;
+    $scope.city;
+    $scope.district;
+    //请求省文件
+    $http.get('/page/static/base/json/province.json').success(function(data)
+	{
+	  $scope.provinces = data;
+	})
+
+	//请求市文件
+	$http.get('/page/static/base/json/city.json').success(function(data)
+			{
+		$scope.citys = data;
+			})
+	//请求区文件
+    $http.get('/page/static/base/json/district.json').success(function(data)
+	{
+	  $scope.districts = data;
+	})
+    
+    $scope.reset=function(){
+    	$scope.memberGrade.level='';
+    	$scope.memberGrade.gradeId='';
+    	$scope.memberGrade.brandId='';
+    	$scope.memberGrade.discount='0';
+    	$scope.memberGrade.gradeName='';
+    }
+    function resetMember(){
+    	$scope.member.headpicpath=''; 
+        $scope.member.memberNo='';
+        $scope.member.memberId='';
+        $scope.member.name='';
+        $scope.member.sex='M';
+        $scope.member.gradeId='';
+        $scope.member.telphone='';
+        $scope.member.province='';
+        $scope.member.city='';
+        $scope.member.district='';
+        $scope.member.address='';
+        $scope.member.birthday='';
+        $scope.member.salesId='';
+        $scope.member.brandId='';
+        $scope.member.discount='0';
+    }
+    $scope.getMemberGrade = function() {
+        var jsonObject = JSON.stringify($scope.memberGrade);
+        $http(
+        {
+            method: 'post',
+            url: pos
+            + 'membergrade/getMemberGrades',
+            params: {
+                keyParams: getKeyParams(
+                jsonObject, keyParams),
+                jsonObject: getJsonObject(jsonObject)
+
+            }
+
+        }).success(function(data, stauts, headers,config) {
+        	if(data.code=="1"){
+        		$scope.gradeTypes = data.data.memberGradeList;
+        	}else{
+        		alertmsg(data.msg,"error")
+        	}
+        })
+
+    }
+    $scope.getMemberGrade();
+    // 取消
+    $scope.cancel_btn = function(obj) {
+        var index = obj.$index;
+        $('#gradeId' + obj.grade.gradeId).val(
+        $scope.gradeTypes[index].gradeName);
+        $('#gradeLevel' + obj.grade.gradeId).val(
+        $scope.gradeTypes[index].level);
+    }
+    //导购员
+    $scope.getGui=function(){
+    	var jsonObject = "{\"orgId\":\""+$scope.member.orgId+"\"}";
+        $http(
+        {
+            method: 'post',
+            url: cas
+            + 'user/findGuideByOrgId',
+            params: {
+                keyParams: getKeyParams(
+                jsonObject, keyParams),
+                jsonObject: getJsonObject(jsonObject)
+            }
+
+        })
+        .success(
+        function(data, stauts, headers, 
+        config) {
+        	if(data.code=="1"){
+        		$scope.guides = data.data.guideList;
+        	}else{
+        		alertmsg(data.msg,"error")
+        	}
+        })
+    }
+    $scope.getGui();
+    $scope.uploadHeadpicPath = function(files) { 
+	    if (files && files.length) {
+   	     $scope.files = files;
+   	     var imageUrl = $scope.member.orgId+"/headpic/";
+	     jsonObject = "{\"imageUrl\":\""+imageUrl+"\"}";
+   	       for (var i = 0; i < files.length; i++) {		       
+   	         Upload.upload({
+   	           //服务端接收
+   	        	 url: pos+'imageUpload/addMemberImage',
+   	           //上传的同时带的参数
+   	             data:{ keyParams:getKeyParams(jsonObject,keyParams),
+	            	 jsonObject:getJsonObject(jsonObject) } ,
+   	        	 file: files[i]
+	   	       }).success(function (data, status, headers, config) {
+		   	        if(data.code=="1"){
+		   	        	//上传成功
+		   	           $scope.member.headpicpath = data.data.imagesPath;
+		   	           $("#headpicpath").attr("src", $scope.member.headpicpath);
+		        	}else{
+		        		alertmsg(data.msg)
+		        	}
+	   	       }).error(function (data, status, headers, config) {
+	   	           //上传失败
+	   	           console.log('error status: ' + status);
+	   	       });		        		        
+   	       }
+   	       
+   	     }
+   	}
+    //会员重复校验
+    $scope.memberNoWarn=false;
+    $scope.checkMember=function(){
+    	if(undefined!=$scope.member.memberNo&&""!=$scope.member.memberNo){
+    		var jsonObject="{\"memberNo\":\""+$scope.member.memberNo+"\",\"orgId\":\""+$scope.member.orgId+"\"}";
+    		$http(
+		        {
+		            method: 'post',
+		            url: pos + 'member/getMemberById',
+		            params: {
+		                keyParams: getKeyParams(
+		                jsonObject, keyParams),
+		                jsonObject: getJsonObject(jsonObject)
+		            }
+		        })
+		        .success(
+		        function(data, stauts, headers, config) {
+		        	if(data.code=="1"){
+			            if(data.data.member != undefined){
+			            	$scope.memberNoWarn=true;
+			            }else{
+			            	$scope.memberNoWarn=false;
+			            }
+		        	}else{
+		        		$scope.member.memberNo="";
+		        		alertmsg(data.msg,"error")
+		        	}
+		        })
+    	}
+    }
+    // 添加会员
+    $scope.addMember = function() {
+    	if($scope.memberNoWarn){
+    		alertmsg("该会员号已存在",'error');
+    		return;
+    	}
+    	if(validateForm("memberForm","msg")==true){
+	    	$scope.member.birthday=$("#birthday").val();
+	    	if($scope.province!=undefined){
+	    		$scope.member.province=$scope.province.name;
+	    	}
+	    	if($scope.city!=undefined){
+	    		$scope.member.city= $scope.city.name;
+	    	}
+	    	if($scope.district!=undefined){
+	    		$scope.member.district=$scope.district.name;
+	    	}
+	    	if($scope.grade!=undefined){
+		    	$scope.member.gradeId=$scope.grade.gradeId.toString();;
+		    	$scope.member.discount=$scope.grade.discount;
+	    	}
+	    	$scope.member.headpicpath = $('#headpicpath').attr('src');
+	    	$scope.member.totalpoints = "0";
+	        var jsonObject = JSON.stringify($scope.member);
+	        $http(
+	        {
+	            method: 'post',
+	            url: pos + 'member/addMember',
+	            params: {
+	                keyParams: getKeyParams(
+	                jsonObject, keyParams),
+	                jsonObject: getJsonObject(jsonObject)
+	            }
+	        })
+	        .success(
+	        function(data, stauts, headers, 
+	        config) {
+	        	if(data.code=="1"){
+	        		alertmsg(data.msg);
+		            //window.location.href='#/member';
+		            $scope.numA=0;
+		            $scope.queryMember();
+		            
+		            $scope.member.memberNo='';
+		            $scope.member.name='';
+		            $scope.member.sex='M';
+		            $scope.member.telphone='';
+		            $scope.member.address='';
+		            $scope.grade ='';
+		            $scope. member.salesId='';
+		            $scope.province='';
+		            $scope.city='';
+		            $scope.district='';
+		            $('#birthday').val("");
+		            $('#headpicpath').attr("src", "page/../../static/base/images/large.png");
+	        	}else{
+	        		alertmsg(data.msg,"error")
+	        	}
+	        })
+    	}
+        else{
+        	alertmsg(validateForm("memberForm","msg"),'error');
+        }
+    }
+    $scope.queryMember=function(){
+    	$scope.memberQuery.nub="0";
+    	var jsonObject = JSON.stringify($scope.memberQuery);
+        $http(
+        {
+            method: 'post',
+            url: pos + 'member/getOMSMembers',
+            params: {
+                keyParams: getKeyParams(
+                jsonObject, keyParams),
+                jsonObject: getJsonObject(jsonObject)
+            }
+        }).success(function(data, stauts, headers,config) {
+        	if(data.code=="1"){
+        		$scope.members=data.data.memberList;
+                if(undefined!==$scope.members&&$scope.members.length>0){
+                	$scope.size=parseInt($scope.members[0].count);
+                	if($scope.size>=$scope.memberQuery.size){
+                		$scope.createPagePlugin($scope.size,$scope.memberQuery.size);
+                	}else{
+                		$scope.createPagePlugin("0",$scope.memberQuery.size);
+                	}
+                }else{
+                	$scope.size="0";
+                	$scope.createPagePlugin("0",$scope.memberQuery.size);
+                }
+        	}else{
+        		alertmsg(data.msg,"error")
+        	}
+        })
+    }
+    //查看会员详情
+    $scope.getMemberDetail=function(obj){
+    	var oldMemberId = $("#oldMemberId").val();
+		 $(".detPanel-info").remove();
+    	$scope.memberId = obj.member.memberId;
+    	if(oldMemberId!=$scope.memberId){
+    	var addLineMember=[];
+    	addLineMember.push('<tr class="detPanel-info" style="display: table-row;">');
+    	addLineMember.push('<td class="detailTd" colspan="9">');
+    	addLineMember.push('<table class="table inventDetail mgb0">');
+    	addLineMember.push('<tr><th scope="col">卡类型</th><th scope="col">折扣</th><th scope="col">积分</th><th scope="col">发卡店铺</th><th scope="col">登记日期</th></tr>');
+    	addLineMember.push('<tr ng-repeat="member in members" ng-if="member.memberId == memberId"><td>{{member.gradeName}}<input type="hidden" id="oldMemberId" value="{{member.memberId}}"></td><td>{{member.discount}}</td><td>{{member.totalpoints}}</td><td>{{member.orgName}}</td><td>{{member.rigisterDate}}</td></tr>');
+    	addLineMember.push('</table></td></tr>');
+	   	 var html=addLineMember.join("");
+	        var template=angular.element(html);
+	        var newHtml=$compile(template)($scope);
+	        angular.element($('#member'+$scope.memberId).after(newHtml));
+    	}
+    }
+    
+    $scope.createPagePlugin=function(total,pageSize){
+	 	  $("#paging").empty();
+	      paging = pagePlugin.createPaging({
+			    renderTo : 'paging',
+			    total:total,
+			    pageSize:pageSize
+		  });
+	      paging.goPage = function(from,to){
+		      $scope.page(from-1,pageSize);
+		  }			    	
+	};
+	
+	$scope.page=function(from,pageSize){
+		$scope.memberQuery.nub=from.toString();
+		$scope.memberQuery.size=pageSize;
+		 var jsonObject=JSON.stringify($scope.memberQuery);
+		 $http({
+			 method: 'post',
+	         url: pos + 'member/getOMSMembers',
+	         params:{
+	             keyParams:getKeyParams(jsonObject,keyParams),
+	             jsonObject:getJsonObject(jsonObject)
+	         }
+	     }).success(function(data,stauts,headers,config){
+	    	 if(data.code=="1"){
+	    		 $scope.members=data.data.memberList;
+    		}else{
+    			alertmsg(data.msg,"error")
+    		}
+	     })
+	 }
+	
+    $scope.delMember_btn=function(obj){
+    	$scope.memberDel = {};
+    	$scope.memberDel.memberId=obj.member.memberId;
+    	$scope.memberDel.orgId=obj.member.orgId;
+    }
+    $scope.cancelDelMember_btn=function(){
+    	resetMember();
+    }
+    $scope.delMember=function(){
+    	var jsonObject = JSON.stringify($scope.memberDel);
+    	$http(
+		{
+			method:"post",
+			url:pos+"member/deleteMember",
+			params:{
+				keyParams: getKeyParams(
+		                jsonObject, keyParams),
+		                jsonObject: getJsonObject(jsonObject)
+			}
+		}	
+    	).success(function(data,status,header,config){
+    		alertmsg(data.msg);
+    		$scope.queryMember();
+    	})
+    }
+    //开始编辑
+    $scope.toupdateMember=function(obj){
+    	//localStorage.memberInfo=JSON.stringify(obj.member);
+    	//window.location.href="#/memberedit";
+    	$scope.numB=1;
+    	$scope.memberEdit=obj.member;
+    	 //请求省文件
+        $scope.initprovinces=function(){
+	        	for(var i=0;i<$scope.provinces.length;i++){
+		  			if($scope.provinces[i].name==$scope.memberEdit.province){
+		  				$scope.provinceId=$scope.provinces[i].id;
+		  			}
+		  		}
+        }
+        $http.get('/page/static/base/json/province.json').success(function(data)
+    	{
+    	  $scope.provinces = data;
+    	  $scope.initprovinces();
+    	})
+    	//请求市文件
+        $scope.initcitys=function(){
+        	if(""!=$scope.provinceId){
+	        	for(var i=0;i<$scope.citys[$scope.provinceId].length;i++){
+	    			if($scope.citys[$scope.provinceId][i].name==$scope.memberEdit.city){
+	    				$scope.cityId=$scope.citys[$scope.provinceId][i].id;
+	    			}
+	    		}
+        	}
+        }
+    	$http.get('/page/static/base/json/city.json').success(function(data)
+    	{
+    		$scope.citys = data;
+    		$scope.initcitys();
+    	})
+        
+    	//请求区文件
+        $http.get('/page/static/base/json/district.json').success(function(data)
+    	{
+        	$scope.districts = data;
+    	})
+    	
+    }
+    
+    $scope.toaddMember=function(){
+    	$scope.numA=1;
+    }
+    
+    //保存
+    $scope.updateMember = function (obj) {
+    	if(validateForm("updatememberForm","msg")==true){
+    		delete obj.memberEdit.rigisterDate;
+    		obj.memberEdit.birthday=$('#updatebirthday').val();
+            var jsonObject = JSON.stringify(obj.memberEdit);
+            $http({
+                method: "post",
+                url: pos + "member/updateMember",
+                params: {
+                    keyParams: getKeyParams(jsonObject, keyParams),
+                    jsonObject: getJsonObject(jsonObject)
+                }
+            }).success(function (data, status, header, config) {0
+            	if(data.code=="1"){
+            		alertmsg("修改成功");
+	            	//window.location.href='#/member';
+            		$scope.numB=0;
+            		$scope.queryMember();
+            		$scope.memberEdit="";
+            		$scope.member="";
+            	}else{
+            		alertmsg(data.msg,"error")
+            	}
+            })
+        }else{
+        	alertmsg(validateForm("updatememberForm","msg"),'error');
+        }
+    }
+    $scope.returnMember=function(){
+    	$scope.numA=0;
+    	$scope.numB=0;
+        
+        $scope.member.memberNo='';
+        $scope.member.name='';
+        $scope.member.sex='M';
+        $scope.member.telphone='';
+        $scope.member.address='';
+        $scope.grade ='';
+        $scope. member.salesId='';
+        $scope.province='';
+        $scope.city='';
+        $scope.district='';
+        $('#birthday').val("");
+        $('#headpicpath').attr("src", "page/../../static/base/images/large.png");
+
+    	$scope.memberEdit="";
+    }
+}]);

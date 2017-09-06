@@ -1,0 +1,122 @@
+<%@ page contentType="text/html; charset=utf-8" language="java" import="java.util.*" errorPage="" %>
+<!--------------- Content start ----------------->
+<div class="content-wrapper content-wrapper-order fn-clear" >
+    <div class="col-md-11 pageTitl removeBottom">
+    	<div class="unionBrief ">
+        <h2 class="am-ft-16 ">{{cloudName}}</h2>
+        <p>
+        	<span class="descriColor1">品牌：</span><span class="descriColor2">{{brandName}}&nbsp;&nbsp;</span>
+        	<span class="descriColor1">创建者：</span><span class="descriColor2">{{shopName}}&nbsp;&nbsp;</span>
+        	<span class="descriColor1">状态：</span><span class="descriColor2">{{createOrJoin}}</span>        	
+        </p>
+        </div>
+        <button type="button" style="
+    margin-top: 30px;" class="unionBriefReturn" ng-click="gobackA()">返回</button>
+    </div>
+    <div class="fn-clear"></div>
+    <!-- search -->
+    <div class="col-md-11 codeSelect">
+    	<span>所有商品（共{{countd}}条记录）</span>
+    	<div class="codeSelectRight">
+    	  <input type="text" placeholder="款号查询" ng-model="proModelNum"/>
+    	  <button class="codeSelectBtn" ng-click="searchPro(1)">查询</button>
+    	  <button class="tidySelectBtn" ng-click="showFilterAdition()">精简筛选条件</button>
+    	</div>
+    </div>
+     <div class="col-md-11 tidySelect" ng-show="defaultObj.moreFiltAdition=='show'">
+     	<div class="tidySelectRow1">
+     	  <div>
+     	     <span>年份：</span>
+     	     <select class="selectYear" ng-model="proYear">
+     		     <option value="">请选择</option>
+     		     <option ng-repeat="year in queryYears" ng-value="year.proYear">{{year.proYear}}</option>
+     	      </select> 
+     	  </div>
+     	  <div>
+     	     <span>季节：</span>
+     	     <select class="selectSeason" ng-model="proSeason">
+     		    <option value="">请选择</option>
+     		    <option ng-repeat="season in seasons" ng-value="season.proSeason">{{season.proSeason}}</option>
+     	     </select>
+     	   </div> 
+       </div> 
+       <div class="tidySelectRow2">
+       	   <div>
+     	      <span>大品类：</span>
+     	      <select class="selectBig" ng-model="proGrandparentSortId" ng-click="getParentSort()">
+     		    <option value="">请选择</option>
+     		    <option ng-repeat="bigSort in grandparentSorts" ng-value="bigSort.proGrandparentSortId">{{bigSort.grandparentSortName}}</option>
+     	      </select>
+     	   </div>
+     	   <div> 
+           	  <span>中品类：</span>
+     	      <select class="selectMid"  ng-model="proParentSortId" ng-click="getSort()" >
+     		     <option value="">请选择</option>
+     		     <option ng-repeat="midSort in parentSorts" ng-value="midSort.proParentSortId">{{midSort.parentSortName}}</option>
+     	      </select>
+     	   </div>
+     	   <div>
+     	       <span>小品类：</span>
+     	       <select class="selectSmall" ng-model="proSortId">
+     		      <option value="">请选择</option>
+     		      <option ng-repeat="smallSort in sorts" ng-value="smallSort.proSortId">{{smallSort.sortName}}</option>
+     	        </select>
+     	   </div>
+     	      <button class="tidySelectButton" ng-click="searchPro(2)">查询</button>
+       </div>       
+    </div>
+    <!-- /search -->
+
+    <!-- Main content -->
+    <div class="ManColTable col-lg-12 offsetPadding">
+        <form>
+            <div class="PrivTable ordersTable o2o-ordersTable">
+                <table class="table table-hover table-striped unoinListTable">
+                    <tr>
+                        <th scope="col" colspan="2" style="width: 36%;">商品</th>
+                        <th scope="col" style="width: 13%;">吊牌价</th>
+                        <th scope="col" style="width: 10%;">参与成员</th>
+                        <th scope="col" style="width: 15%;">我的020结算价</th>
+                        <th scope="col" style="width: 10%;">我的云仓总库存</th>
+                        <th scope="col" >操作</th>
+                    </tr>
+                    <tr ng-repeat="unionPro in stockList">
+                    	<td colspan="2">
+                    		<div class="goodsDesc">
+                    			<div class="goodsImg"><img ng-src="{{unionPro.proPic}}"/></div>
+                    			<div class="goodsDetil">
+                    				<p>{{unionPro.proName}}</p>
+                    				<p>款号：{{unionPro.proModelnum}}</p>
+                    				<p>{{unionPro.brandName}} &nbsp;{{unionPro.grandparentSortName}}/{{unionPro.parentSortName}}/{{unionPro.sortName}} &nbsp;
+                    					{{unionPro.proYear}}年&nbsp;{{unionPro.proSeason}}</p>
+                    			</div>
+                    		</div>
+                    	</td>
+                    	<td>{{unionPro.proPrice}}元</td>
+                    	<td>{{unionPro.attendedShopNum}}个</td>
+                    	<td>
+                    		<p ng-if="unionPro.minPrice != unionPro.maxPrice">{{unionPro.minPrice |number:2}}元-{{unionPro.maxPrice |number:2}}元</p>
+                    		<p ng-if="unionPro.minPrice == unionPro.maxPrice">{{unionPro.minPrice |number:2}}元</p>
+                    		<img class="limitBtn" src="../static/base/images/icon_limit.png"/>
+                    	</td>
+                    	<td>{{unionPro.totalNum}}件</td>
+                    	<td><button class="viewDetil" ng-click="viewDetil(this)">查看详情</button></td>
+                    </tr>
+                    
+                </table>
+            </div>
+        </form>
+        <!-- 分页 -->
+      	<!--分页 start-->
+            <div class="pagelist priv-pagelist">
+                <div id="productListPage"></div>
+            </div>
+        <!--分页 end-->
+        <!-- /分页 -->
+        <div class="fn-clear"></div>
+    </div>
+
+    <!-- /Main content -->
+</div>
+<!--------------- Content end ----------------->
+

@@ -1,0 +1,22 @@
+qyApp.controller("categoryMgtController", function($scope, $http, Upload, $compile, $route, $state, $stateParams) {
+
+$scope.toAddStandard=function(type){
+		if(type=='1'){
+			$state.go("addCategory",{
+				uiParams:""
+		});
+		}else{
+			$state.go("editCategory",{
+				uiParams:""
+		});
+		}
+	}
+
+
+
+
+
+
+
+
+});

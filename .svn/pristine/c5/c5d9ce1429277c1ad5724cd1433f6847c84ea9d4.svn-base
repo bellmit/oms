@@ -1,0 +1,10 @@
+qyApp.controller('trainDetailsController', ['$scope', '$http', '$compile', '$state', '$stateParams', function($scope, $http, $compile, $state, $stateParams) {
+	$scope.queryLog=function(){
+		console.log("hah")
+		$state.go("artDesignerDetails", {
+			uiParams: ""
+		});
+	}
+
+	
+}]);

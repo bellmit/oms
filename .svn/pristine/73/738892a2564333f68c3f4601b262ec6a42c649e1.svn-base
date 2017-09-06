@@ -1,0 +1,48 @@
+qyApp.controller("saleSurveyController", function($scope, $http, Upload, $compile, $route, $state, $stateParams, $timeout) {
+	
+	/*竖向柱状图*/ 
+	var myChart1 = echarts.init(document.getElementById('charts1'));
+	var dataAxis = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+	var data = [10, 20, 11, 24, 20, 30, 10, 23, 42, 31, 40, 49];
+	var color='#A1DDFA';
+	var title1='2017年销售业绩';
+	var option1=barGraphVertical(dataAxis,data,color,title1);
+	myChart1.setOption(option1);
+	var myChart3 = echarts.init(document.getElementById('charts3'));
+	var dataAxis = ['杭州商务一部', '杭州商务二部', '杭州商务三部', '杭州商务四部', '杭州商务五部', '杭州商务六部', '杭州商务七部', '杭州商务八部', '杭州商务九部'];
+	var data = [10, 20, 11, 24, 20, 30, 10, 23, 42];
+	var color1=' #6FE7D0';
+	var title3='3月各部门销售业绩';
+	var option3=barGraphVertical(dataAxis,data,color1,title3);
+	myChart3.setOption(option3);
+	/*横向柱状图*/
+	var myChart2 = echarts.init(document.getElementById('charts2'));
+	 var builderJson = {
+				"all": '50000.00',
+				"charts": {
+				    "客服": '24365.00',
+				    "美工": '14365.00',
+				    "运营": '12165.00',
+				    "培训": '10043.00',
+				    "套餐": '7043.00'
+				}
+				};
+	var title2='3月产品销售业绩';
+	var option2=barGraphCross(builderJson,title2);
+	myChart2.setOption(option2);
+	var myChart4 = echarts.init(document.getElementById('charts4'));
+	 var builderJson = {
+				"all": '50000.00',
+				"charts": {
+				    "张三新签一部": '24365.00',
+				    "美工": '14365.00',
+				    "运营": '12165.00',
+				    "培训": '10043.00',
+				    "套餐": '7043.00'
+				}
+				};
+	var title4='3月产品销售业绩';
+	var option4=barGraphCross(builderJson,title4);
+	myChart4.setOption(option4);
+	
+});

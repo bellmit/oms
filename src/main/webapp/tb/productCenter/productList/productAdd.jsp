@@ -1,0 +1,296 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--------------- Content start ----------------->
+<div class="content-wrapper addProductContent-wrapper">
+	<div class="col-md-11 pageTitl">
+		<h2 class="am-ft-16 fn-left" ng-if="proModelid!=undefined">修改商品</h2>
+		<h2 class="am-ft-16 fn-left" ng-if="proModelid==undefined">添加商品</h2>
+		<a href="javascript:;" class="line-btn fn-right" ng-click="goback()" style="width:70px;">返回</a>
+	</div>
+	<div class="fn-clear"></div>
+	<form id="addproductForm">
+		<section class="container-fluid">
+			<div class="row">
+				<div class="prodet-nav prodet-content">
+					<div class="prodet-box">
+						<!----row1---->
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>商品品类：</div>
+							<div class="col-md-8 form-group" id="ProSorts">
+								<select class="col-md-3" ng-options="g.sortId as g.sortName for g in item0" ng-model="selectSortId0" ng-change="sortIdChange(selectSortId0,1)">
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>品类细分：</div>
+							<div class="col-md-8 form-group" id="ProSorts">
+								<select class="col-md-3 mgr5" ng-options="p.sortId as p.sortName for p in item1" ng-model="selectSortId1" ng-change="sortIdChange(selectSortId1,2)">
+								</select>
+								<select class="col-md-3" ng-show="item2.length != 0" ng-options="s.sortId as s.sortName for s in item2" ng-model="selectSortId2" ng-change="sortIdChange(selectSortId2,'3')">
+								</select>
+								<select class="col-md-3" ng-show="item3.length != 0" ng-options="x.sortId as x.sortName for x in item3" ng-model="selectSortId3">
+								</select>
+							</div>
+						</div>
+						<!----row2---->
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>所属品牌：</div>
+							<div class="col-md-2 form-group">
+								<select class="col-md-12" ng-options="m.brandId as m.brandName for m in queryBrands" ng-model="brandIds" ng-change="changeProName(itemsSort,itemsSelectSortId)">
+									<input type="hidden" name="brandId" value="{{brandIds}}" />
+								</select>
+							</div>
+							<a href="javascript:;" class="fn-block mgt10 col-sm-2" ng-click="addBrand()">+&nbsp;添加品牌</a>
+						</div>
+						<!----row3---->
+						<!-- <div class="row">
+                            <div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>商品名称：</div>
+                            <div class="col-md-8 form-group">
+                                <input type="text" class="col-md-8 text-overflow" name="proName" placeholder=""/>
+                            </div>
+                        </div> -->
+						<!----row4---->
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>商品款号：</div>
+							<div class="col-md-2 form-group">
+								<input type="text" class="text-overflow" name="proModelnum" placeholder="" ng-model="styleNumber" ng-blur="changeProName(itemsSort,itemsSelectSortId)" />
+							</div>
+							<div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>单位：</div>
+							<div class="col-md-2 form-group">
+								<input type="text" class="text-overflow" name="proUom" placeholder="" />
+							</div>
+						</div>
+						<!----row5---->
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>商品主图：</div>
+							<div class="col-md-8 mainPhoto">
+								<div class="photoBox">
+									<div class="photoBg">
+										<input type="file" name="files" ngf-select="uploadMain($files,'mainUrl')" value="" />
+										<img alt="" src="../static/base/images/icon_upload.png" id="mainUrl">
+									</div>
+								</div>
+								<p class="am-ft-red">(请上传700*700以上图片，小于3M)</p>
+							</div>
+						</div>
+						<!----row6---->
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14">商品属性：</div>
+							<div class="col-md-10 form-group pro-property">
+								<!--inner row1-->
+								<div class="row">
+									<div class="col-md-2 inprodet-titl am-ft-12">年份：</div>
+									<div class="col-md-4 form-group">
+										<select name="proYear" class="col-md-8" ng-model="proYear" ng-change="changeProName(itemsSort,itemsSelectSortId)">
+											<option value="{{year}}" ng-repeat="year in years">{{year}}</option>
+										</select>
+									</div>
+									<div class="col-md-2 inprodet-titl am-ft-12">季节：</div>
+									<div class="col-md-4 form-group">
+										<select name="proSeason" class="col-md-8" ng-model="proSeason" ng-change="changeProName(itemsSort,itemsSelectSortId)">
+											<option value="春">春</option>
+											<option value="夏">夏</option>
+											<option value="秋">秋</option>
+											<option value="冬">冬</option>
+											<option value="四季">四季</option>
+										</select>
+									</div>
+								</div>
+								<!--inner row2-->
+								<div class="row">
+									<div class="col-md-2 inprodet-titl am-ft-12">性别：</div>
+									<div class="col-md-4 form-group">
+										<select name="proSex" class="col-md-8" ng-model="proSex" ng-change="changeProName(itemsSort,itemsSelectSortId)">
+											<option value="F">男</option>
+											<option value="M">女</option>
+										</select>
+									</div>
+									<div class="col-md-2 inprodet-titl am-ft-12">波段：</div>
+									<div class="col-md-4 form-group">
+										<input type="text" class="col-md-8 text-overflow" name="proStage" placeholder="" />
+									</div>
+								</div>
+								<!--inner row3-->
+								<div class="row">
+									<div class="col-md-2 inprodet-titl am-ft-12">系列：</div>
+									<div class="col-md-4 form-group">
+										<input type="text" class="col-md-8 text-overflow" name="proSeries" placeholder="" ng-model="proSeries" ng-blur="changeProName(itemsSort,itemsSelectSortId)"/>
+									</div>
+									<div class="col-md-2 inprodet-titl am-ft-12">风格：</div>
+									<div class="col-md-4 form-group">
+										<input type="text" class="col-md-8 text-overflow" name="proStyle" placeholder="" ng-model="proStyle" ng-blur="changeProName(itemsSort,itemsSelectSortId)"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!----row6---->
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>吊牌价格：</div>
+							<div class="col-md-2 form-group needValInfo">
+								<input type="text" class="col-md-10 text-overflow" name="proPrice" placeholder="" value="" />&nbsp;元
+							</div>
+						</div>
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>商品名称：</div>
+							<div class="col-md-8 form-group">
+								<input type="text" class="col-md-8 text-overflow" name="proName" placeholder="" />
+							</div>
+						</div>
+						<!----row7商品规格---->
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>商品规格：</div>
+							<!----innerrow7-1 选择颜色---->
+							<div class="col-md-10 form-group pro-property">
+								<!--inner row1-->
+								<div class="col-md-8 am-ft-12 am-ft-left">
+									<span class="needValInfo fn-left">请选择本商品的所有颜色</span>
+									<a href="javascript:;" class="fn-block fn-left mgl10" ng-click="addColor()">+&nbsp;添加颜色</a>
+								</div>
+								<!--色系Tab-->
+								<div class="AddproTabnav col-md-10">
+									<div class="tab-item col-md-2" data-tab="" ng-repeat="system in itemsColorList" ng-click="getColBySys(this)" name="{{system.colorSystem}}">{{system.colorSystem}}</div>
+								</div>
+								<!--色系TabContent-->
+								<div class="AddproTabInfo col-md-12">
+									<div class="proSize-info">
+										<div class="row">
+											<div class="col-sm-2" ng-repeat="color in colors">
+												<input type="checkbox" ng-model="x" ng-checked="isSelected(color.colorId)" ng-click="chkColor(color.colorId,x,color.colorName,color.colorNum)" name="colorId" value="{{color.colorId}}" id="cl{{color.colorId}}" />
+												<label for="cl{{color.colorId}}">{{color.colorName}}</label>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="AddproTabInfo AddproTabInfo2 col-md-12">
+									<div class="proSize-info">
+										<!--选择所有尺寸-->
+										<div class="col-md-8 am-ft-left ProSizeTitl">
+											<span class="needValInfo mgl0 fn-left">请选择本商品的所有尺码</span>
+											<a href="javascript:;" class="fn-block fn-left mgl10" ng-click="addColor()">+&nbsp;添加尺码</a>
+										</div>
+										<div class="col-md-8 productSizeSlec">
+											<div class="fn-left am-ft-14">尺码组：</div>
+											<div class="col-md-4 form-group">
+												<select class="col-md-8" ng-options="c.groupId as c.groupName for c in itemsGroup" ng-model="selectedGroup" ng-change="groupIdChange()">
+													<input type="hidden" name="groupId" value="{{selectedGroup}}" />
+												</select>
+											</div>
+										</div>
+										<div class="col-md-12 ProSize mgb0">
+											<div class="proSize-info">
+												<div class="row">
+													<div class="col-md-2" ng-repeat="size in sizes">
+														<input type="checkbox" ng-model="s" ng-checked="isSelectedSize(size.sizeId)" ng-click="chkSize(size.sizeId,s,size.sizeName,size.sizeNum)" name="sizeId" value="{{size.sizeId}}" id="sz{{size.sizeId}}" />
+														<label for="sz{{size.sizeId}}">{{size.sizeName}}</label>
+													</div>
+												</div>
+											</div>
+
+										</div>
+										<div class="fn-clear"></div>
+									</div>
+
+								</div>
+
+								<!--/色系TabContent-->
+
+							</div>
+							<!----innerrow7-2 颜色尺寸联动---->
+							<div class="nowraps-text inprodet-titl">&nbsp;</div>
+							<div class="col-md-10 form-group table-responsive corlorSizeTable">
+								<table width="100%" class="table table-condensed">
+									<tr>
+										<th scope="col">颜色</th>
+										<th scope="col">尺寸</th>
+										<!--  <th scope="col">商品条形码</th> -->
+										<th scope="col">商品SKU编码</th>
+									</tr>
+									<tr ng-repeat="colors in ColorNumAndName">
+										<td>{{colors.colorName}}</td>
+										<td>
+											<div ng-repeat="sizes in SizeNumAndName" class="mgb10 color-size">{{sizes.sizeName}}
+												<input type="hidden" name="sizeName" value="{{sizes.sizeName}}" />
+											</div>
+										</td>
+										<!-- <td>
+		                                <div ng-repeat="sizes in SizeNumAndName" class="mgb10">
+		                                	<input id="{{colors.colorId+sizes.sizeId}}" name="proInterbc" type="text"/>
+		                                </div>
+	                                </td> -->
+										<td>
+											<div ng-repeat="sizes in SizeNumAndName" class="mgb10 color-size">
+												{{styleNumber}}{{colors.colorNum}}{{sizes.sizeNum}}
+												<input id="{{colors.colorId+sizes.sizeId+'1'}}" name="proInnerbc" type="hidden" value="{{styleNumber}}{{colors.colorNum}}{{sizes.sizeNum}}" />
+											</div>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="fn-clear"></div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<!-- /.row -->
+			<button type="button" class="btn btn-primary postProInfo" ng-click="saveProduct(this)" ng-if="proModelid==undefined">确认添加</button>
+			<button type="button" class="btn btn-primary postProInfo" ng-click="updateProduct(this)" ng-if="proModelid!=undefined">保存</button>
+		</section>
+	</form>
+	<div class="fn-clear"></div>
+</div>
+<div class="fn-clear"></div>
+<!--添加成功弹窗-->
+<div style="position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);z-index:99999" ng-show="addSuccessDialog">
+	<div class="am-dialog addProductSuccess" >
+		<img class="statImg" src="../static/base/images/icon_added.png" />
+		<div class="am-dialog-wrap">
+			<div class="am-dialog-header">
+				<h3>添加商品成功！</h3>
+			</div>
+			<div class="am-dialog-body">
+				<p class="am-dialog-brief">您还没有为该商品上传素材
+					<a href="javascript:;" class="mgl5" ng-click="uploadMateria()">立即上传素材</a>
+				</p>
+				<p class="am-dialog-brief">
+					<a href="javascript:;" class="line-btn fn-left mgr20" ng-click="lookThisDetail()">查看商品</a>
+					<a href="javascript:;" class="line-btn fn-left" ng-click="continueToAdd()">继续添加商品</a>
+					<em class="fn-clear"></em>
+				</p>
+				<p class="mgt25 am-dialog-brief">
+					<a href="javascript:;" class="am-ft-gray" ng-click="gobackToProList()">返回商品列表</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+<!--/添加成功弹窗-->
+<script type="text/javascript">
+	$('.addProductSuccess').center();
+	function addBrand() {
+		var location = window.location.href;
+		var newlocation = location.substr(0, location.indexOf('tb/'));
+		localStorage.menuId = "351";
+		localStorage.menuName = "品牌管理";
+		window.location.href = newlocation + "tb/public/home.jsp#/brandMgt";
+		secNode(351, 0);
+	}
+
+	function addColor() {
+		var location = window.location.href;
+		var newlocation = location.substr(0, location.indexOf('tb/'));
+		localStorage.menuId = "350";
+		localStorage.menuName = "颜色管理";
+		window.location.href = newlocation + "tb/public/home.jsp#/color";
+		secNode(350, 0);
+	}
+
+	function addSize() {
+		var location = window.location.href;
+		var newlocation = location.substr(0, location.indexOf('tb/'));
+		localStorage.menuId = "349";
+		localStorage.menuName = "尺码管理";
+		window.location.href = newlocation + "tb/public/home.jsp#/size";
+		secNode(349, '尺码管理');
+	}
+</script>

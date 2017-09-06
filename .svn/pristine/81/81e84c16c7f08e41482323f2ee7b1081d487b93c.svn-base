@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+    <meta charset="UTF-8">
+    <title>尺码管理</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <link rel="short icon" href="images/16icon.ico" />
+    <!-- Bootstrap 3.3.4 -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="css/reset.css" rel="stylesheet" type="text/css" />
+    <!-- Font Awesome Icons -->
+    <link href="css/fonts/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- Ionicons -->
+    <link href="css/fonts/ionicons.min.css" rel="stylesheet" type="text/css" />
+    <!-- Theme style -->
+    <link href="css/frambase.css" rel="stylesheet" type="text/css" />
+    <link href="css/skin-blue.min.css" rel="stylesheet" type="text/css" />
+    <!-- Necessary style -->
+    <link href="css/base.css" rel="stylesheet" type="text/css" />
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <!--angularJS-->
+    <script src="js/angular.js"></script>
+</head>
+<body class="skin-blue sidebar-mini" ng-app="manaSizeApp">
+
+<div class="wrapper" style="position: inherit;">
+<!-- Top start -->
+<header class="main-header">
+    <!-- Header Navbar start -->
+    <nav class="navbar navbar-static-top" role="navigation">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <i class="fa fa-bars"></i>
+        </a>
+        <!-- Logo start-->
+        <a href="#" class="logo">
+            <!-- mini logo  -->
+                <span class="logo-mini">
+                    <img src="images/logo-min.png" />
+                    <small class="am-ft-16">零售管理平台</small>
+                </span>
+            <!-- logo -->
+                <span class="logo-lg">
+                    <img src="images/logo-min.png" />
+                    <small class="am-ft-16">零售管理平台</small>
+                </span>
+        </a>
+        <!-- Logo end -->
+        <!-- Navbar Right Menu start -->
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <li class="loginTime">上次登录时间：2016-01-06</li>
+                <!-- User -->
+                <li class="user user-menu">
+                    <a href="javascript:;">zora-Tao</a>
+                </li>
+                <!-- messages Menu start -->
+                <li class="notifications-menu">
+                    <a href="javascript:;" class="messages-info">
+                        <i class="fa fa-bell-o"></i>
+                        <span class="badge">10</span>
+                    </a>
+                </li>
+                <!-- Exit -->
+                <li>
+                    <a href="javascript:;" class="top-exit">退出登录</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<!-- Top end -->
+
+<!-- breadcrumb start -->
+<section class="content-header">
+    <ol class="breadcrumb">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">商品中心</a></li>
+        <li class="active">颜色管理</li>
+    </ol>
+    <div class="clearfix"></div>
+</section>
+<!-- breadcrumb end -->
+
+<!---- Left side start ---->
+<aside class="main-sidebar fixed-main-sidebar">
+    <!-- sidebar -->
+    <section class="sidebar">
+        <!-- sidebar menu -->
+        <ul class="sidebar-menu fn-left">
+            <li class="active treeview">
+                <a href="#">
+                    <i class="icon icon1"></i>
+                    <span>商品中心</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="icon icon2"></i>
+                    <span>报表查看</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="icon icon3"></i>
+                    <span>订单管理</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="icon icon4"></i>
+                    <span>商品中心</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="icon icon5"></i>
+                    <span>报表查看</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="icon icon6"></i>
+                    <span>订单管理</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="icon icon7"></i>
+                    <span>订单管理</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="icon icon8"></i>
+                    <span>订单管理</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="icon icon9"></i>
+                    <span>订单管理</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="icon icon10"></i>
+                    <span>订单管理</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="inMenu-node sidebar fn-right">
+            <li class="Menu-nodeTitl">商品中心</li>
+            <li>
+                <a href="#">
+                    <span>颜色管理</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span>分类管理</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span>尺码管理</span>
+                </a>
+
+            </li>
+            <li>
+                <a href="#">
+                    <span>分类管理</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span>分类管理</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span>分类管理</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span>分类管理</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+</aside>
+<!---- Left sidebar end ---->
+
+<!--------------- Content start ----------------->
+<div class="content-wrapper" ng-controller="ManagSizeContr">
+    <!-- Main content -->
+    <div class="ManColTable col-lg-12">
+        <form>
+            <div class="table-responsive PrivTable manasizeTable">
+                <table class="table table-hover table-striped table-bordered" ng-repeat="n in grouplist">
+                    <tr>
+                        <th scope="col" colspan="4" class="am-ft-left">
+                            <input class="groupTitlName" type="text" value="{{n.groupName}}" groupid="{{n.groupId}}" ng-model="n.groupName" disabled />
+                            <div class="sizeTitl">
+                                <a href="javascript:;" class="sizeTitl-edit" onclick="editTitl(this)">编辑</a>
+                                <a href="javascript:;" class="sizeTitl-save fn-hide" onclick="editGroupname(this)">保存</a>
+                                <a href="javascript:;" class="sizeTitl-cancel fn-hide" onclick="cancelTitl(this)">取消</a>
+                            </div>
+                            <a href="javascript:;" class="del-group fn-right" onclick="deletSizeGroup(this)">删除组</a>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>尺码名称</td>
+                        <td>编码（用于SKU编码）</td>
+                        <td>尺码排序号</td>
+                        <td colspan="2">操作</td>
+                    </tr>
+                    <tr ng-repeat="v in n.sizes | orderBy:'sizeIndex'" sizeindex="{{v.sizeIndex}}" sizeid="{{v.sizeId}}" >
+                        <td><input type="text" class="sizename" ng-model="v.sizeName" disabled /></td>
+                        <td><input type="text" class="sizenum" value="{{v.sizeNum}}" ng-model="v.sizeNum" disabled /></td>
+                        <td>
+                            <select class="sizeindex" ng-init="sizedex" disabled>
+                                <option ng-repeat="d in sizedex">{{d}}</option>
+                            </select>
+                        </td>
+                        <td class="td_edit">
+                            <button type="button" name="alter" class="line-btn fn-left alterBtn col-lg-6" am-bg="blue" onclick="edit_btn(this)">编辑</button>
+                            <button type="button" class="fn-left line-btn-delete col-lg-6" am-bg="white" onclick="deletSize(this)">删除</button>
+                        </td>
+                        <td class="td_editing" style="display:none">
+                            <button type="button" name="alter" class="line-btn fn-left alterBtn col-lg-6" am-bg="blue" onclick="editSize(this)">保存</button>
+                            <button type="button" class="fn-left line-btn-delete col-lg-6" am-bg="white" onclick="cancel_btn(this)">取消</button>
+                        </td>
+
+                    </tr>
+
+                    <tr class="addTr">
+                        <td colspan="4">
+                            <a href="javascript:;" class="fn-left addLineColor" onclick="addNewSize(this)">+&nbsp;增加尺码</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <div class="fn-left">
+                                <span class="fn-left mgt10">适用于：</span>
+                                <select disabled>
+                                    <option>所有品牌</option>
+                                    <option>美特斯邦威</option>
+                                </select>
+                            </div>
+
+                            <div class="sizeTitl mgl10">
+                                <a href="javascript:;" class="sizeTitl-edit" onclick="editTitl(this)">编辑</a>
+                                <a href="javascript:;" class="sizeTitl-save fn-hide" onclick="">保存</a>
+                                <a href="javascript:;" class="sizeTitl-cancel fn-hide" onclick="cancelTitl(this)">取消</a>
+                            </div>
+                            <div class="fn-clear"></div>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </div>
+            <button type="button" class="btn btn-info addSizeGroup" onclick="addNewGroup()">增加尺码组</button>
+        </form>
+        <div class="fn-clear"></div>
+    </div>
+
+    <!--分页 start-->
+    <div class="pagelist priv-pagelist">
+        <div class="pager">
+            <a href='javascript:;'>首页</a>
+            <a href='javascript:;'>上一页</a>
+            <a href="javascript:;">1</a>
+            <span class="cpb">2</span>
+            <a href="javascript:;">3</a>
+            <a href="javascript:;">...</a>
+            <a href="javascript:;">15</a>
+            <a href="javascript:;">下一页</a>
+            <a href='javascript:;'>尾页</a>
+            <div class="fn-clear"></div>
+        </div>
+    </div>
+    <!--分页 end-->
+
+</div>
+
+</div>
+
+<!--新增尺码组框-->
+<table class="table table-hover table-striped table-bordered newAddGroup newAddGroupClone">
+    <tr>
+        <th scope="col" colspan="4" class="am-ft-left">
+            <input class="groupTitlName" type="text" name="" value="新增尺码组" />
+            <div class="sizeTitl">
+                <a href="javascript:;" class="sizeTitl-edit fn-hide" onclick="editTitl(this)">编辑</a>
+                <a href="javascript:;" class="sizeTitl-save" onclick="saveSizeGroup(this)">保存</a>
+                <a href="javascript:;" class="sizeTitl-cancel" onclick="cancelTitl(this)">取消</a>
+            </div>
+        </th>
+    </tr>
+    <tr>
+        <td>尺码名称</td>
+        <td>编码（用于SKU编码）</td>
+        <td colspan="2">操作</td>
+    </tr>
+    <tr class="addTr">
+        <td colspan="4">
+            <a href="javascript:;" class="fn-left addLineColor" onclick="addNewSize(this)">+&nbsp;增加尺码</a>
+        </td>
+    </tr>
+</table>
+<!--/新增尺码组框-->
+<!--弹窗 start-->
+<div class="am-dialog EditDialog fn-hide">
+    <form id="myform">
+        <div class="am-dialog-wrap">
+            <div class="am-dialog-header">
+                <h3 class="am-ft-center">确定删除？</h3>
+            </div>
+            <div class="dialogBtn am-flexbox">
+                <button type="button" class="am-flexbox-item btn am-button SavEdit deletGroup" am-bg="blue">确认</button>
+                <button type="button" class="am-flexbox-item btn am-button" onclick="Dialhide()" am-bg="white">取消</button>
+                <div class="fn-clear"></div>
+            </div>
+        </div>
+    </form>
+</div>
+<!--弹窗 end-->
+
+<!-- 工具提示 start-->
+<div class="alert alert-danger alert-dismissible fade in fn-hide" role="alert">
+    <button type="button" class="close">
+        <span>×</span>
+    </button>
+    <h4>保存失败!</h4>
+    <p>输入的内容不能为空</p>
+</div>
+<!-- 工具提示 end -->
+
+<!----- JS ------>
+<!-- jQuery 2.1.4 -->
+<script src="js/jQuery-2.1.4.min.js"></script>
+
+<!-- Bootstrap 3.3.2 JS -->
+<script src="js/bootstrap.min.js" type="text/javascript"></script>
+<!-- AdminLTE App -->
+<script src="js/app.min.js" type="text/javascript"></script>
+<script src="js/base.js" type="text/javascript"></script>
+
+<script src="js/jquery.md5.js" type="text/javascript"></script>
+<script src="js/formutil.js" type="text/javascript"></script>
+<script src="js/qinyi_base.js" type="text/javascript"></script>
+
+<script src="js/size.js" type="text/javascript"></script>
+
+<script>
+    var keyParams="{\"timestamp\":1462348569,\"duid\":\"1\",\"token\":\"123\",\"userId\":\"1\",\"appKey\":\"aZ23dA4S4I\"}";
+
+//弹窗居中
+$('.EditDialog').center();
+
+//关闭提示框
+$('.close').click(function(){
+    $('.alert').hide();
+    Dialhide();
+//    $('.groupTitlName,.sizename,.sizenum,.sizeindex').prop('disabled',true);
+//    $('.td_editing').hide();
+//    $('.td_edit').show();
+});
+
+</script>
+
+</body>
+</html>

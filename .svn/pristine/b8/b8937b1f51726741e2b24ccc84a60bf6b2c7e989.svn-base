@@ -1,0 +1,17 @@
+qyApp.controller("voucherListController", function($scope, $http, Upload, $compile, $route, $state, $stateParams) {
+	/*初始化*/
+	$scope.model={
+		'isShowFrame':'0',/*1激活  2作废  3添加充值卡  4批量激活  5导入充值卡 6删除*/
+		'isTips':'0',/*1 激活成功 2 充值成功 3删除成功 */
+		'isUpload':'1'/*1 添加  2上传成功*/
+	}
+	/*添加充值*/
+	$scope.showFrametype=function(type){
+		$scope.model.isShowFrame=type;
+	}
+	/*关闭弹框*/
+	$scope.closedialog=function(){
+		$scope.model.isShowFrame='0';
+	}
+	
+})

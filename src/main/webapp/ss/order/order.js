@@ -1,0 +1,622 @@
+qyApp.controller('orderController', function($scope, $http, $compile, $timeout) {
+
+	var orgId = JSON.parse(keyParams).orgId;
+	$scope.userInfo = JSON.parse(localStorage.userInfo);
+	//计算总价
+
+	var data = "{\"orgId\":\"" + orgId + "\"}";
+	//查询订单方式
+	$scope.orderType = "1";
+	//导购列表
+	$http({
+		method: 'post',
+		url: cas + 'user/getSales',
+		params: {
+			keyParams: getKeyParams(data, keyParams),
+			jsonObject: getJsonObject(data)
+		}
+	}).success(function(data, stauts, headers, config) {
+		$scope.dg = data.data.saleList;
+	})
+	$scope.showOrder = function(type) {
+		if(type == "1") {
+			$scope.orderType = "1";
+			$scope.dayTargetSearch();
+		} else if(type == "2") {
+			$scope.orderType = "2";
+			$scope.dayTargetSearch();
+		} else if(type == "3") {
+			$scope.orderType = "3";
+			$scope.dayTargetSearch();
+		} else if(type == "4") {
+			$scope.orderType = "4";
+			$scope.dayTargetSearch();
+			//			$scope.getOrderInfoTB();
+		} else if(type == "") {
+			$scope.orderType = "";
+			$scope.dayTargetSearch();
+		}
+	}
+
+	//	加载020订单的AJAX数据请求
+	//	加载订单详情的AJAX请求
+	$scope.from = "0";
+	$scope.pageSize = "5";
+	$scope.loadO2OOrderListAjax = function() {
+			$scope.formData = $("#searchOrderForm").serializeJson();
+			$scope.formData = angular.fromJson($scope.formData);
+			var startTimeArr = $scope.formData.time.split("-");
+			var startTimeString = "";
+			angular.forEach(startTimeArr, function(ele) {
+				startTimeString += ele;
+			})
+			var jsonObject = {
+				"orderId": $scope.formData.orgId,
+				"startTime": "",
+				"endTime": "",
+				"orgId": "",
+				"wfUser": "",
+				"status": "",
+				"nub": $scope.from,
+				"size": $scope.pageSize
+			}
+			jsonObject = angular.toJson(jsonObject);
+			$http({
+				method: 'post',
+				url: pos + 'order/getorderForO2O',
+				params: {
+					keyParams: getKeyParams(
+						jsonObject, keyParams),
+					jsonObject: getJsonObject(jsonObject)
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == "1") {
+					if(data.data) {
+						$scope.orderLists = data.data.orderList;
+						var pagsize;
+						for(var i = 0; i < $scope.orderLists.length; i++) {
+							pagsize = $scope.orderLists[i].packages.length;
+							$scope.orderLists[i].packages.pagsize = pagsize;
+						}
+						$scope.orderListsUsed = $scope.orderLists;
+						$scope.count = data.data.count;
+						$scope.createPagePlugina($scope.count, $scope.pageSize);
+					}
+					/*else {
+						alertmsg("无满足您需要的订单数据", "error")
+					}*/
+				} else {
+					alertmsg(data.msg, "error")
+				}
+			})
+		}
+		//主页  查询订单
+	var from = 0;
+	var pageSize = 5;
+	$scope.dayTargetSearch = function() {
+		$scope.formData = $("#searchOrderForm").serializeJson();
+		$scope.formData = angular.fromJson($scope.formData);
+		
+		angular.forEach($scope.orgLists,function(ele,index){
+			if($scope.formData.orgId == ele.orgId){
+				$scope.chooseShopName = ele.shopName
+			}
+		})
+		var startTimeArr = $scope.formData.time.split("-");
+		var startTimeString = "";
+		angular.forEach(startTimeArr, function(ele) {
+			startTimeString += ele;
+		})
+		if($scope.orderType == "1") {
+			var data1 = "{\"orgId\":\"" + $scope.formData.orgId + "\",\"day\":\"" + startTimeString + "\",\"orderType\":\"" + $scope.orderType + "\",\"size\":\"" + pageSize + "\",\"nub\":\"" + from + "\"}"
+			$http({
+				method: 'post',
+				url: pos + 'order/getOrder',
+				params: {
+					keyParams: getKeyParams(data1, keyParams),
+					jsonObject: getJsonObject(data1)
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == 1) {
+					if(data.data.orderList.length > 0) {
+						$scope.orderList = data.data.orderList;
+						count = data.data.count;
+
+						$scope.createPagePlugin(count, pageSize);
+					} else {
+						$scope.orderList = [];
+						count = 0;
+						$scope.createPagePlugin(count, pageSize);
+						//							alertmsg("无满足您需要的订单数据", "error")
+					}
+				} else {
+					alertmsg("获取订单失败", "error");
+				}
+			})
+		} else if($scope.orderType == "2") {
+			var jsonObject = {
+				"orderId": "",
+				"startTime": startTimeString,
+				"endTime": startTimeString,
+				//					"startTime": "20160927",
+				//					"endTime": "20160929",
+				"orgId": $scope.formData.orgId,
+				"wfUser": "",
+				"status": "",
+				"nub": $scope.from,
+				"size": $scope.pageSize
+			}
+			jsonObject = angular.toJson(jsonObject);
+			$http({
+				method: 'post',
+				url: pos + 'order/getorderForO2O',
+				params: {
+					keyParams: getKeyParams(
+						jsonObject, keyParams),
+					jsonObject: getJsonObject(jsonObject)
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == "1") {
+					if(data.data) {
+						$scope.orderLists = data.data.orderList;
+						$scope.orderListsUsed = $scope.orderLists;
+						$scope.count = data.data.count;
+						$scope.createPagePlugina($scope.count, $scope.pageSize);
+					} else {
+						$scope.orderLists = [];
+						$scope.orderListsUsed = [];
+						$scope.count = 0;
+						$scope.createPagePlugina($scope.count, $scope.pageSize);
+						//							alertmsg("无满足您需要的订单数据", "error")
+					}
+				} else {
+					alertmsg(data.msg, "error")
+				}
+			})
+		} else if($scope.orderType == "3") {
+//			var data1 = "{\"orgId\":\"" + $scope.formData.orgId + "\",\"day\":\"" + startTimeString + "\",\"orderType\":\"" + $scope.orderType + "\",\"size\":\"" + pageSize + "\",\"nub\":\"" + from + "\"}"
+			if(startTimeString != ""){
+				var day =startTimeString.substr(0,4)+"-"+startTimeString.substr(4,2)+"-"+startTimeString.substr(6,2);
+			}else{
+				var day =startTimeString
+			}
+			var data1 = {
+				day:day,
+				orgId:$scope.formData.orgId,
+				memberId: "",
+				orderStatus: "",
+				orderId: "",
+				nub: from+"",
+				size: pageSize+""
+			};
+			data1 = angular.toJson(data1);
+			$http({
+				method: 'post',
+				url: pos + 'order/getWdOrderList',
+				params: {
+					keyParams: getKeyParams(data1, keyParams),
+					jsonObject: getJsonObject(data1)
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == 1) {
+					console.log(data)
+					if(data.data.orders.length > 0) {
+						$scope.orderList = data.data.orders;
+						count = data.data.count;
+						$scope.createPagePluginWD(count, pageSize);
+					} else {
+						$scope.orderList = [];
+						count = 0;
+						$scope.createPagePluginWD(count, pageSize);
+						//							alertmsg("无满足您需要的订单数据", "error")
+					}
+				} else {
+					alertmsg("获取订单失败", "error");
+				}
+			})
+		} else if($scope.orderType == "4") {
+			$scope.getOrderInfoTB();
+		}
+	}
+	$scope.dayTargetSearcha = function() {
+			var data1 = "{\"orgId\":\"" + $scope.orgIdH + "\",\"day\":\"" + "" + "\",\"orderType\":\"" + $scope.orderType + "\",\"size\":\"" + pageSize + "\",\"nub\":\"" + from + "\"}"
+			$http({
+				method: 'post',
+				url: pos + 'order/getOrder',
+				params: {
+					keyParams: getKeyParams(data1, keyParams),
+					jsonObject: getJsonObject(data1)
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == 1) {
+					if(data.data.orderList.length > 0) {
+						$scope.orderList = data.data.orderList;
+						count = data.data.count;
+						$scope.createPagePlugin(count, pageSize);
+					} else {
+						$scope.orderList = [];
+						count = 0;
+						$scope.createPagePlugin(count, pageSize);
+						//								alertmsg("无满足您需要的订单数据", "error")
+					}
+				} else {
+					alertmsg("获取订单失败", "error");
+				}
+			})
+		}
+		//	加载门店列表下拉框
+	$scope.loadShop = function() {
+		if($scope.userInfo.orgType == 4) {
+			var orgList1 = [];
+			var orgList2 = {
+				"orgId": $scope.userInfo.orgId,
+				"shopName": $scope.userInfo.orgName
+			};
+			orgList1.push(orgList2);
+			$scope.orgLists = orgList1;
+			$scope.orgIdH = $scope.orgLists[0].orgId;
+			$scope.dayTargetSearcha();
+		} else if($scope.userInfo.orgType == 1) {
+			var userInfo = angular.fromJson(keyParams)
+			var jsonObject = {
+				shopNum: "",
+				shopName: "",
+				orgId: userInfo.orgId,
+				nub: "0",
+				size: "0"
+			}
+			jsonObject = angular.toJson(jsonObject);
+			$http({
+				method: 'post',
+				url: pos + 'shop/getMerchantShop',
+				params: {
+					keyParams: getKeyParams(jsonObject, keyParams),
+					jsonObject: getJsonObject(jsonObject)
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == "1") {
+					data.data.shopList.forEach(function(ele) {
+						ele.selected = false;
+					})
+					$scope.orgLists = data.data.shopList;
+					$scope.orgLists[0].selected = true;
+					$scope.orgIdH = $scope.orgLists[0].orgId;
+					$scope.dayTargetSearcha();
+				} else {
+					alertmsg(data.msg, "error")
+				}
+			})
+		}
+
+	}
+	$scope.loadShop();
+	//分页
+	$scope.createPagePlugin = function(total, pageSize) {
+		$("#paging").empty();
+		paging = pagePlugin.createPaging({
+			renderTo: 'paging',
+			total: total,
+			pageSize: pageSize
+		});
+		paging.goPage = function(from, to) {
+			$scope.page(from - 1, pageSize);
+		}
+	};
+	//分页
+	$scope.page = function(from, pageSize) {
+			$scope.formData = $("#searchOrderForm").serializeJson();
+			$scope.formData = angular.fromJson($scope.formData);
+			var startTimeArr = $scope.formData.time.split("-");
+			var startTimeString = "";
+			angular.forEach(startTimeArr, function(ele) {
+				startTimeString += ele;
+			})
+			var data1 = "{\"orgId\":\"" + $scope.formData.orgId + "\",\"day\":\"" + startTimeString + "\",\"orderType\":\"" + $scope.orderType + "\",\"size\":\"" + pageSize + "\",\"nub\":\"" + from + "\"}"
+			$http({
+				method: 'post',
+				url: pos + 'order/getOrder',
+				params: {
+					keyParams: getKeyParams(data1, keyParams),
+					jsonObject: getJsonObject(data1)
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == 1) {
+					$scope.orderList = data.data.orderList;
+				} else {
+					alertmsg("获取订单失败", "error");
+				}
+			})
+		}
+		//分页
+	$scope.createPagePlugina = function(total, pageSize) {
+		$("#O2Opage").empty();
+		paging = pagePlugin.createPaging({
+			renderTo: 'O2Opage',
+			total: total,
+			pageSize: pageSize
+		});
+		paging.goPage = function(from, to) {
+			$scope.pagea(from - 1, pageSize);
+		}
+	};
+	//分页
+	$scope.pagea = function(from, pageSize) {
+		var jsonObject = {
+			"orderId": "",
+			"startTime": startTimeString,
+			"endTime": startTimeString,
+			"orgId": $scope.formData.orgId,
+			"wfUser": "",
+			"status": "",
+			"nub": from,
+			"size": pageSize
+		}
+		jsonObject = angular.toJson(jsonObject);
+		$http({
+			method: 'post',
+			url: pos + 'order/getorderForO2O',
+			params: {
+				keyParams: getKeyParams(
+					jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				if(data.data) {
+					$scope.orderLists = data.data.orderList;
+					$scope.orderListsUsed = $scope.orderLists;
+					$scope.count = data.data.count;
+				}
+				/*else {
+					alertmsg("无满足您需要的订单数据", "error")
+				}*/
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		})
+	}
+
+	//分页
+	$scope.createPagePluginWD = function(total, pageSize) {
+		$("#WDpaging").empty();
+		paging = pagePlugin.createPaging({
+			renderTo: 'WDpaging',
+			total: total,
+			pageSize: pageSize
+		});
+		paging.goPage = function(from, to) {
+			$scope.pageWD(from - 1, pageSize);
+		}
+	};
+	//分页
+	$scope.pageWD = function(from, pageSize) {
+		$scope.formData = $("#searchOrderForm").serializeJson();
+		$scope.formData = angular.fromJson($scope.formData);
+		var startTimeArr = $scope.formData.time.split("-");
+		var startTimeString = "";
+		angular.forEach(startTimeArr, function(ele) {
+			startTimeString += ele;
+		})
+		if(startTimeString != ""){
+				var day =startTimeString.substr(0,4)+"-"+startTimeString.substr(4,2)+"-"+startTimeString.substr(6,2);
+			}else{
+				var day =startTimeString
+			}
+			var data1 = {
+				day:day,
+				orgId:$scope.formData.orgId,
+				memberId: "",
+				orderStatus: "",
+				orderId: "",
+				nub: from+"",
+				size: pageSize+""
+			};
+			data1 = angular.toJson(data1);
+		$http({
+			method: 'post',
+			url: pos + 'order/getWdOrderList',
+			params: {
+				keyParams: getKeyParams(data1, keyParams),
+				jsonObject: getJsonObject(data1)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.orderList = data.data.orders;
+			} else {
+				alertmsg("获取订单失败", "error");
+			}
+		})
+	}
+
+	/*电商订单*/
+	$scope.getOrderInfoTB = function() {
+			//获取商户信息
+			$scope.formData = $("#searchOrderForm").serializeJson();
+			$scope.formData = angular.fromJson($scope.formData);
+			var startTimeArr = $scope.formData.time.split("-");
+			var startTimeString = "";
+			angular.forEach(startTimeArr, function(ele) {
+				startTimeString += ele;
+			})
+			var jsonObject1 = {
+				orgId: $scope.userInfo.orgId,
+				orderSource: "0",
+				shopOrgId: $scope.formData.orgId,
+				memberName: "",
+				orderStatus: "",
+				orderId: "",
+				startTime: startTimeString,
+				endTime: startTimeString,
+				nub: $scope.from,
+				size: $scope.pageSize
+			};
+			jsonObject1 = JSON.stringify(jsonObject1);
+			$http({
+				method: 'post',
+				url: pos +
+					'alibabaOrder/getAlibabaOrder',
+				params: {
+					keyParams: getKeyParams(
+						jsonObject1, keyParams),
+					jsonObject: getJsonObject(jsonObject1)
+				}
+
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == "1") {
+					$scope.orderList_a = data.data.orderList;
+					$scope.orderStatusCount = data.data.orderStatusCount;
+					$scope.shopList = data.data.shopList;
+					$scope.orderCount = data.data.count;
+					if($scope.orderCount > 5) {
+						$scope.createPagePluginWe($scope.orderCount, $scope.size);
+					} else {
+						$("#paging").empty();
+					}
+				} else {
+					alertmsg(data.msg, "error")
+				}
+			})
+		}
+		/*电商订单分页*/
+		//分页
+	$scope.createPagePluginWe = function(total, pageSize) {
+		$("#paginge").empty();
+		paging = pagePlugin.createPaging({
+			renderTo: 'paginge',
+			total: total,
+			pageSize: pageSize
+		});
+		paging.goPage = function(from, to) {
+			$scope.pageWe(from - 1, pageSize);
+		}
+	};
+	//分页
+	$scope.pageWe = function(from, pageSize) {
+		$scope.formData = angular.fromJson($scope.formData);
+		var startTimeArr = $scope.formData.time.split("-");
+		var startTimeString = "";
+		angular.forEach(startTimeArr, function(ele) {
+			startTimeString += ele;
+		})
+		var jsonObject1 = {
+			orgId: $scope.userInfo.orgId,
+			orderSource: "0",
+			shopOrgId: $scope.formData.orgId,
+			memberName: "",
+			orderStatus: "",
+			orderId: "",
+			startTime: startTimeString,
+			endTime: startTimeString,
+			nub: from,
+			size: pageSize
+		};
+		jsonObject1 = JSON.stringify(jsonObject1);
+		$http({
+			method: 'post',
+			url: pos + 'alibabaOrder/getAlibabaOrder',
+			params: {
+				keyParams: getKeyParams(data1, keyParams),
+				jsonObject: getJsonObject(data1)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.orderList_a = data.data.orderList;
+				$scope.orderStatusCount = data.data.orderStatusCount;
+				$scope.shopList = data.data.shopList;
+				$scope.orderCount = data.data.count;
+			} else {
+				alertmsg("获取订单失败", "error");
+			}
+		})
+	};
+
+	/*加载快递公司*/
+	/*获取物流公司的接口*/
+	$scope.logitic = "";
+	$scope.getlogisticsCompany = function() {
+		var jsonObject = {
+			logiticCompanyIds: "",
+			source: ""
+		}
+		jsonObject = angular.toJson(jsonObject)
+		$http({
+			method: 'post',
+			url: pos + 'logitic/getLogiticCompany',
+			async: true,
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				$scope.logiticMaps = [{
+					code: "",
+					logiticCompanyId: "",
+					logiticCompanyName: "请选择",
+					logiticDescribe: "",
+					logo: ""
+				}].concat(data.data.logiticMaps);
+			} else {
+				//				clearInterval(timer); 
+				alertmsg(data.msg, "error");
+			}
+		});
+	}
+	$scope.getlogisticsCompany();
+	//	$scope.load
+	/*发货微信订单*/
+	$scope.postWxProduct = "hide";
+	$scope.sendWxOrder = function(obj) {
+		$scope.postWxProduct = "show";
+		//		$scope.outOrderId = obj.outOrderId;
+		$scope.orderOrgId = obj.orgId;
+		$scope.orderId = obj.orderId;
+	}
+	$scope.closeDia = function() {
+			$scope.postWxProduct = "hide";
+		}
+		/*点击确认发货按钮*/
+	$scope.surepostProduct = function() {
+		angular.forEach($scope.logiticMaps, function(ele, index) {
+			if(ele.logiticCompanyId == $scope.logitic) {
+				$scope.selectLogitic = ele;
+			}
+		})
+		var jsonObject = {
+			orderId: $scope.orderId,
+			logiticStatus: "1",
+			logiticCompanyId: $scope.selectLogitic.logiticCompanyId,
+			logiticCompanyName: $scope.selectLogitic.logiticCompanyName,
+			logiticNum: $scope.trackingNumber
+		}
+		jsonObject = angular.toJson(jsonObject);
+		$http({
+			method: 'post',
+			url: pos + 'logitic/updateLogiticInfo',
+			async: true,
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+
+			if(data.code == "1") {
+				$scope.closeDia();
+				alertmsg("发货成功");
+			} else {
+				//				clearInterval(timer); 
+				alertmsg(data.msg, "error");
+			}
+		})
+	}
+	$scope.print = function(obj) {
+		$scope.orderDetail = obj;
+		$timeout(function() {
+			$("#orderInfo").jqprint({
+				operaSupport: true,
+				 printContainer:  true,
+				importCSS: true
+			})
+		}, 200)
+	}
+});

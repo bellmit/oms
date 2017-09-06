@@ -1,0 +1,121 @@
+@charset "UTF-8";
+
+.base-paging-area{
+    float:right;
+}
+
+.base-paging-area .p-num{
+    float: left;
+    list-style: none;
+}
+.base-paging-area .p-skip{
+    float: left;
+    list-style: none;
+    margin-left: 0px;
+}
+.base-paging-area .p-num .num{
+    float: left;
+    color: #333;
+    background-color: #fff;
+}
+.base-paging-area .p-num .num.curr{
+    border: 0 none;
+    padding: 1px 15px;
+    background: #147BA5;
+    filter: none;
+    color: #fff;
+    cursor: default;
+}
+
+.base-paging-area .p-num li{
+    float: left;
+    height: 30px;
+    line-height: 27px;
+    padding: 0 15px;
+    margin-right: 5px;
+    font-size: 12px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+}
+.base-paging-area .p-num li:hover{
+    background: #147BA5;
+    color: #fff;
+}
+.base-paging-area .p-num .more{
+    border: 0;
+    background: none;
+    color: #ccc;
+    cursor: text;
+}
+.base-paging-area .p-num .pn-prev.disabled,.base-paging-area .p-num .pn-next.disabled{
+    background: 0;
+    background: #f2f2f2;
+    cursor: text;
+    color: #9e9e9e;
+}
+.pn-prev{
+
+}
+.pn-next{
+
+}
+em {
+    font-style: normal;
+}
+.base-paging-area .p-num .pn-prev em, .base-paging-area .p-num .pn-next em {
+    vertical-align: middle;
+}
+.base-paging-area .p-num .pn-prev i, .base-paging-area .p-num .pn-next i {
+    color: #ccc;
+    padding-left: 0;
+}
+.base-paging-area .p-num .pn-prev i, .base-paging-area .p-num .pn-next i {
+    vertical-align: middle;
+    font-style: normal;
+    font-size: 14px;
+    font-family: "\5b8b\4f53";
+    padding: 0 5px;
+    color: #aaa;
+    margin: 0 2px;
+}
+.base-paging-area .p-skip li{
+    float: left;
+    line-height: 26px;
+    font-size: 12px;
+}
+.base-paging-area .p-skip  em{
+
+}
+.base-paging-area .p-skip .input-txt {
+    width: 24px;
+    height: 24px;
+    margin: 0 3px;
+    line-height: 24px;
+    font-size: 12px;
+    text-align: center;
+    padding: 0;
+}
+.base-paging-area .p-skip .btn {
+    height: 26px;
+    margin-left: 10px;
+    font-size: 12px;
+    line-height: 20px;
+    text-decoration: none;
+    border-radius: 3px;
+    display: inline-block;
+    margin-top: -8px;
+}
+.pagelist .btn-default {
+    border: 1px solid #DDD;
+    padding: 4px 13px 5px;
+    color: #666;
+    background-color: #fff;
+}
+.pagelist {
+    width: 94%!important;
+    float: left;
+    margin: 15px!important;
+}

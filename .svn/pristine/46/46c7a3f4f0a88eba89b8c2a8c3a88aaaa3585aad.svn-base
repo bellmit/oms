@@ -1,0 +1,3 @@
+qyApp.controller("saleSurveyController", function($scope, $http, Upload, $compile, $route, $state, $stateParams, $timeout) {
+	
+});

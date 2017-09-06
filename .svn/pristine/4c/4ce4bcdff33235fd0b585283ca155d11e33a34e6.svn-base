@@ -1,0 +1,385 @@
+qyApp.controller('managerUserController', [ '$scope', '$http',
+	function($scope, $http) {
+		/**
+		 * 管理人员查询
+		 */
+		//总记录数
+		$scope.size="0";
+		//查询条件
+		$scope.query={
+			orgId:'',
+			userName:'',
+			nub:'0',
+			size:'10'
+		}
+		var orgQueryJson="{\"orgType\":\"\"}"
+		//获取店铺
+		$http(
+        {
+            method: 'post',
+            url: pos + 'shop/getShopByOrgId',
+            params: {
+                keyParams: getKeyParams(orgQueryJson, keyParams),
+                jsonObject: getJsonObject(orgQueryJson)
+            }
+
+        }).success(
+	        function(data, stauts, headers, 
+	        config) {
+	        	if(data.code=="1"){
+	        		 $scope.orgList=data.data.orgList;
+        		}else{
+        			alertmsg(data.msg,"error")
+        		}
+        })
+		//查询所有管理人员
+		$scope.queryManagers=function(){
+			//$scope.query.nub="0";
+			var jsonObject=JSON.stringify($scope.query);
+			$http(
+	        {
+	            method: 'post',
+	            url: pos + 'shop/getShopUser',
+	            params: {
+	                keyParams: getKeyParams(jsonObject, keyParams),
+	                jsonObject: getJsonObject(jsonObject)
+	            }
+
+	        }).success(function(data, stauts, headers, config) {
+		        	if(data.code=="1"){
+		        		$scope.managers=data.data.userList;
+			        	if($scope.managers!=undefined&&$scope.managers.length>0){
+			        		$scope.size=parseInt(data.data.count);
+			            	if($scope.size>=$scope.query.size){
+			            		$scope.createPagePlugin($scope.size,$scope.query.size);
+			            	}else{
+			            		$scope.createPagePlugin("0",$scope.query.size);
+			            	}
+			        	}else{
+			        		$scope.size="0";
+			        		$scope.createPagePlugin("0",$scope.query.size);
+			        	}
+	        		}else{
+	        			alertmsg(data.msg,"error")
+	        		}
+	        })
+		}
+		
+		$scope.queryManagers();
+		//插入分页
+		$scope.createPagePlugin=function(total,pageSize){
+		 	  $("#paging").empty();
+		      paging = pagePlugin.createPaging({
+				    renderTo : 'paging',
+				    total:total,
+				    pageSize:pageSize
+			  });
+		      paging.goPage = function(from,to){
+			      $scope.page(from-1,pageSize);
+			  }			    	
+		};
+		//分页查询
+		$scope.page=function(from,pageSize){
+			$scope.query.nub=from.toString();
+			$scope.query.size=pageSize;
+			 var jsonObject=JSON.stringify($scope.query);
+			 $http({
+				 method: 'post',
+//				 url: cas + 'user/getUserList',
+				 url: pos + 'shop/getShopUser',
+		         params:{
+		             keyParams:getKeyParams(jsonObject,keyParams),
+		             jsonObject:getJsonObject(jsonObject)
+		         }
+		     }).success(function(data,stauts,headers,config){
+		    	 if(data.code=="1"){
+		    		 $scope.managers=data.data.userList;
+	    		}else{
+	    			alertmsg(data.msg,"error")
+	    		}
+		     })
+		 }
+		$scope.delUserName;
+		//删除操作
+		$scope.del_btn=function(obj){
+			$scope.delUserName=obj.manager.userName;
+		}
+		//取消删除操作
+		$scope.cancelBtn=function(obj){
+			$scope.delUserName="";
+		}
+		//删除人员
+		$scope.delManagerUser=function(){
+			var userId = $("#userId").val();
+			var jsonObject = "{\"userId\":\""+userId+"\"}";
+			$http(
+	        {
+	            method: 'post',
+	            url: cas
+	            + 'user/deleteUserById',
+	            params: {
+	                keyParams: getKeyParams(
+	                jsonObject, keyParams),
+	                jsonObject: getJsonObject(jsonObject)
+	            }
+
+	        }).success(
+		        function(data, stauts, headers, 
+		        config) {
+		        	alertmsg(data.msg);
+		        	$scope.queryManagers();
+	        })
+		}
+		//编辑操作
+		$scope.manager={
+				userName:'',
+				trueName:'',
+				userId:'',
+				roleId:'',
+				orgId:'',
+		}
+		$scope.toupdateUser=function(obj){
+			$scope.manager = obj.manager;
+			$scope.roleId = obj.manager.roleId;
+			$scope.orgName = obj.manager.orgName;
+			//window.location.href="#/managerUserEdit";
+			$scope.numB=1;
+			var queryJson="{\"orgType\":\"\"}";
+			//获取店铺
+			$http(
+	        {
+	            method: 'post',
+	            url: pos + 'shop/getShopByOrgId',
+	            params: {
+	                keyParams: getKeyParams(
+	                		queryJson, keyParams),
+	                jsonObject: getJsonObject(queryJson)
+	            }
+
+	        }).success(
+		        function(data, stauts, headers, 
+		        config) {
+		        	if(data.code=="1"){
+		        		$scope.orgList=data.data.orgList;
+		        	}else{
+		        		alertmsg(data.msg,"error")
+		        	}
+	        })
+	    queryJson="{\"rangeCode\":\"0\"}";
+			//获取店铺
+			$http(
+	        {
+	            method: 'post',
+	            url: cas
+	            + 'role/getRolesByRange',
+	            params: {
+	                keyParams: getKeyParams(
+	                		queryJson, keyParams),
+	                jsonObject: getJsonObject(queryJson)
+	            }
+	        }).success(
+		        function(data, stauts, headers, 
+		        config) {
+		        	if(data.code=="1"){
+		        		$scope.roles=data.data.roles;
+		        	}else{
+		        		alertmsg(data.msg,"error")
+		        	}
+	        })
+	        
+		}
+		
+		$scope.update=function(){
+			if(validateForm("updatemanagerUserForm","msg")==true){
+				if($scope.roleId!=$scope.manager.roleId){
+					updateRole();
+				}else{
+					updateUser();
+				}
+	        }else{
+	        	alertmsg(validateForm("updatemanagerUserForm","msg"),'error');
+        	}
+		}
+		function updateUser(){
+			var jsonObject=JSON.stringify($scope.manager);
+			$http(
+		        {
+		            method: 'post',
+		            url: cas
+		            + 'user/updateUser',
+		            params: {
+		                keyParams: getKeyParams(
+		                jsonObject, keyParams),
+		                jsonObject: getJsonObject(jsonObject)
+		            }
+
+		        }).success(
+			        function(data, stauts, headers, 
+			        config) {
+			        	if(data.code=="1"){
+			        		alertmsg(data.msg);
+				        	//window.location.href="#/managerUser";
+			        		$scope.numB=0;
+			        		//$scope.managers="";
+			        		$scope.queryManagers();
+			        	}else{
+			        		alertmsg(data.msg,"error")
+			        	}
+		        })
+		}
+		function updateRole(){
+			var jsonObject = "{\"userId\":\""+$scope.manager.userId+"\",\"roleIds\":\""+$scope.roleId+"\"}";
+			$http(
+		        {
+		            method: 'post',
+		            url: cas
+		            + 'user/insertRoleForUser',
+		            params: {
+		                keyParams: getKeyParams(
+		                jsonObject, keyParams),
+		                jsonObject: getJsonObject(jsonObject)
+		            }
+
+		        }).success(
+			        function(data, stauts, headers, 
+			        config) {
+			        	if(data.code=="1"){
+			        		alertmsg("职位修改成功");
+				        	updateUser();
+			        	}else{
+			        		alertmsg(data.msg)
+			        	}
+		        })
+		}
+		
+		$scope.toaddUser=function(){
+			$scope.numA=1;
+			$scope.userNameWarn=false;
+			$scope.manager={
+					userName:'',
+					trueName:'',
+					password:'',
+					roleId:'',
+					orgId:'',
+			}
+			var queryJson="{\"orgType\":\"\"}"
+				//获取店铺
+				$http(
+		        {
+		            method: 'post',
+		            url: pos + 'shop/getShopByOrgId',
+		            params: {
+		                keyParams: getKeyParams(
+		                		queryJson, keyParams),
+		                jsonObject: getJsonObject(queryJson)
+		            }
+
+		        }).success(
+			        function(data, stauts, headers, 
+			        config) {
+			        	if(data.code=="1"){
+			        		$scope.orgList=data.data.orgList;
+			        	}else{
+			        		alertmsg(data.msg,"error")
+			        	}
+		        })
+		    queryJson="{\"rangeCode\":\"0\"}"
+				//获取内置角色
+				$http(
+		        {
+		            method: 'post',
+		            url: cas
+		            + 'role/getRolesByRange',
+		            params: {
+		                keyParams: getKeyParams(
+		                		queryJson, keyParams),
+		                jsonObject: getJsonObject(queryJson)
+		            }
+		        }).success(
+			        function(data, stauts, headers, 
+			        config) {
+			        	if(data.code=="1"){
+			        		$scope.roles=data.data.roles;
+			        	}else{
+			        		alertmsg(data.msg,"error")
+			        	}
+		        })
+		}
+		
+		$scope.add=function(){
+			if($scope.userNameWarn){
+            	alertmsg("该用户名已存在！",'error');
+            	return;
+            }
+			if(validateForm("managerUserForm","msg")==true){
+			var jsonObject=JSON.stringify($scope.manager);
+			$http(
+			        {
+			            method: 'post',
+			            url: cas + 'user/addUserOrg',
+			            params: {
+			                keyParams: getKeyParams(jsonObject, keyParams),
+			                jsonObject: getJsonObject(jsonObject)
+			            }
+
+			        }).success(
+				        function(data) {
+				        	if(data.code=="1"){
+				        		alertmsg(data.msg);
+				        		$scope.numA=0;
+				        		$scope.queryManagers();
+				        	}else{
+				        		alertmsg(data.msg,"error")
+				        	}
+			        })
+			}else{
+				alertmsg(validateForm("managerUserForm","msg"),'error');
+			}
+		}
+		//用户名校验
+		$scope.checkUserName=function(){
+			$scope.manager.userName=$scope.manager.userName.trim();
+			if($scope.manager.userName==""){
+				return;
+			}
+			checkUserByName($scope.manager.userName);
+		}
+		
+		function checkUserByName(userName){
+			var jsonObject="{\"userName\":\""+userName+"\"}";
+			$http(
+            {
+                method: 'post',
+                url: cas
+                + 'user/userExistsCheck',
+                params: {
+                    keyParams: getKeyParams(
+                    jsonObject, keyParams),
+                    jsonObject: getJsonObject(jsonObject)
+                }
+            })
+            .success(
+            function(data, stauts, headers, 
+            config) {
+            	if(data.code=="1"){
+            		var flag=data.data.flag;
+                	if(flag==undefined){
+                		$scope.userNameWarn=true;
+                	}else if("true"==flag){
+        				$scope.userNameWarn=true;
+        			}else{
+        				$scope.userNameWarn=false;
+        			}
+            	}else{
+            		$scope.manager.userName="";
+            		alertmsg(data.msg,"error")
+            	}
+            })
+		}
+		
+		$scope.returnhome=function(){
+			$scope.numA=0;
+			$scope.numB=0;
+		}
+	} 
+]);

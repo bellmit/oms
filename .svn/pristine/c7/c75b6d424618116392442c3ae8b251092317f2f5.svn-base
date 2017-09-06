@@ -1,0 +1,17 @@
+qyApp.controller('wdProductListController', ['$scope', '$http', '$compile', '$state', '$stateParams', function($scope, $http, $compile, $state, $stateParams) {
+/*增加商品*/
+$scope.toAddProduct=function(type){
+	if(type=='1'){
+		$state.go("addWdPro", {
+				uiParams: ''
+		});
+		
+	}else{
+		$state.go("editWdPro", {
+				uiParams: ''
+		});
+	}
+}
+
+
+}]);

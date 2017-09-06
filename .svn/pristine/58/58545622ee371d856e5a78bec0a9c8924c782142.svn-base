@@ -1,0 +1,90 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--添加人员-->
+	    <!--------------- Content start ----------------->
+    <div class="content-wrapper content-wrapper-commerciaInfo mgb15">
+        <div class="col-md-11 pageTitl">
+            <h2 class="am-ft-16 fn-left">编辑部门信息</h2>
+            <a href="javascript:;" class="line-btn fn-right" ng-click="goBack()">返回</a>
+        </div>
+        <div class="fn-clear"></div>
+		<form id="">
+        <div class="ManColTable col-lg-12">
+            <div class="commercia-info mgb20 pdl15">
+                <!-- row1 -->
+                <div class="row">
+                    <div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>部门名称：</div>
+                    <div class="col-md-3 form-group needValInfo">
+                        <input type="text" class="col-md-10 text-overflow" name="" placeholder="" value=""  required="required" />
+                    </div>
+                </div>
+                <!-- row2 -->
+                <div class="row">
+                    <div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>主管昵称：</div>
+                    <div class="col-md-3 form-group needValInfo">
+                        <input type="text" class="col-md-10 text-overflow" name="" placeholder="" value="" required="required" />
+                    </div>
+                </div>
+                <!-- row3 -->
+                <div class="row">
+                    <div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>主管手机号：</div>
+                    <div class="col-md-3 form-group needValInfo">
+                        <input type="text" class="col-md-10 text-overflow" name="" placeholder="" value="" required="required" />
+                    </div>
+                </div>
+                <!-- row4 -->
+                <div class="row">
+                    <div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>初始密码：</div>
+                    <div class="col-md-3 form-group needValInfo">
+                        <input type="password" class="col-md-10 text-overflow" name="" placeholder=" " value="" />
+                    </div>
+                </div>
+                <!-- row5 -->
+                <div class="row">
+                    <div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>部门分组：</div>
+                    <div class="col-md-7 form-group needValInfo">
+                        <select class="col-md-2 mgr10">
+							<option>CEO</option>
+                        </select>
+                        <select class="col-md-3 mgr10">
+							<option>商务</option>
+							<option>执行</option>
+							<option>新建部门</option>
+                        </select>
+                        <select class="col-md-3 mgr10">
+							<option>杭州商务部</option>
+							<option>武汉商务部</option>
+							<option>电商部</option>
+							<option>新建部门</option>
+                        </select>
+                        <select class="col-md-3 mgr10">
+							<option>续签一部</option>
+							<option>续签二部</option>
+							<option>续签部</option>
+							<option>新建部门</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- row6 -->
+                <div class="row">
+                    <div class="nowraps-text inprodet-titl am-ft-14">部门区域：</div>
+                    <div class="col-md-3 form-group needValInfo">
+                        <input type="text" class="col-md-10 text-overflow" name="" placeholder=" " value="" />
+                    </div>
+                </div>
+                <!-- row7 -->
+                <div class="row">
+                    <div class="nowraps-text inprodet-titl am-ft-14">主管邮箱：</div>
+                    <div class="col-md-3 form-group needValInfo">
+                        <input type="text" class="col-md-10 text-overflow" name="" placeholder=" " value="" />
+                    </div>
+                </div>
+                <div class="fn-clear"></div>
+            </div>
+            </form>
+            <button type="button" class="btn btn-primary addBrandBtn">确认修改</button>
+            <button type="button" class="btn btn-default mgl10" ng-click="goBack()">取消</button>
+            <div class="fn-clear"></div>
+        </div>
+        <div class="fn-clear"></div>
+    </div>
+

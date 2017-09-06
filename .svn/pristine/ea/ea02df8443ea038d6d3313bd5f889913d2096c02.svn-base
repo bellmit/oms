@@ -1,0 +1,98 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+
+<!-- <a href="javascript:;" class="line-btn forwardTop-goBack" ng-if="type=='1'" ng-click="gobWorkBench()" >返回</a> -->
+<div class="content-wrapper content-wrapper-itemshow content-wrapper-itemshow2">
+	<div class="forwardTop-content fn-left" ng-if="userInfo.orgType == '6'">
+		<div class="forwardTop-left">
+			<img ng-src="{{orgInfo.shopLogo}}" ng-if="orgInfo.shopLogo != '' " />
+			<img src="http://static.qineasy.com/base/images/img_default_company.png" ng-if="orgInfo.shopLogo == '' " />
+		</div>
+		<div class="forwardTop-right">
+			<div class="forwardTop-righttop">
+				<p href="javascript:;" class="forwardTop-rightTitl">{{orgInfo.shopName}}</p>
+				<div class="fn-clear"></div>
+			</div>
+			<p class="am-ft-black">
+				<span class="stores-count">店铺数：<a href="javascript:;">{{orgInfo.shopNum}}个</a></span>
+				<span class="mgl10">运营人员：{{orgInfo.userName}}<!-- <a href="javascript:;"
+						class="mgl5 allotOprate">更换</a> --></span>
+			</p>
+			<p>联系电话：{{orgInfo.shopTel}}</p>
+			<p>
+				<span class="fn-left">详细地址：{{orgInfo.province}}{{orgInfo.city}}{{orgInfo.district}}{{orgInfo.shopAddr}}</span>
+				<span class="fn-right am-ft-gray">商户添加时间：{{orgInfo.openDate}}</span>
+			</p>
+		</div>
+	</div>
+	<div class="fn-clear"></div>
+	<div class="ManColTable col-lg-12">
+		<!-- 商品列表 -->
+		<div>
+
+				<div class="AddproTabnav">
+					<div class="tab-item" ng-class="{true:'tabactive'}[productTab=='1']" ng-click="shiftProductTab('1')">客户列表({{shopCount}})</div>
+					<div class="tab-item" ng-class="{true:'tabactive'}[productTab=='2']" ng-click="shiftProductTab('2')">合同列表({{contractCount}})</div>
+					<a href="javascript:;" class="btn fn-right btn-primary" ng-show="productTab=='1'" ng-click="addData('saleManage','commercialAdd',{},'1')">添加客户</a>
+					<a href="javascript:;" class="btn fn-right btn-primary" ng-show="productTab=='2'" ng-click="addData('saleManage','contractAdd',{},'2')">添加合同</a>
+					<div class="fn-clear"></div>
+				</div>
+				<div>
+					<!--<div class="saleSearch">
+						<div class="clientName">
+							<span>客户名称：</span><input type="text" placeholder="请输入合同编号" />
+						</div>
+						<div class="clientInfo fn-clear">
+							<p class="fn-left pdr20 mgt20">
+								<span>地区：</span>
+								<select name="" id="">
+									<option value="">全部</option>
+									<option value="">地区</option>
+								</select>
+							</p>
+							<p class="fn-left pdr20 mgt20">
+								<span>部门：</span>
+								<select name="" id="">
+									<option value="">全部</option>
+									<option value="">部门1</option>
+								</select>
+							</p>
+							<p class="fn-left pdr20 mgt20">
+								<span>销售人员：</span>
+								<select name="" id="">
+									<option value="">全部</option>
+									<option value="">销售人员12</option>
+								</select>
+							</p>
+							<p class="fn-left mgt20">
+								<span>状态：</span>
+								<select name="" id="">
+									<option value="">全部</option>
+									<option value="">状态1</option>
+								</select>
+							</p>
+							<p class="fn-left pdl15 mgt20">
+								<button>查询</button>
+							</p>
+						</div>
+					</div>-->
+					<constract-search></constract-search>
+					<div class="productCenterInfo" ng-show="productTab=='1'">
+						<jsp:include page="clientList.jsp" />
+					</div>
+					<div class="productCenterInfo" ng-show="productTab=='2'">
+						<jsp:include page="contractList.jsp" />
+					</div>
+				</div>
+
+				<div class="fn-clear"></div>
+			
+			<!--分页 start-->
+
+			<!--分页 end-->
+		</div>
+
+		<!-- /商品列表 -->
+	</div>
+	<div class="fn-clear"></div>
+</div>
+<!--发布商品弹框-->

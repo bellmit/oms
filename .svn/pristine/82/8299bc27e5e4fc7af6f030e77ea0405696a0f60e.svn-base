@@ -1,0 +1,52 @@
+.publish-article-title {
+	padding: 15px;
+	background: #fff;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+}
+
+.title-tips {
+	font-weight: bold;
+	margin-bottom: 3px;
+}
+
+.publish-article-content {
+	padding: 15px 0;
+	background: #fff;
+	border: 1px solid #ccc;
+}
+
+.publish-article-content .article-content {
+	padding: 5px;
+	height: 355px;
+	border-bottom: 1px solid #ccc;
+}
+
+.publish-article-content .footer-btn {
+	text-align: center;
+	padding-top: 10px;
+}
+
+.publish-article-content .footer-btn .upload-img {
+	display: inline-block;
+	vertical-align: bottom;
+	width: 25px;
+	height: 20px;
+	margin-right: 10px;
+	background: url(../img/img.png) 0 no-repeat;
+	background-size: 100%;
+}
+
+#imageUpload:hover {
+	cursor: pointer;
+}
+
+#mobileUploadImg:hover {
+	cursor: pointer;
+}
+
+.mobileDescTitle {
+	margin: 0 auto;
+	width: 90%;
+	display: block;
+}

@@ -1,0 +1,73 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--------------- Content start ----------------->
+<a href="javascript:;" class="line-btn forwardTop-goBack" ng-if="type=='1'" ng-click="gobWorkBench()" >返回</a>
+<div class="content-wrapper	saleSumary-wrapper fn-clear">
+	<div class="firstTab">
+		<ul class="fn-clear">
+			<li class="fn-left" ng-class="{true:'tabactive'}[productTab=='1']" ng-click="shiftProductTab('1','30')">最近30天</li>
+			<li class="fn-left" ng-class="{true:'tabactive'}[productTab=='2']" ng-click="shiftProductTab('2','7')">最近7天</li>
+			<li class="fn-left" ng-class="{true:'tabactive'}[productTab=='3']" ng-click="shiftProductTab('3','thisMonth')">本月</li>
+			<li class="fn-left" ng-class="{true:'tabactive'}[productTab=='4']" ng-click="shiftProductTab('4','thisYear')">本年</li>
+			<li class="fn-left" ng-class="{true:'tabactive'}[productTab=='5']" ng-click="shiftProductTab('5','other')">其他时间查询</li>
+		</ul>
+	</div>
+
+	<div class="col-lg-12   pl0 mgl5 mgt20 saleDetail">
+		<div class="col-lg-8" ng-show="productTab=='5'">
+			<div class="searchByTime pdl20 pt10 pb10">
+				<div class="fn-left mgr15 ">
+					<input type="text" id="start" placeholder="开始日期" class="mgr5"> 至
+					<input type="text" id="end" placeholder="结束日期" class="mgl5" />
+				</div>
+				<button ng-click="searchData()">查询</button>
+			</div>
+		</div>
+		<div class="col-lg-10 saleSummary">
+			<ul class="fn-clear">
+				<li class="fn-left newclient">
+					<p>累计新增客户</p>
+					<p>{{salesList.addShopCount}}</p>
+				</li>
+				<li class="fn-left constractCount">
+					<p>合同总数</p>
+					<p>{{salesList.contractCount}}</p>
+				</li>
+				<li class="fn-left moneyAmount">
+					<p>总金额</p>
+					<p>￥{{salesList.allTotalprice}}</p>
+				</li>
+				<li class="fn-left notDeadCon">
+					<p>未到期合同总数</p>
+					<p>{{salesList.notDueCount}}</p>
+				</li>
+				<li class="fn-left moneyCome">
+					<p>待收金额</p>
+					<p>￥{{salesList.notPaidAmount}}</p>
+				</li>
+			</ul>
+		</div>
+		<div class="mgt15  pdl15 secondTab col-lg-10">
+			<ul>
+				<li class="fn-left" ng-class="{true:'tabactive'}[saleTab=='1']" ng-click="shiftsaleTab('1','area')">按地区</li>
+				<li class="fn-left" ng-class="{true:'tabactive'}[saleTab=='2']" ng-click="shiftsaleTab('2','depart')">按部门</li>
+				<li class="fn-left" ng-class="{true:'tabactive'}[saleTab=='4']" ng-click="shiftsaleTab('4','saler')">按销售人员</li>
+				<li class="fn-left" ng-class="{true:'tabactive'}[saleTab=='3']" ng-click="shiftsaleTab('3','client')">按客户</li>
+			</ul>
+		</div>
+		<div class="area col-md-10" ng-show="saleTab=='1'">
+			<jsp:include page="lookByAreaTable.jsp" />
+		</div>
+		<div class="depart col-md-10" ng-show="saleTab=='2'">
+			<jsp:include page="lookByDepartTable.jsp" />
+		</div>
+		<div class="client col-md-10" ng-show="saleTab=='3'">
+			<jsp:include page="lookByClientTable.jsp" />
+		</div>
+		<div class="saler col-md-10" ng-show="saleTab=='4'">
+			<jsp:include page="lookBySalerTable.jsp" />
+		</div>
+		<div class="col-md-10">
+			<div id="paging2"></div>
+		</div>
+	</div>
+</div>

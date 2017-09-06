@@ -1,0 +1,214 @@
+qyApp.controller("addWdProController", function($scope, $http, Upload, $compile, $route, $state, $stateParams) {	
+	//规格切换
+	$scope.tabType='0';//初始化
+	$scope.shiftStandardTab=function(type){
+		$("."+$scope.tabType).hide();
+		$scope.tabType=type;
+		$("."+$scope.tabType).show();
+		
+	}
+	
+	$scope.shiftStandardTab1=function(type){
+		$scope.tabType=type;
+		if(type=="0"){
+			$(".color").show();
+			$(".size").hide();
+		}else{
+			$(".size").show();
+			$(".color").hide();
+		}
+		
+	}
+	
+	/*获取大品类*/
+	var jsonSortPid = JSON.stringify({
+//		"orgId": JSON.parse(keyParams).orgId,
+		//"orgId":"-1",
+		"sortPid": 0
+	});//获取大品类
+	$http({
+		method: 'post',
+		url: pos + 'sort/getBaseAndCustomSortWD',
+		params: {
+			keyParams: getKeyParams(jsonSortPid, keyParams),
+			jsonObject: getJsonObject(jsonSortPid)
+		}
+	}).success(function(data, stauts, headers, config) {
+		if(data.code == "1") {
+			$scope.item0 = data.data.sortList;
+		} else {
+			alertmsg('获取大品类失败', "error");
+		}
+	});
+	
+	//年份数组
+	$scope.queryYears = function() {
+			var dt = new Date();
+			year = dt.getFullYear();
+			$scope.years = [];
+			for(var i = 0; i < 7; i++) {
+				$scope.years.push(year - 5 + i);
+			}
+			$scope.proYear = year + "";
+		}
+	$scope.queryYears();
+	
+	//添加商品
+	$scope.addProudctWd=function(){
+		var json=JSON.parse($("#addproductForm").serializeJson());
+		json.publishStatus="1";
+		var obj={};
+		json.products=[];
+		obj.proNum="20112300000";
+		if(json.proSize){
+			if(json.proSize instanceof Array){
+				$.each(json.proSize,function(i,n){
+					obj.proSize=n;
+				})
+			}else{
+				obj.proSize=json.proSize;
+			}
+		}
+		if(json.proSizeName){
+			if(json.proSizeName instanceof Array){
+				$.each(json.proSizeName,function(i,n){
+					obj.proSizeName=n;
+				})
+			}else{
+				obj.proSizeName=json.proSizeName;
+			}
+		}
+		if(json.proColorId){
+			if(json.proColorId instanceof Array){
+				$.each(json.proColorId,function(i,n){
+					obj.proColorId=n;
+				})
+			}else{
+				obj.proColorId=json.proColorId;
+			}
+		}
+		obj.adjustPrice=$scope.adjustPrice;
+		obj.stkOnHand=$scope.stkOnHand;
+		json.products.push(obj);
+		json=JSON.stringify(json);
+		$http({
+			method: 'post',
+			url: pos + 'product/addProductWD',
+			params: {
+				keyParams: getKeyParams(json, keyParams),
+				jsonObject: getJsonObject(json)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				alertmsg('添加商品成功');
+			} else {
+				alertmsg('添加商品失败', "error");
+			}
+		});
+	}
+	
+	//获取自定义规格
+	$scope.getProductSpec=function(sortId){
+		$('#productSpecGroup').empty();
+		var json=JSON.stringify({"sortId":sortId});
+		$http({
+			method: 'post',
+			url: pos + 'product/getProductSpec',
+			params: {
+				keyParams: getKeyParams(json, keyParams),
+				jsonObject: getJsonObject(json)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				$scope.productSpecGroup=data.data.productSpecGroup;
+				if($scope.productSpecGroup.length>0){
+					var html=[];
+					var htmlTable=[];
+					$.each($scope.productSpecGroup,function(i,n){
+						
+						$.each(n.productSpec,function(j,k){
+							if(i==0){
+								html.push('<label class="label-input '+n.specGroupIndex+'">');
+								html.push('<input type="checkbox"  value="'+k.productSpecId+'"/>'+k.specName);
+								html.push('</label>');
+							}else{
+								html.push('<label class="label-input '+n.specGroupIndex+'" style="display:none">');
+								html.push('<input type="checkbox" value="'+k.productSpecId+'"/>'+k.specName);
+								html.push('</label>');
+							}							
+							
+//							htmlTable.push("<tr><td>"+k.specName+"</td>");
+							
+						})
+						
+					})
+			         var template=angular.element(html.join(""));
+			         var newHtml=$compile(template)($scope);
+			         angular.element($('#productSpecGroup').append(newHtml));
+				}else{
+					$('#productSpecGroup').empty();
+				}
+			} else {
+				alertmsg('获取自定义规格失败', "error");
+			}
+		});
+	}
+	
+	//获取服装规格
+	$scope.getColorAndSize=function(sortId){
+		$('#productSpecGroup').empty();
+		var json=JSON.stringify({"proModelid":"","sortId":sortId,"nub":"0","size":"0"});
+		$http({
+			method: 'post',
+			url: pos + 'product/getColorAndSize',
+			params: {
+				keyParams: getKeyParams(json, keyParams),
+				jsonObject: getJsonObject(json)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				$scope.colorList=data.data.colorInfo.colorList;
+				$scope.sizeList=data.data.sizeInfo.sizeList;
+				if($scope.colorList.length>0){
+					var html=[];
+					$.each($scope.colorList,function(i,n){
+							html.push('<label class="label-input color">');
+							html.push('<input type="checkbox" name="proColorId" value="'+n.colorId+'"/>'+n.colorName);
+							html.push('</label>');
+					});
+					 var template=angular.element(html.join(""));
+			         var newHtml=$compile(template)($scope);
+			         angular.element($('#productSpecGroup').append(newHtml));
+				}else{
+					$('#productSpecGroup').empty();
+				}
+				
+				if($scope.sizeList.length>0){
+					var html=[];
+					$.each($scope.sizeList,function(i,n){
+						html.push('<label class="label-input size" style="display:none">');
+						html.push('<input type="checkbox" name="proSize" value="'+n.sizeId+'"/>'+n.sizeName);
+						html.push('<input type="hidden" name="proSizeName" value="'+n.sizeName+'"/>');
+						html.push('</label>');
+					})
+					 var template=angular.element(html.join(""));
+			         var newHtml=$compile(template)($scope);
+			         angular.element($('#productSpecGroup').append(newHtml));
+				}else{
+					$('#productSpecGroup').empty();
+				}
+			} else {
+				alertmsg('获取自定义规格失败', "error");
+			}
+		});
+	}
+	
+	//品类change事件
+	$scope.changeSort=function(proSortId){
+		if(proSortId=="130906331"){
+			$scope.getColorAndSize(proSortId);
+		}else{
+			$scope.getProductSpec(proSortId);
+		}
+	}
+});

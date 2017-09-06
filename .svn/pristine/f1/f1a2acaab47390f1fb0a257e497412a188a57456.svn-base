@@ -1,0 +1,86 @@
+<%@ page contentType="text/html; charset=utf-8" language="java" import="java.util.*" errorPage="" %>
+<!--------------- Content start ----------------->
+<div class="content-wrapper unionProductInfo content-wrapper-order">
+	<div class="col-md-11 fn-clear pageTitl">
+		<h2 class="am-ft-16 fn-left">云仓商品详情</h2>
+		<button type="button" class="fn-right gobackButton" ng-click="goBackC()">返回</button>
+	</div>
+	<div class="unionProductInfoContent col-md-11 ">
+		<!--<div class="pageTitl removeBottom">-->
+    	<div class="unionBrief unionBriefDetil">
+    	  <h2 ng-if="status=='2'">联盟：{{cloudName}}({{brandName}})</h2>
+          <p  ng-if="status=='1'" class="unionStockList">
+        	<span class="descriColor1">{{cloudName}}&nbsp;&nbsp;</span>
+        	<span class="descriColor1">品牌：</span><span class="descriColor2">{{brandName}}&nbsp;&nbsp;</span>
+        	<span class="descriColor1">创建者：</span><span class="descriColor2">{{shopName}}&nbsp;&nbsp;</span>
+        	<span class="descriColor1">状态：</span><span class="descriColor2">{{createOrJoin}}</span>        	
+          </p>
+        </div>
+     </div>  
+	<div class="fn-clear unionProductInfoDetail col-md-11">
+			<div class="fn-left">
+				<div class="cloudProductImg fn-left">
+					<img ng-src="{{proPicD}}" />
+				</div>
+				<div class="fn-left">
+					<p class="linea productname">
+						{{proNameD}}
+						<img ng-if="allowPriceD!='未设置'" class="limitBtn" src="../static/base/images/icon_limit.png" />
+					</p>
+					<p class="lineb  pronumber"><span>款号 : </span><span>{{proModelnumD}}</span></p>
+					<div class="linec fn-clear">
+						<p class="fn-left"><span>品牌：</span><span>{{brandNameD}}</span></p>
+						<p class="fn-left"><span>品类：</span><span>{{grandparentSortNameD}}/{{parentSortNameD}}/{{sortNameD}}</span></p>
+						<p class="fn-left">年份：<span></span><span>{{proYearD}}年</span></p>
+						<p class="fn-left">季节：<span></span><span>{{proSeasonD}}</span></p>
+					</div>
+					<p class="lined"><span>吊牌价：</span><span>{{proPriceD | number:2}}元</span></p>
+				</div>
+			</div>
+			<div class="fn-right rightPart">
+				<p ng-if="allowPriceD!='未设置'"><span>&nbsp;&nbsp;&nbsp;最低限价：</span><span>{{allowPriceD | number:2}}元</span></p>
+				<p ng-if="allowPriceD =='未设置'"><span>&nbsp;&nbsp;&nbsp;最低限价：</span><span>未设置</span></p>
+				<p ng-if="status=='2'"><span >云仓总库存：</span><span>{{totalNumD}}件</span></p>
+				<p ng-if="status=='1'"><span >我的云仓总库存：</span><span>{{totalNumD}}件</span></p>
+			</div>
+	</div>
+		<!-- search -->
+	<div class="joinedmembernumA fn-clear col-md-11">
+			<p class="fn-left">参与成员共{{attendedShopNumD}}个：</p>
+			<div class="fn-right">
+				<input type="text" ng-model="memberName" placeholder="成员名称查询" />
+				<button ng-click="searchJoinedMember()">查询</button>			
+			</div>
+	</div>
+		<!-- /search -->
+
+
+	<!-- Main content -->
+	<div class="ManColTable col-lg-12 offsetPadding">
+		<div class="table-responsive PrivTableA">
+			<table class="table table-hover table-striped table-bordered">
+				<tr>
+					<th scope="col">成员编号</th>
+					<th scope="col">成员名称</th>
+					<th scope="col">O2O结算价</th>
+					<th scope="col">云仓库存</th>
+				</tr>
+				<tr ng-repeat="unionMumber in storeStockList">
+					<td>{{unionMumber.shopNum}}</td>
+					<td>{{unionMumber.shopName}}</td>
+					<td>{{unionMumber.minPrice | number:2}}元-{{unionMumber.maxPrice | number:2}}元</td>
+					<td>{{unionMumber.stockNum}}件</td>
+				</tr>				
+			</table>
+		</div>
+		
+	 <!-- 分页 -->
+      	<!--分页 start-->
+            <div class="pagelist priv-pagelist">
+                <div id="productInfoPaging"></div>
+            </div>
+        <!--分页 end-->
+        <!-- /分页 -->
+        <div class="fn-clear"></div>
+   </div>
+</div>

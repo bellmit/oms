@@ -1,0 +1,436 @@
+qyApp.controller("contractInfoController",  function($scope, $http, Upload, $compile,$route, $state, $stateParams) {
+	$scope.parts1=[];
+	$scope.parts2=[];
+	$scope.parts3=[];
+	$scope.parts4=[];
+	$scope.parts5=[];
+	$scope.selectpartId1='';
+	$scope.selectpartId2='';
+	$scope.selectpartId3='';
+	$scope.selectpartId4='';
+	$scope.selectpartId5='';
+	$scope.ok="false";
+	
+	if($stateParams.uiParams.type=="1"){
+		$stateParams.uiParams.source.push({
+			level:1,
+			name: "contractInfo"
+		})
+	}else if($stateParams.uiParams.type=="2"){
+		$stateParams.uiParams.source.splice($stateParams.uiParams.source.length-1,1)
+	}
+	$scope.contractInfo=$stateParams.uiParams.orgInfo;
+	$scope.userInfo=JSON.parse(localStorage.userInfo);
+//	$scope.timeArr=$scope.contractInfo.begindate.split("-");
+	$scope.goback=function(){
+		$stateParams.uiParams.type="2";
+		$stateParams.uiParams.source.splice($stateParams.uiParams.source.length-1,1);
+		$state.go($stateParams.uiParams.source[$stateParams.uiParams.source.length-1].name,{
+			uiParams:$stateParams.uiParams
+		})
+	}
+	$scope.roleId=JSON.parse(localStorage.userInfo).roleId;
+	$scope.serviceContract="false";
+	$scope.financeService="false";
+	$scope.departService="false";
+	console.log($scope.contractInfo)
+	if($scope.contractInfo.contractStatus!="0"){
+		$scope.serviceContract="true";
+	}
+	
+	//财务人员查看
+	if($scope.roleId=="12"){
+		$scope.financeService="true";
+		if($scope.contractInfo.contractStatus=="0"){
+			$scope.ok="true";
+		}
+	//主管查看
+	}else if($scope.roleId=="13"||$scope.roleId=="15"||$scope.roleId=="17"){
+		$scope.financeService="true";
+		$scope.departService="true";
+		if($scope.contractInfo.contractStatus=="1"){
+			$scope.assignedUser="true";
+			$scope.departService="false";
+			$scope.ok="true";
+		}
+	//普通员工查看
+	}else if($scope.roleId=="14"||$scope.roleId=="16"||$scope.roleId=="18"){
+		$scope.financeService="true";
+		$scope.departService="true";
+		$scope.execService="true";
+		//合同是否待确认
+		if($scope.contractInfo.contractStatus=="2"){	
+			$scope.execUser="true";
+			$scope.execService="false";
+			$scope.ok="true";
+		}
+	}
+	
+	
+	//获取合同任务详细信息
+	$scope.getContractTask=function(){
+		var contractId=$scope.contractInfo.contractId;
+		$http({
+			method: 'post',
+			url: pos + 'contract/getContractTask',
+			params: {
+				keyParams: getKeyParams("{\"contractId\":\""+contractId+"\"}", keyParams),
+				jsonObject: getJsonObject("{\"contractId\":\""+contractId+"\"}")
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.contractTask = data.data.contractTasks[0];
+				if($scope.contractInfo.contractStatus=="1"){
+					$scope.getUserList();
+				}				
+			} else {
+				alertmsg("获取失败", "error");
+			}
+		});
+	}
+	$scope.getContractTask();
+		
+	//获取部门区域
+	$scope.getDepartArea=function(){
+		var jsonObject = {};
+		jsonObject = angular.toJson(jsonObject);
+		$http({
+			method: 'post',
+			url: cas + 'depart/getDepartArea',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.departAreaList = data.data.departAreaList;
+			} else {
+				alertmsg("获取失败", "error");
+			}
+		});
+	}
+	$scope.getDepartArea();
+	
+//	$scope.parts1=[];
+//	$scope.parts2=[];
+//	$scope.parts3=[];
+	//查询区域下的部门列表
+ 	$scope.getDepartList = function(depart){
+ 		var jsonObject = "{\"pDepartId\":\""+0+"\",\"departArea\":\""+depart+"\"}";
+ 		$http({
+            method: 'post',
+            url: cas + 'depart/getDepartList',
+            params: {
+	            keyParams: getKeyParams(jsonObject, keyParams),
+	            jsonObject: getJsonObject(jsonObject)
+	        }
+       }).success(function(data, stauts, headers, config) {
+            if (data.code == 1) {
+                $scope.parts1 = data.data.departList;     
+                $scope.parts2 = [];
+			    $scope.parts3 = [];
+			    $scope.parts4 = [];
+			    $scope.parts5 = [];
+		    	$scope.selectpartId2='';
+				$scope.selectpartId3='';
+				$scope.selectpartId4='';	
+				$scope.selectpartId5='';	
+            } else {
+                alertmsg("获取部门分组失败", "error");
+            }
+       })
+ 	};
+  	
+  	//查询部门分组
+	$scope.sortIdChange = function(id, type){
+		$scope.departId=id;
+		var jsonObject = "{\"pDepartId\":\""+id+"\"}";
+ 		$http({
+            method: 'post',
+            url: cas + 'depart/getDepartList',
+            params: {
+	            keyParams: getKeyParams(jsonObject, keyParams),
+	            jsonObject: getJsonObject(jsonObject)
+	        }
+       }).success(function(data, stauts, headers, config) {
+            if (data.code == 1) {              	
+				if(type == "1") {
+				    $scope.parts2 = data.data.departList; 
+					$scope.parts3 = [];
+				    $scope.parts4 = [];
+				    $scope.parts5 = [];
+					$scope.selectpartId3='';
+					$scope.selectpartId4='';
+					$scope.selectpartId5='';
+				}else if(type == "2"){
+					$scope.parts3 = data.data.departList; 
+				    $scope.parts4 = [];
+				    $scope.parts5 = [];
+					$scope.selectpartId4='';
+					$scope.selectpartId5='';
+				}else if(type == "3"){
+					$scope.parts4 = data.data.departList; 
+				    $scope.parts5 = [];
+					$scope.selectpartId5='';
+				}else if(type == "4"){
+					$scope.parts5 = data.data.departList; 
+				}
+            } else {
+                alertmsg("获取部门列表信息失败", "error");
+            }
+       })
+	}
+	
+	//合同提交
+	$scope.save=function(roleId){
+		if(roleId=="12"){			
+			var jsonObject=JSON.parse($('#financeForm').serializeJson());						
+			jsonObject.departId=$scope.departId;
+			jsonObject.contractId=$scope.contractInfo.contractId;
+			jsonObject.orgId=$scope.contractInfo.orgId;
+			if(jsonObject.moneyType=='0'){
+				jsonObject.accountAmount="0";
+			}
+			if(parseInt(jsonObject.accountAmount)>parseInt($scope.contractInfo.notPaidAmount)){
+	 			alertmsg("收款金额不能大于代收款", "error");
+	 			return;
+	 		}
+	 		if(parseInt(jsonObject.accountAmount)<0){
+	 			alertmsg("收款金额不能小于零", "error");
+	 			return;
+	 		}
+			var notPaidAmount=parseInt($scope.contractInfo.totalprice)-parseInt(jsonObject.money)
+			jsonObject.notPaidAmount=notPaidAmount.toString();
+			jsonObject=JSON.stringify(jsonObject);
+			$http({
+	            method: 'post',
+	            url: pos + 'contract/addContractTask',
+	            params: {
+		            keyParams: getKeyParams(jsonObject, keyParams),
+		            jsonObject: getJsonObject(jsonObject)
+		        }
+	       }).success(function(data, stauts, headers, config) {
+	            if (data.code == 1) {              	
+	            	//$scope.contractInfo.contractStatus='1';
+	            	//$scope.financeService="true";
+	            	//$scope.ok="false";
+	            	$scope.goback();
+	            } else {
+	                alertmsg("审核合同任务失败", "error");
+	            }
+	       })
+		}
+		if(roleId=="13"||roleId=="15"||roleId=="17"){
+			var jsonObject=JSON.parse($('#assignedForm').serializeJson());
+			var orgId=$scope.userInfo.orgId;
+			jsonObject.departId=$scope.contractTask.execDepartId;
+			jsonObject.contractId=$scope.contractInfo.contractId;
+			jsonObject.roleId=roleId;
+			jsonObject.fileName=$scope.fileName;
+			jsonObject.fileUrl=$scope.fileUrl;
+			jsonObject=JSON.stringify(jsonObject);
+			$http({
+	            method: 'post',
+	            url: pos + 'contract/updateContractTask',
+	            params: {
+		            keyParams: getKeyParams(jsonObject, keyParams),
+		            jsonObject: getJsonObject(jsonObject)
+		        }
+	       }).success(function(data, stauts, headers, config) {
+	            if (data.code == 1) {              	
+	            	//$scope.departService="true";
+//	            	$scope.assignedUser="false";
+//	            	$scope.ok="false";
+	            	$scope.goback();
+	            } else {
+	                alertmsg("分配合同任务失败", "error");
+	            }
+	       })
+		}
+		if(roleId=="14"||roleId=="16"||roleId=="18"){
+			var jsonObject=JSON.parse($('#execForm').serializeJson());
+			if(!jsonObject.managerResult){
+				alertmsg("接受人意见不能为空", "error");
+				return;
+			}
+			var orgId=$scope.userInfo.orgId;
+			jsonObject.departId=$scope.contractTask.execDepartId;
+			jsonObject.contractId=$scope.contractInfo.contractId;
+			jsonObject.roleId=roleId;
+			jsonObject.orgId=$scope.contractInfo.orgId;
+			jsonObject=JSON.stringify(jsonObject);
+			$http({
+	            method: 'post',
+	            url: pos + 'contract/updateContractTask',
+	            params: {
+		            keyParams: getKeyParams(jsonObject, keyParams),
+		            jsonObject: getJsonObject(jsonObject)
+		        }
+	       }).success(function(data, stauts, headers, config) {
+	            if (data.code == 1) {              	
+	            	//$scope.execService="true";
+//	            	$scope.execUser="false";
+//	            	$scope.ok="false";
+	            	$scope.goback();
+	            } else {
+	                alertmsg("分配合同任务失败", "error");
+	            }
+	       })
+		}
+	}
+	
+	//查询部门下的子部门
+	//查询部门下的人员信息
+	$scope.getUserList = function(){
+		var departId=$scope.contractTask.execDepartId;
+		var orgId=$scope.userInfo.orgId;
+ 		var jsonObject = "{\"departId\":\""+departId+"\",\"orgId\":\""+orgId+"\"}";
+ 		$http({
+            method: 'post',
+            url: cas + 'user/getUserList',
+            params: {
+	            keyParams: getKeyParams(jsonObject, keyParams),
+	            jsonObject: getJsonObject(jsonObject)
+	        }
+       }).success(function(data, stauts, headers, config) {
+            if (data.code == 1) {
+               $scope.userList = data.data.userList;
+               var html=[];
+               html.push('<select name="execUserId">');
+               html.push('<option value="">请选择</option>');
+               $.each($scope.userList,function(i,n){
+            	  html.push('<option value="'+n.userId+'">'+n.trueName+'</option>');
+               })
+               $('#assigned').append(html.join(''));
+            } else {
+                alertmsg("获取部门人员失败", "error");
+            }
+       })
+ 	};
+ 	//终止合同
+ 	$scope.endStatus='0';//暂停服务显示框
+ 	$scope.endContract=function(){
+ 		$scope.endStatus='1';
+ 	}
+ 	$scope.userName=$scope.contractInfo.userName;//确认人
+ 	$scope.contractStatus=6;//5暂停 6终止
+ 	$scope.deductRate=$scope.contractInfo.deductRate;//提成百分点
+ 	$scope.setdeductAmout=function(){
+ 		if($scope.deductRate!=''&&$scope.deductRate!=undefined){
+	 		$scope.deductAmout=Number($scope.deductRate)*Number($scope.businessAmount)/100;
+	 		$scope.deductAmout=$scope.deductAmout.toFixed(2);
+ 		}
+ 	}
+ 	$scope.sureEndContract=function(){
+ 		$scope.businessEndTime=$("#end").val();
+ 		var jsonObject={
+ 			contractId:$scope.contractInfo.contractId,
+ 			businessAmount:$scope.businessAmount,
+ 			deductAmout:$scope.deductAmout,
+ 			businessEndTime:$scope.businessEndTime,
+ 			endUserId:$scope.contractInfo.userId,
+ 			endMemo:$scope.endMemo,
+ 			contractStatus:$scope.contractStatus
+ 		}
+ 		jsonObject=JSON.stringify(jsonObject);
+ 		console.log(jsonObject);
+ 		$http({
+            method: 'post',
+            url: pos + 'contract/endContract',
+            params: {
+	            keyParams: getKeyParams(jsonObject, keyParams),
+	            jsonObject: getJsonObject(jsonObject)
+	        }
+       }).success(function(data, stauts, headers, config) {
+           console.log(data)
+           if (data.code == 1) {
+             $scope.endStatus='0';
+            } else {
+                alertmsg("终止合同失败", "error");
+            }
+       })
+ 	}
+ 	//服务终止or完结
+ 	$scope.isService=function(type){
+ 		if(type=='5'){
+ 			$scope.contractStatus=5;
+ 		}else{
+ 			$scope.contractStatus=6;
+ 		}
+ 	}
+ 
+// 	$scope.getDepartUsers();
+ 	//继收
+ 	$scope.accountAmount="";
+ 	$scope.accountTime="";
+ 	$scope.memo="";
+ 	$scope.pay=function(){
+ 		var jsonObject=JSON.parse($('#reAcountForm').serializeJson());
+// 		jsonObject.accountAmount=$scope.accountAmount;
+ 		
+ 		if(parseInt(jsonObject.accountAmount)>parseInt($scope.contractInfo.notPaidAmount)){
+ 			alertmsg("收款金额不能大于代收款", "error");
+ 			return;
+ 		}
+ 		if(parseInt(jsonObject.accountAmount)<0){
+ 			alertmsg("收款金额不能小于零", "error");
+ 			return;
+ 		}
+ 		jsonObject.memo=$scope.memo;
+ 		jsonObject.contractId=$scope.contractInfo.contractId;
+ 		jsonObject.accountUserId=$scope.userInfo.userId;
+ 		jsonObject=JSON.stringify(jsonObject);
+ 		console.log(jsonObject);
+ 		$http({
+            method: 'post',
+            url: pos + 'contract/addContractPay',
+            params: {
+	            keyParams: getKeyParams(jsonObject, keyParams),
+	            jsonObject: getJsonObject(jsonObject)
+	        }
+       }).success(function(data, stauts, headers, config) {
+           console.log(data)
+           if (data.code == 1) {
+        	   $scope.goback();
+	        } else {
+	            alertmsg("收款失败", "error");
+	        }
+       })
+ 	}
+ 	
+ 	//上传work
+	$scope.uploadWork=function(files){
+		if(files){
+			var fileUrl = JSON.parse(keyParams).orgId + "/work/"
+			jsonObject = "{\"fileUrl\":\"" + fileUrl + "\"}";
+			if(files && files.length) {
+				$scope.files = files;
+				for(var i = 0; i < files.length; i++) {
+					Upload.upload({
+						//服务端接收
+						url: pos + 'contract/uploadWork',
+						//上传的同时带的参数
+						data: {
+							keyParams: getKeyParams(jsonObject, keyParams),
+							jsonObject: getJsonObject(jsonObject)
+						},
+						file: files[i]
+					}).success(function(data, status, headers, config) {
+						//上传成功
+						if(data.code == "1") {
+							$("#fileName").text(data.data.workName);
+							$scope.fileName=data.data.workName
+							$scope.fileUrl=data.data.workPath;
+						} else {
+							alertmsg("上传Work失败", "error");
+						}
+					}).error(function(data, status, headers, config) {
+						//上传失败
+						console.log('error status: ' + status);
+					});
+				}
+			}
+		}
+		
+	}
+});

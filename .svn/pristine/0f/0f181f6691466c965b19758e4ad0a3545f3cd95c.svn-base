@@ -1,0 +1,171 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--------------- Content start ----------------->
+<div class="content-wrapper contractCreate-wraper fn-clear">
+	<div class="col-md-11 pageTitl">
+		<h2 class="am-ft-16 fn-left">添加合同</h2>
+		<a href="javascript:;" class="line-btn fn-right" ng-click="goback()">返回</a>
+	</div>
+	<div class="col-md-11 fn-clear addContractBox">
+		<form id='contractForm'>
+			<div class="fn-clear col-md-12 contractBaseInfoBox">
+				<div class="contractBaseInfo">基础信息</div>
+				<div class="contractInfo col-md-9">
+					<!-- <div class="infoLine infoLinec fn-clear">
+						<div class="fn-left infoTitile">
+							<em class="am-ft-red mgr5">*</em>合同编号：
+						</div>
+						<input type="text" name="contractNum" />
+					</div> -->
+					<div class="infoLine infoLinea fn-clear">
+						<div class="fn-left infoTitile">
+							<em class="am-ft-red mgr5">*</em>合同类型：
+						</div>
+						<label> <input type="radio" name='contractType' value='0' />新签
+						</label> <label> <input type="radio" name='contractType' value='1' />续签
+						</label>
+					</div>
+					<div class="infoLine infoLineb fn-clear">
+						<div class="fn-left infoTitile">
+							<em class="am-ft-red mgr5">*</em>客户名称：
+						</div>
+						<select name="orgId" ng-model='orgManage'
+							ng-options='orgManage.orgId as orgManage.shopName for orgManage in orgManageLists'>
+							<option value="">请选择</option>
+							<option value="orgManage.orgId">orgManage.shopName</option>
+						</select>
+						<!--<span ng-show="pageIn=='1'" style="line-height: 30px;">{{shopName}}</span>
+					<div class="row" id="forwardaddForma" ng-show="pageIn=='2'">
+						<div class="col-md-3 selectBox" style="padding: 0;">
+							<div data-selectId="" class="shopparent">
+								<span>请选择</span>
+								<i class="fa fa-sort-desc fn-right mgr5 mgt5" aria-hidden="true"></i>
+							</div>
+						<!--下拉框的代码-->
+						<!--<div class="simulateSelect fn-hide">
+							<div class="searchpart">
+								<span class="fangda"><i class="fa fa-search" aria-hidden="true"></i></span>
+								<input type="text" class="orgshopName" ng-model="orgshopName" ng-change="searchOrgList()" placeholder="请输入商户名称" />
+							</div>
+							<div class="selectePart">
+								<ul>
+									<li data-Id="{{orgManageList.orgId}}" ng-repeat="orgManageList in orgManageLists track by $index"> {{orgManageList.shopName}}</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>-->
+					</div>
+					<div class="infoLine infoLinec fn-clear">
+						<div class="fn-left infoTitile">
+							<em class="am-ft-red mgr5">*</em>席位数/店铺数：
+						</div>
+						<input type="text" name='shopNum' />
+					</div>
+					<div class="infoLine infoLinec fn-clear">
+						<div class="fn-left infoTitile">
+							<em class="am-ft-red mgr5">*</em>合同费用：
+						</div>
+						<input type="text" name="totalprice" />
+					</div>
+					<div class="infoLine infoLined fn-clear">
+						<div class="fn-left infoTitile">
+							<em class="am-ft-red mgr5">*</em>服务类型：
+						</div>
+						<label> <input type="radio" name='serviceType' value='值守' />值守
+						</label> <label> <input type="radio" name='serviceType' value='提成' />提成
+						</label>&nbsp; <input type="text" name='serviceType' />
+					</div>
+					<div class="infoLine infoLinee fn-clear">
+						<div class="fn-left infoTitile">
+							<em class="am-ft-red mgr5">*</em>产品类型：
+						</div>
+						<label> <input type="radio" name='productType' value='客服' />客服
+						</label> <label> <input type="radio" name='productType' value='美工' />美工
+						</label> <label> <input type="radio" name='productType' value='运营' />运营
+						</label> <label> <input type="radio" name='productType' value='培训' />培训
+						</label>
+					</div>
+					<div class="infoLine infoLineg fn-clear">
+						<div class="fn-left infoTitile">
+							<!--<em class="am-ft-red mgr5">*</em>-->
+							产品备注：
+						</div>
+						<textarea type="text" name='serviceMemo' />
+					</div>
+					<div class="infoLine infoLinef fn-clear">
+						<div class="fn-left infoTitile">
+							<em class="am-ft-red mgr5">*</em>合同周期：
+						</div>
+						<!--<input type="text" class="fn-left laydate-icon form-control" id="effectdatatime" ng-model="begindate" placeholder="开始日期" />-->
+						<input type="text"
+							class="fn-left laydate-icon form-control effectdatatime"
+							name='begindate' placeholder="开始日期" onclick="laydate()" /> <span
+							class="fn-left">&nbsp;至&nbsp;</span> <input type="text"
+							class="fn-left laydate-icon form-control effectdatatime"
+							name='enddate' placeholder="结束日期" onclick="laydate()" />
+					</div>
+				</div>
+			</div>
+			<div class="fn-clear col-md-12 contractBaseInfoBox">
+				<div class="contractBaseInfo">所属区域</div>
+				<div class="contractInfo col-md-9">
+					<div class="infoLine infoLinef fn-clear">
+						<div class="fn-left infoTitile">
+							<em class="am-ft-red mgr5">*</em>计划上线时间：
+						</div>
+						<input type="text" class="fn-left laydate-icon form-control"
+							name='planDate' placeholder="上线时间" onclick="laydate()" />
+					</div>
+					<div class="infoLine infoLinee fn-clear">
+						<div class="fn-left infoTitile">
+							<em class="am-ft-red mgr5">*</em>服务区域：
+						</div>
+						<label> <input type="radio" name='serviceArea' value='杭州' />杭州
+						</label> <label> <input type="radio" name='serviceArea' value='武汉' />武汉
+						</label> <label> <input type="radio" name='serviceArea' value='合肥' />合肥
+						</label>
+					</div>
+					<div class="infoLine infoLinec fn-clear">
+						<div class="fn-left infoTitile">
+							<em class="am-ft-red mgr5">*</em>服务部门/人：
+						</div>
+						<input type="text" name='serviceDepart' />
+					</div>
+					<!-- <div class="infoLine infoLinec fn-clear">
+				<div class="fn-left infoTitile">
+					<em class="am-ft-red mgr5">*</em>
+					服务业务组/人：
+				</div>
+				<input type="text" />
+			</div> -->
+					<div class="infoLine infoLinei fn-clear">
+						<div class="fn-left infoTitile">
+							<!--<em class="am-ft-red mgr5">*</em>-->
+							合同备注：
+						</div>
+						<textarea name="remark" ng-model="remark" rows="1" cols="1">
+				</textarea>
+						<span> <i ng-if="remark.length==undefined">0</i> <i
+							ng-if="remark.length!=undefined">{{remark.length}}</i> /200
+						</span>
+					</div>
+					<div class="infoLine infoLinei fn-clear">
+						<div class="fn-left infoTitile">
+							<!--<em class="am-ft-red mgr5">*</em>-->
+							确认人：
+						</div>
+						<span class="am-ft-gray">{{userInfo.trueName}}</span>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div>
+		<button type="button" class="btn btn-primary addBrandBtn"
+			ng-click="addContract()">确认</button>
+		<button type="button" class="btn btn-default mgl10"
+			ng-click="goback()">取消</button>
+	</div>
+</div>
+</div>
+<div class="fn-clear"></div>

@@ -1,0 +1,50 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<div class="content-wrapper content-wrapper-order fn-clear pdl20">
+	<!-- search -->
+	<div class="col-md-11 pageTitl no-border-bottom fn-clear pl0 mgl0 mgb5">
+		<h2 class="am-ft-16 fn-left title-aline-bottom">
+			<span class="">所有经销商（{{count}}）</span>
+			<span class="distri-intro">经销商是指拥有品牌授权的商户</span>
+			</h2>
+		<div class="codeSelectRight">
+			<input type="text" placeholder="请输入经销商名称查询"  ng-model="shopName"/>
+			<button class="codeSelectBtn" ng-click="searchDistributor()">查询</button>
+			<button class="addDiscount_btn mgl10 mgt5" ng-click="addDistribute()">添加经销商</button>
+		</div>
+	</div>
+	<div class="distri-table mgl0 PrivTable col-md-11 pl0 pr0 mgt0">
+		<table class="table table-hover center-align table-striped table-bordered">
+			<tr>
+				<th scope="col">编号</th>
+				<th scope="col">经销商名称</th>
+				<th scope="col">授权品牌</th>
+				<th scope="col">商户类型</th>
+				<th scope="col">联系人</th>
+				<th scope="col">联系方式</th>
+				<th scope="col">详细地址</th>
+				<th scope="col">操作</th>
+			</tr>
+			<tr ng-repeat="orgList in  orgLists">
+				<td>{{orgList.shopNum}}</td>
+				<td>{{orgList.name}}</td>
+				<td>{{orgList.brandName}}</td>
+				<td>
+				<span ng-if="orgList.shopType=='S1'">企业</span>
+				<span ng-if="orgList.shopType=='S2'">个人</span>
+				</td>
+				<td>{{orgList.contacts}}</td>
+				<td>{{orgList.shopTel}}</td>
+				<td>{{orgList.province}}{{orgList.city}}{{orgList.district}}{{orgList.shopAddr}}</td>
+				<td>
+					<a href="javascript:;" class="am-ft-blue" ng-click="lookInfo(orgList)">查看详情</a>
+				</td>
+			</tr>
+		</table>
+		 <div class="pagelist priv-pagelist">
+                <div id="page"></div>
+            </div>
+	</div>
+	<!-- /search -->
+	<!-- Main content -->
+</div>
+

@@ -1,0 +1,979 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--------------- Content start ----------------->
+<div class="content-wrapper contractInfo-wrapper content-wrapper-itemshow content-wrapper-itemshow2">
+	<div class="col-md-11 contractTitle pageTitl">
+		<p class="fn-left  mgr20">
+			<span class="contractSeller">合同编号：</span>
+			<span class="contractCode">{{contractInfo.contractNum}}</span>
+			<!--<span>{{contractInfo.contractNum}}</span>-->
+		</p>
+		<p class="fn-left  mgr20">
+			<span class="contractSeller">客户名称：</span>
+			<span class="contractCode">{{contractInfo.shopName}}</span>
+			<!--<span>{{contractInfo.userName}}</span>-->
+		</p>
+		<p class="fn-left ">
+			<span class="contractSeller">产品类型：</span>
+			<span class="contractCode">{{contractInfo.productType}}</span>
+			<!--<span>{{contractInfo.userName}}</span>-->
+		</p>
+		<a href="javascript:;" class="line-btn fn-right" ng-click="goback()">返回</a>
+	</div>
+	<div class="col-md-11 contractDetailBox" >
+		<div class="col-md-12 contractDetailTitle">
+			<div>基础信息</div>
+			<div>所属区域</div>
+		</div>
+		<div class="col-md-12 contractDetailContent">
+			<div class="contractDetailLeftBox">
+				<div class="infoLine infoLinea fn-clear">
+					<div class="fn-left infoTitile">
+						合同类型：
+					</div>
+					<span ng-if="contractInfo.contractType=='0'">新签</span>
+					<span ng-if="contractInfo.contractType=='1'">续签</span>
+				</div>
+				<div class="infoLine infoLineb fn-clear">
+					<div class="fn-left infoTitile">
+						席位数/店铺数：
+					</div>
+					<span>{{contractInfo.shopNum}}家</span>
+			  </div>
+				<div class="infoLine infoLineb fn-clear">
+					<div class="fn-left infoTitile">
+						店铺账号：
+					</div>
+					<div class="fn-left infocontentBox">
+						<div ng-repeat="shop in contractInfo.shopList" class="mgt10" style="background:#f4f4f4; padding:10px;">
+							<p>
+								<span class="mgr20">{{shop.shopName}}  &nbsp;&nbsp;<span ng-if="shop.shopType=='2'">淘宝</span>
+								<span ng-if="shop.shopType=='3'">(天猫)</span>
+								<span ng-if="shop.shopType=='4'">(京东)</span>
+								<span ng-if="shop.shopType=='0'">(1688)</span>
+								<span ng-if="shop.shopType=='1'">(速卖通)</span>
+								<span ng-if="shop.shopType=='5'">(亚马逊)</span></span>
+							</p>
+							<p>
+								<span class="am-ft-12">帐号：{{shop.thirdUserName}}</span>
+								<span class="am-ft-12">密码：{{shop.thirdPassWord}}</span>
+							</p>
+							<p>{{shop.shopUrl}}</p>
+						</div>
+					</div>
+			  </div>
+			
+			<div class="infoLine infoLinec fn-clear">
+				<div class="fn-left infoTitile">
+					合同费用：
+				</div>
+				<span>{{contractInfo.totalprice}}&nbsp;元</span>
+			</div>
+			<div class="infoLine infoLined fn-clear">
+				<div class="fn-left infoTitile">
+					服务类型：
+				</div>
+				<span class="mgr10">{{contractInfo.serviceType}}</span>
+				<span ng-if='contractInfo.serviceType=="提成"'>提成比例&nbsp;{{contractInfo.deductRate}}%</span>
+			</div>
+			<div class="infoLine infoLinee fn-clear">
+				<div class="fn-left infoTitile">
+					产品类型：
+				</div>
+				<span>{{contractInfo.productType}}</span>
+			</div>
+			<div class="infoLine infoLineg fn-clear">
+				<div class="fn-left infoTitile">
+					产品备注：
+				</div>
+				<span>{{contractInfo.serviceMemo}}</span>
+			</div>
+			<div class="infoLine infoLinef fn-clear">
+				<div class="fn-left infoTitile">
+					合同周期：
+				</div>
+				<span>{{contractInfo.begindate}}至{{contractInfo.enddate}}</span>
+			</div>
+		</div>
+		<div class="contractDetailLeftBox contractDetailRightBox">
+			<div class="infoLine infoLinef fn-clear">
+				<div class="fn-left infoTitile">
+					计划上线时间：
+				</div>
+				<span>{{contractInfo.planDate}}</span>
+			</div>
+			<div class="infoLine infoLinee fn-clear">
+				<div class="fn-left infoTitile">
+					服务区域：
+				</div>
+				<span>{{contractInfo.serviceArea}}</span>
+			</div>	
+			<div class="infoLine infoLinec fn-clear">
+				<div class="fn-left infoTitile">
+					服务部门：
+				</div>
+				<span>{{contractInfo.serviceDepart}}</span>
+			</div>
+			<div class="infoLine infoLinei fn-clear">
+				<div class="fn-left infoTitile">
+					合同备注：
+				</div>
+				<span>{{contractInfo.remark}}</span>
+			</div>
+			<div class="infoLine infoLinei fn-clear">
+				<div class="fn-left infoTitile">
+					签单人：
+				</div>
+				<span>{{contractInfo.signName}}</span>
+			</div>
+			<div class="infoLine infoLinei fn-clear">
+				<div class="fn-left infoTitile">
+					提交时间：
+				</div>
+				<span >{{contractInfo.createdate}}</span>
+			</div>
+			<div class="infoLine infoLinei fn-clear">
+				<div class="fn-left infoTitile">
+					所属部门：
+				</div>
+				<span >{{contractInfo.departNameTree}}</span>
+			</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-11 fn-clear addContractBox" ng-if="roleId=='12'&&contractInfo.contractStatus=='0'">
+	<form id="financeForm">
+		<div class="fn-clear col-md-12 contractBaseInfoBox">
+			<div class="contractBaseInfo">财务审核</div>
+	    </div>
+	    <div class="contractInfo col-md-9">
+				<div class="infoLineBox mgt15 fn-clear mgb10">
+					<div class="infoTitile">
+						负责部门：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<div class="infoLineInfo">
+							<select class="col-md-3 mgr10" ng-model="depart" ng-options='depart.areaName as depart.areaName for depart in departAreaList' ng-change="getDepartList(depart)">
+								<option value="">请选择</option>
+							</select>
+							<select class="col-md-3 mgr10" ng-show="parts1.length != 0" ng-options="n.departId as n.departName for n in parts1" ng-model="selectpartId1" ng-change="sortIdChange(selectpartId1,1)">
+								<option value="">请选择</option>
+	                        </select>
+	                        <select class="col-md-3 mgr10" ng-show="parts2.length != 0" ng-options="x.departId as x.departName for x in parts2" ng-model="selectpartId2" ng-change="sortIdChange(selectpartId2,2)">
+								<option value="">请选择</option>
+	                        </select>
+	                        <select class="col-md-3 mgr10" ng-show="parts3.length != 0" ng-options="a.departId as a.departName for a in parts3" ng-model="selectpartId3" ng-change="sortIdChange(selectpartId3,3)">
+								<option value="">请选择</option>
+	                        </select>
+						</div>
+						<button>添加负责部门</button>
+					</div>
+				</div>
+				<div class="infoLineBox mgt0 fn-clear">
+					<div class="infoTitile">
+						收款状态：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<label class="fn-left mgr5">
+							<input name="moneyType"  type="radio" value="1" ng-click='accountStatus(1)'/>已到账
+						</label>
+						<input type="text" name="accountAmount" class="fn-left mgr15"  ng-if='isAccount=="1"'  />
+						<label>
+							<input name="moneyType" type="radio" value="0" checked="checked" ng-click='accountStatus(2)'/>未到账
+						</label>
+					</div>
+				</div>
+				<div class="infoLineBox mgt0 fn-clear">
+					<div class="infoTitile">
+						到账时间：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<input type="text"
+							class="fn-left laydate-icon form-control effectdatatime"
+							name='accountTime' placeholder="到账时间" onclick="laydate()" />
+					</div>
+				</div>
+				<div class="infoLineBox  fn-clear">
+					<div class="infoTitile">
+						备注：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<input name="memo" type="text" />
+					</div>
+				</div>
+				<div class="infoLineBox mgb15 mgt0 fn-clear">
+					<div class="infoTitile">
+						确认人：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<!-- <span class="am-ft-gray">财务部</span> -->
+						<span class="am-ft-gray">{{userInfo.trueName}}</span>
+					</div>
+				</div>
+		</div>
+	</form>
+	</div>
+	<div class="col-md-11 fn-clear addContractBox"  style="border:1px solid #D7D7D7;" id="serviceContract" ng-if="serviceContract=='true'">
+		<div class="fn-clear col-md-12 contractBaseInfoBox" >
+			<div class="contractBaseInfo" style="background: #D7D7D7;">业务流转</div>
+	    </div>
+	    <div class="contractInfo col-md-9">
+			<div class="infoLineBox mgt15 fn-clear">
+				<div class="col-md-12">
+					<div class="infoTitile col-md-3">
+						合同<span ng-if="contractInfo.contractType=='0'">新签</span>
+							<span ng-if="contractInfo.contractType=='1'">续签</span>
+					</div>
+					<div class="checkContractInfo col-md-9 fn-clear">
+						<div class="hasContractInfo fn-clear" id="financeService" ng-if="financeService=='true'">
+							<div class="hasContractNo">1</div>
+							<div class="infoLineInfo">
+								<div>
+									<span class="am-ft-16 mgr20 am-ft-black">财务审核</span>
+									<span class="mgr20">财务部 {{contractInfo.accountUserName}}</span>
+									<span>{{contractTask.createTime}}</span>
+								</div>
+								<div class="passContractInfo" >
+									<p>
+										<span  class="color666">部门负责：</span>
+										<span class="color333 mgr15">{{contractTask.execDepartName}}</span>
+										<span class="color666">部门主管：</span>
+										<span class="color333">{{contractTask.managerUserName}}</span>
+									</p>
+									<p ng-repeat="contractPay in contractInfo.contractPayList">
+										<span class="color666">到账：</span>
+										<span class="color333 mgr15">{{contractPay.accountAmount}}元</span>
+										<span class="color666">收款时间：</span>
+										<span class="color333">{{contractPay.accountTime}}</span>
+									</p>
+									<p>
+										<span class="color666">备注：</span>
+										<span class="color333">{{contractTask.memo}}</span>
+									</p>
+								</div>
+							</div>
+					</div>
+					<div class="hasContractInfo fn-clear" id="departService" ng-if="departService=='true'">
+							<div class="hasContractNo">2</div>
+							<div class="infoLineInfo">
+								<div>
+									<span class="am-ft-16 mgr20 am-ft-black">部门分配</span>
+									<span>{{contractTask.execDepartName}} {{contractTask.managerUserName}}</span>
+									<span>{{contractTask.createTime}}</span>
+								</div>
+								<div class="passContractInfo">
+									<p>
+										<span class="color666">执行人：</span>
+										<span class="color333">{{contractTask.execUserName}}</span>
+									</p>
+									<p>
+										<span class="color666">工作安排：</span>
+										<a href="contractTask.fileUrl">{{contractTask.fileName}}</a>
+									</p>
+									<p>
+										<span class="color666">备注：</span>
+										<span class="color333">{{contractTask.memo}}</span>
+									</p>
+								</div>
+							</div>
+					</div>
+					<div class="hasContractInfo fn-clear" ng-if="execService=='true'">
+							<div class="hasContractNo">3</div>
+							<div class="infoLineInfo">
+								<div>
+									<span class="am-ft-16 mgr20 am-ft-black">部门接收</span>
+									<span class="mgr20">{{contractTask.execDepartName}} {{contractTask.trueName}}</span>
+									<span>{{contractTask.createTime}}</span>
+								</div>
+								<div class="passContractInfo">
+									<p >
+										<span class="color666">接收人意见：</span>
+										<span class="color333" ng-if="contractTask.managerResult=='0'">同意</span>
+										<span class="color333" ng-if="contractTask.managerResult=='1'">不同意</span>
+									</p>
+									<p>
+										<span>实际上线时间：</span>
+										<span class="color333">{{contractTask.finishTime}}</span>
+									</p>
+								</div>
+							</div>
+					</div>
+					<div class="hasContractInfo fn-clear " ng-if="doing=='true'">
+							<div class="hasContractNo">4</div>
+							<div class="infoLineInfo">
+								<div>
+									<span class="am-ft-16 mgr20 am-ft-black">执行中</span>
+								</div>
+							</div>
+					</div>
+						<!--续收款财务审核-->
+				   <div class="hasContractInfo fn-clear fn-hide">
+								<div class="hasContractNo">6</div>
+								<div class="infoLineInfo">
+									<div>
+										<span class="am-ft-16 mgr20 am-ft-black">财务审核</span>
+										<span class="mgr20">财务部 小里</span>
+										<span>2017/2/20 17:54</span>
+									</div>
+									<div class="passContractInfo">
+										<p>
+											<span>本次到账：500元</span>
+										</p>
+										<p>
+											<span>到账时间：2017/2/20 17:54</span>
+										</p>
+										<p>
+											<span class="mgr15">已到账：8500</span>
+											<span>待收：500</span>
+										</p>
+										<p>
+											<span>备注：还差500</span>
+										</p>
+									</div>
+								</div>
+						</div>
+			<!--/续收款财务审核-->			
+					</div>
+					<!--合同终止-->
+						<div class='infoTitile col-md-3'  ng-if="contractInfo.contractStatus=='5'||contractInfo.contractStatus=='7'||contractInfo.contractStatus=='6'||contractInfo.contractStatus=='8'">合同终止</div>
+						<div class="checkContractInfo col-md-9 fn-clear" ng-if="contractInfo.contractStatus=='5'||contractInfo.contractStatus=='7'||contractInfo.contractStatus=='6'||contractInfo.contractStatus=='8'">
+							<div class="hasContractInfo fn-clear">
+								<div class="hasContractNo">4</div>
+								<div class="infoLineInfo">
+									<div>
+										<span class="am-ft-16 mgr20 am-ft-black" ng-if="contractInfo.contractStatus=='7'">服务暂停</span>
+										<span class="am-ft-16 mgr20 am-ft-black" ng-if="contractInfo.contractStatus=='8'">服务终止</span>
+										<span class="mgr20">{{endInfo.endUserName}}</span>
+									</div>
+									<div class="passContractInfo">
+										<p>
+											<span class="color666">本月销售金额：</span>
+											<span class="color333">{{endInfo.businessAmount}}</span>
+										</p>
+										<p>
+											<span class="color666">本月提成：</span>
+											<span class="color333">{{endInfo.deductAmout}}</span>
+										</p>
+										<p>
+											<span class="color666">截止时间：</span>
+											<span class="color333">{{endInfo.businessEndTime}}</span>
+										</p>
+										<p>
+											<span class="color666">品牌商反馈原因：</span>
+											<span class="color333">{{endInfo.endMemo}}</span>
+										</p>
+									</div>
+								</div>
+							</div>
+							<div class="hasContractInfo fn-clear "  ng-if="contractInfo.contractStatus=='6'||contractInfo.contractStatus=='3'||contractInfo.contractStatus=='5'">
+								<div class="hasContractNo">5</div>
+								<div class="infoLineInfo">
+									<div>
+										<span class="am-ft-16 mgr20 am-ft-black">业务审批</span>
+										<span class="mgr20">业务部 小里</span>
+										<span>2017/2/20 17:54</span>
+									</div>
+									<div class="passContractInfo">
+										<p>
+											<span class="color666">审批意见</span>
+											<span class="color333" ng-if="contractInfo.contractStatus=='3'">同意</span>
+											<span class="color333" ng-if="contractInfo.contractStatus=='5'||contractInfo.contractStatus=='6'">不同意</span>
+										</p>
+										<p>
+											<span class="color666">备注：</span>
+											<span class="color333" ></span>
+										</p>
+									</div>
+								</div>
+							</div>
+							<div class="hasContractInfo fn-clear fn-hide">
+								<div class="hasContractNo">9</div>
+								<div class="infoLineInfo">
+									<div>
+										<span class="am-ft-16 mgr20 am-ft-black">原因确认</span>
+										<span class="mgr20">QC 小里</span>
+										<span>2017/2/20 17:54</span>
+									</div>
+									<div class="passContractInfo">
+										<p>
+											<span>最终确认原因：运营人员不足，导致运营效率偏低</span>
+										</p>
+										<p>
+											<span>负责人审批：运营部 赵大</span>
+										</p>
+									</div>
+								</div>
+							</div>
+							<div class="hasContractInfo fn-clear fn-hide">
+								<div class="hasContractNo">10</div>
+								<div class="infoLineInfo">
+									<div>
+										<span class="am-ft-16 mgr20 am-ft-black">部门预审</span>
+										<span class="mgr20">运营部 小里</span>
+										<span>2017/2/20 17:54</span>
+									</div>
+									<div class="passContractInfo">
+										<p>
+											<span>财审应收费用：1000元</span>
+										</p>
+										<p>
+											<span>备注：服务款项已收取</span>
+										</p>
+									</div>
+								</div>
+							</div>
+							<div class="hasContractInfo fn-clear fn-hide">
+								<div class="hasContractNo">10</div>
+								<div class="infoLineInfo">
+									<div>
+										<span class="am-ft-16 mgr20 am-ft-black">财务预审</span>
+										<span class="mgr20">财务部 小里</span>
+										<span>2017/2/20 17:54</span>
+									</div>
+									<div class="passContractInfo">
+										<p>
+											<span>财审应收费用：1000元</span>
+										</p>
+										<p>
+											<span>备注：确认到账</span>
+										</p>
+									</div>
+								</div>
+							</div>
+							<div class="hasContractInfo fn-clear fn-hide">
+								<div class="hasContractNo">11</div>
+								<div class="infoLineInfo">
+									<div>
+										<span class="am-ft-16 mgr20 am-ft-black">已终止</span>
+									</div>
+								</div>
+						</div>
+					</div>
+					<!--/合同终止-->
+					<!--服务调动-->
+						<div class="infoTitile col-md-3 fn-hide">服务调动</div>
+						<div class="checkContractInfo col-md-9 fn-clear fn-hide">
+							<div class="hasContractInfo fn-clear">
+								<div class="hasContractNo">7</div>
+								<div class="infoLineInfo">
+									<div>
+										<span class="am-ft-16 mgr20 am-ft-black">调动申请</span>
+										<span class="mgr20">业务部 王二</span>
+										<span>2017/2/20 17:54</span>
+									</div>
+									<div class="passContractInfo">
+										<p>
+											<span>调动原因：业务调整</span>
+										</p>
+										<p>
+											<span>上线时间：2017/2/20 17:54</span>
+										</p>
+										<p>
+											<span>服务区域：武汉</span>
+										</p>
+										<p>
+											<span>服务部门：运营部</span>
+										</p>
+										<p>
+											<span>服务业务组/人：哒哒</span>
+										</p>
+										<p>
+											<span>审批人：运营主管部</span>
+										</p>
+										<p>
+											<span>接收人：续签部 小王</span>
+										</p>
+										<p>
+											<span>合同备注：被调动区域库存减少，调入区域库存从调入日起增加</span>
+										</p>
+									</div>
+								</div>
+							</div>
+							<div class="hasContractInfo fn-clear fn-hide">
+								<div class="hasContractNo">11</div>
+								<div class="infoLineInfo">
+									<div>
+										<span class="am-ft-16 mgr20 am-ft-black">区域调动，执行中</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					<!--/服务调动-->
+					</div>
+				</div>
+		</div>
+	</div>
+	<div class="col-md-11 fn-clear addContractBox" ng-if="contractInfo.contractStatus!='0'&&roleId=='12'&&contractInfo.notPaidAmount!=0">
+	<form id="reAcountForm" >
+		<div class="fn-clear col-md-12 contractBaseInfoBox">
+			<div class="contractBaseInfo">财务审核</div>
+	    </div>
+		<div class="contractInfo col-md-12">
+			<div class="infoLineBox mgt15 fn-clear mgb10">
+				<div class="infoTitile">
+					本次到账：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<input type="text" class="mgr15" name="accountAmount"/>&nbsp;元
+					<span class="mgr15 am-ft-red" ng-if='endInfo!="undefined"&&(contractInfo.contractStatus=="7"||contractInfo.contractStatus=="8")'>待收合同金额：{{contractInfo.notPaidAmount}}元</span>
+					<span class="am-ft-red" ng-if='endInfo!="undefined"&&(contractInfo.contractStatus=="7"||contractInfo.contractStatus=="8")&&deductRate!=""'>待收提成：{{endInfo.deductAmout}}元</span>
+				</div>
+			</div>
+			<div class="infoLineBox mgt0 fn-clear">
+				<div class="infoTitile">
+					到账时间：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<input type="text"
+						class="fn-left laydate-icon form-control effectdatatime"
+						name="accountTime" placeholder="到账时间" onclick="laydate()" />
+				</div>
+			</div>
+			<div class="infoLineBox mgt0 fn-clear">
+				<div class="infoTitile">
+					备注：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<input type="text" name="memo"/>
+				</div>
+			</div>
+			<div class="infoLineBox mgb15 mgt0 fn-clear">
+				<div class="infoTitile">
+					确认人：
+				</div>
+				<div class="checkContractInfo fn-left">
+					 <span class="am-ft-gray">{{userInfo.trueName}}</span> 
+				</div>
+			</div>
+	</div>
+	</form>
+		<button type="button" class="btn btn-primary addBrandBtn mgb10" ng-click="pay()">确认</button>
+	</div>
+	<div class="col-md-11 fn-clear addContractBox" ng-if="assignedUser=='true'">
+		<form id="assignedForm">
+		<div class="fn-clear col-md-12 contractBaseInfoBox">
+			<div class="contractBaseInfo">部门主管</div>
+	    </div>
+	    <div class="contractInfo col-md-9">
+				<div class="infoLineBox mgt15 mgb10 fn-clear">
+					<div class="infoTitile">
+						执行人：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<div class="infoLineInfo" id="assigned">
+							<!-- <select name="" ng-model="depart2" ng-options="n.departId as n.departName for n in departList">
+								<option value="">请选择</option>
+							</select> -->
+							<!-- <select name="userId" ng-model="user" ng-options="u.userId as u.trueName for u in userList">
+								<option value="">请选择</option>
+							</select> -->
+						</div>
+					</div>
+				</div>
+				<div class="infoLineBox mgt0 mgb10 fn-clear">
+					<div class="infoTitile">
+						工作安排：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<input ngf-select="uploadWork($files)" name="files" type="file" value="" />						
+						<button class="addFileBtn">添加文件</button>	
+						<span class="fn-left mgl5" id="fileName"></span>
+					</div>
+				</div>
+				<div class="infoLineBox mgt0 mgb10 fn-clear">
+					<div class="infoTitile">
+						备注：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<input type="text" name="memo" />
+					</div>
+				</div>
+				<div class="infoLineBox mgb15 mgt0 fn-clear">
+					<div class="infoTitile">
+						确认人：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<span class="am-ft-gray">{{contractTask.execDepartName}}</span>
+						<span class="am-ft-gray">{{contractTask.managerUserName}}</span>
+					</div>
+				</div>
+		</div>
+		</form>
+	</div>
+	<div class="col-md-11 fn-clear addContractBox" ng-if="execUser=='true'">
+	<form id="execForm">
+		<div class="fn-clear col-md-12 contractBaseInfoBox">
+			<div class="contractBaseInfo">接收人</div>
+	    </div>
+	    <div class="contractInfo col-md-9">
+				<div class="infoLineBox mgt15 mgb10 fn-clear">
+					<div class="infoTitile">
+						接收人意见：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<div class="infoLineInfo">
+							<label class="fn-left mgr10 ">
+								<input name="managerResult" type="radio" value="0" />同意
+							</label>
+							<label>
+								<input name="managerResult" type="radio" value="1" />不同意
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="infoLineBox mgt0 mgb10 fn-clear">
+					<div class="infoTitile">
+						实际上线时间：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<input type="text"
+							class="fn-left laydate-icon form-control effectdatatime"
+							name='finishTime' placeholder="实际上线时间" onclick="laydate()" />
+					</div>
+				</div>
+				<div class="infoLineBox mgb15 mgt0 fn-clear">
+					<div class="infoTitile">
+						确认人：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<span class="am-ft-gray">{{contractTask.execDepartName}}</span>
+						<span class="am-ft-gray">{{userInfo.trueName}}</span>
+					</div>
+				</div>
+		</div>
+		</form>
+	</div>
+	<!--暂停服务-->
+	<div class="col-md-11 fn-clear addContractBox" ng-show='endStatus=="1"'>
+		<div class="fn-clear col-md-12 contractBaseInfoBox">
+			<div class="contractBaseInfo">暂停服务</div>
+		</div>
+		<div class="contractInfo col-md-9">
+			<div class="infoLineBox mgt15 mgb10 fn-clear">
+				<div class="infoTitile">
+					本月销售金额：
+				</div>
+				<div class="checkContractInfo fn-left" >
+					<input type="text" ng-model='businessAmount' ng-change='setdeductAmout()' style="width: 100px;"/>&nbsp;元
+				</div>
+			</div>
+			<div class="infoLineBox mgt0 mgb10 fn-clear" ng-if='serviceType=="提成"'>
+				<div class="infoTitile">
+					本月提成金额：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<span class="mgr5">{{deductAmout}}元</span>
+					<span>（本月销售金额*{{deductRate}}%）</span>
+				</div>
+			</div>
+			<div class="infoLineBox mgb15 mgt0 fn-clear">
+				<div class="infoTitile">
+					服务分类：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<label class="fn-left mgr10 ">
+							<input type="radio" name='service' ng-model='contractStatus' value="7" ng-click='isService("7")'/>服务暂停
+					</label>
+					<label>
+							<input type="radio"  name='service' ng-model='contractStatus' value="8" ng-click='isService("8")'/>服务完结
+					</label>
+				</div>
+			</div>
+			<div class="infoLineBox mgb15 mgt0 fn-clear">
+				<div class="infoTitile">
+					截止时间：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<input type="text" id="end" class="fn-left laydate-icon form-control effectdatatime"   placeholder="结束时间" onclick="laydate()" />
+				</div>
+			</div>
+			<div class="infoLineBox mgb15 mgt0 fn-clear">
+				<div class="infoTitile">
+					品牌商反馈原因：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<textarea ng-model='endMemoStop' name="endMemo" rows="3" cols="3"></textarea>
+						<span> <i ng-if="endMemoStop.length==undefined">0</i> <i
+							ng-if="endMemoStop.length!=undefined">{{endMemoStop.length}}</i> /200
+						</span>
+				</div>
+			</div>
+			<div class="infoLineBox mgb15 mgt0 fn-clear">
+				<div class="infoTitile">
+					确认人：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<span class="am-ft-gray">{{userInfo.trueName}}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--/暂停服务-->
+	<!--业务审批-->
+	<div class="col-md-11 fn-clear addContractBox" ng-if='roleId=="13"&&(contractInfo.contractStatus=="7"||contractInfo.contractStatus=="8")'>
+		<form id='businessForm'>
+		<div class="fn-clear col-md-12 contractBaseInfoBox">
+			<div class="contractBaseInfo">业务审批</div>
+		</div>
+		<div class="contractInfo col-md-9">
+			<div class="infoLineBox mgt15 mgb10 fn-clear">
+				<div class="infoTitile">
+					主管意见：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<label class="fn-left mgr5">
+							<input type="radio" name='contractStatusBusiness' ng-model='contractStatusBusiness' checked="checked" value="0"  />同意
+					</label>
+					<label>
+							<input type="radio" name='contractStatusBusiness' ng-model='contractStatusBusiness'  value="1" />不同意
+					</label>
+				</div>
+			</div>
+			<div class="infoLineBox mgt0 mgb10 fn-clear">
+				<div class="infoTitile">
+					备注：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<input type="text" name='endMemo' ng-model='endMemoBusiness'/>
+				</div>
+			</div>
+
+			<div class="infoLineBox mgb15 mgt0 fn-clear">
+				<div class="infoTitile">
+					确认人：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<span class="am-ft-gray">{{userInfo.trueName}}</span>
+				</div>
+			</div>
+		</div>
+		</form>
+	</div>
+	<!--/业务审批-->
+	<!--QC-->
+	<div class="col-md-11 fn-clear addContractBox fn-hide">
+		<div class="fn-clear col-md-12 contractBaseInfoBox">
+			<div class="contractBaseInfo">QC</div>
+		</div>
+		<div class="contractInfo col-md-9">
+			<div class="infoLineBox mgt15 mgb10 fn-clear">
+				<div class="infoTitile">
+					最终确认原因：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<input type="text" />
+				</div>
+			</div>
+			<div class="infoLineBox mgt0 mgb10 fn-clear">
+				<div class="infoTitile">
+					负责人审批：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<select style="width: 16%;margin-right: 10px;">
+						<option>运营组</option>
+						<option>美工组</option>
+						<option>培训组</option>
+						<option>客服组</option>
+					</select>
+					<select style="width: 16%;">
+						<option>甲</option>
+						<option>一</option>
+						<option>三</option>
+						<option>四</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="infoLineBox mgb15 mgt0 fn-clear">
+				<div class="infoTitile">
+					确认人：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<span class="am-ft-gray">QC部 王二</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--/QC-->
+	<!--部门审批-->
+	<div class="col-md-11 fn-clear addContractBox fn-hide">
+		<div class="fn-clear col-md-12 contractBaseInfoBox">
+			<div class="contractBaseInfo">部门审批</div>
+		</div>
+		<div class="contractInfo col-md-9">
+			<div class="infoLineBox mgt15 mgb10 fn-clear">
+				<div class="infoTitile">
+					财审应收费用：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<input type="text" />
+				</div>
+			</div>
+			<div class="infoLineBox mgt0 mgb10 fn-clear">
+				<div class="infoTitile">
+					备注：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<input type="text" />
+				</div>
+			</div>
+
+			<div class="infoLineBox mgb15 mgt0 fn-clear">
+				<div class="infoTitile">
+					确认人：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<span class="am-ft-gray">运营部 王二</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--部门审批-->
+	<!--财务审批-->
+	<div class="col-md-11 fn-clear addContractBox fn-hide">
+		<div class="fn-clear col-md-12 contractBaseInfoBox">
+			<div class="contractBaseInfo">财务审批</div>
+		</div>
+		<div class="contractInfo col-md-9">
+			<div class="infoLineBox mgt15 mgb10 fn-clear">
+				<div class="infoTitile">
+					已确认到账：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<input type="text" />
+				</div>
+			</div>
+			<div class="infoLineBox mgt0 mgb10 fn-clear">
+				<div class="infoTitile">
+					备注：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<input type="text" />
+				</div>
+			</div>
+
+			<div class="infoLineBox mgb15 mgt0 fn-clear">
+				<div class="infoTitile">
+					确认人：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<span class="am-ft-gray">财务部 王二</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--/财务审批-->
+	<!--区域调动-->
+	<div class="col-md-11 fn-clear addContractBox fn-hide">
+		<div class="fn-clear col-md-12 contractBaseInfoBox">
+			<div class="contractBaseInfo">区域调动</div>
+		</div>
+		<div class="contractInfo col-md-9">
+			<div class="infoLineBox mgt15 mgb10 fn-clear">
+				<div class="infoTitile">
+					调动原因：
+				</div>
+				<div class="checkContractInfo fn-left">
+	               <input type="text" />
+				</div>
+			</div>
+			<div class="infoLineBox mgt0 mgb10 fn-clear">
+				<div class="infoTitile">
+					上线时间：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<input type="text" class="fn-left laydate-icon form-control effectdatatime" name='begindate' 
+						placeholder="到账时间" onclick="laydate()" />
+				</div>
+			</div>
+			<div class="infoLineBox mgb15 mgt0 fn-clear">
+				<div class="infoTitile">
+					服务区域：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<label class="fn-left mgr5">
+							<input type="radio" />杭州
+						</label>
+						<label class="fn-left">
+							<input type="radio" />武汉
+						</label>
+						<label>
+							<input type="radio" />合肥
+						</label>
+				</div>
+			</div>
+			<div class="infoLineBox mgb15 mgt0 fn-clear">
+				<div class="infoTitile">
+					服务部门：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<input type="text" />
+				</div>
+			</div>
+			<div class="infoLineBox mgb15 mgt0 fn-clear">
+				<div class="infoTitile">
+					服务业务组/人：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<input type="text" />
+				</div>
+			</div>
+			<div class="infoLineBox mgb15 mgt0 fn-clear">
+				<div class="infoTitile">
+					审批人：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<select style="width: 120px;">
+						<option>家</option>
+						<option>人</option>
+						<option>一</option>
+					</select>
+				</div>
+			</div>
+			<div class="infoLineBox mgb15 mgt0 fn-clear">
+				<div class="infoTitile">
+					接收人：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<select style="width: 120px;">
+						<option>家</option>
+						<option>人</option>
+						<option>一</option>
+					</select>
+				</div>
+			</div>
+			<div class="infoLineBox mgb15 mgt0 fn-clear">
+				<div class="infoTitile">
+					合同备注：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<textarea></textarea>
+				</div>
+			</div>
+			<div class="infoLineBox mgb15 mgt0 fn-clear">
+				<div class="infoTitile">
+					确认人：
+				</div>
+				<div class="checkContractInfo fn-left">
+					<span class="am-ft-gray">业务部 爱惜吧</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--/区域调动-->
+	
+<div class="fn-clear"></div>
+<div>
+	<button type="button" class="btn btn-primary addBrandBtn" ng-click="save(roleId)" ng-if="ok=='true'">确认</button>
+	<button type="button" class="btn btn-primary addBrandBtn" ng-click="sureEndContract()" ng-if="endStatus=='1'">确认</button>
+	<button type="button" class="btn btn-primary addBrandBtn" ng-click="businessContract()"  ng-if='roleId=="13"&&(contractInfo.contractStatus=="7"||contractInfo.contractStatus=="8")'>确认</button>
+	<button type="button" class="btn btn-default " ng-click="goback()"  ng-if="endStatus=='1'" >取消</button>
+	<!-- <button type="button" class="btn btn-default mgl10" ng-if="contractInfo.contractStatus<'3'" ng-click="goback()">取消</button> -->
+</div>
+<div ng-if="roleId=='17'||roleId=='15'">
+		<!-- <button type="button" class="btn btn-primary addBrandBtn addBrandBtn1" ng-click="">续收款</button> -->
+		<button type="button" class="btn btn-primary addBrandBtn addBrandBtn1" ng-click="endContract()" ng-if='stopBtn=="1"'>终止服务</button>
+		<!--<button type="button" class="btn btn-primary addBrandBtn addBrandBtn1"  ng-click="">区域调动</button>
+		<button type="button" class="btn btn-primary addBrandBtn addBrandBtn1" ng-click="">续约服务</button>
+		<button type="button" class="btn btn-default mgl10" ng-click="goback()">返回</button>-->
+</div>
+</div>

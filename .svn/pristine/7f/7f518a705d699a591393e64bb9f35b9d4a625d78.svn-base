@@ -1,0 +1,155 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+
+<table class="table contractTable">
+	<tr>
+		<th>合同编号</th>
+		<th>客户名称</th>
+		<th>服务类型</th>
+		<th>服务区域</th>
+		<th>产品类型</th>
+		<th>服务费用</th>
+		<th>服务期限</th>
+		<th>提交人</th>
+		<th>状态</th>
+		<th>操作</th>
+	</tr>
+	<!--<tr  ng-repeat="contractList in contractLists track by $index" ng-class="{'服务中':'inServer','已到期':'notinServer'}[contractList.status]">
+		<td ><a href="javascript:;" ng-click="contractInfo(this.contractList)">{{contractList.contractNum}}</a></td>
+		<td class="deepColor">{{contractList.shopName}}</td>
+		<td>{{contractList.totalprice}}元</td>
+		<td>{{contractList.serviceType}}</td>
+		<td>{{contractList.months}}个月</td>
+		<td>{{contractList.begindate}}至{{contractList.enddate}}</td>
+		<td class="deepColor">{{contractList.payTypeName}}</td>
+		<td class="deepColor">{{contractList.notPaidAmount}}</td>
+		<td class="deepColor">{{contractList.userName}}</td>
+		<td class="status">{{contractList.status}}</td>
+	</tr>-->
+	<tr class="inServer">
+		<td>HT001</td>
+		<td>南京小小服饰有限公司</td>
+		<td>值守</td>
+		<td>杭州</td>
+		<td>客服</td>
+		<td>9000</td>
+		<td>2016-02-15至2016-05-14</td>
+		<td>赵小冬</td>
+		<td class="status">服务中</td>
+		<td >
+			<span ng-click="contractInfo(this.contractList)">查看详情</span>
+		</td>
+	</tr>
+	<tr class="inServer">
+		<td >HT002</td>
+		<td>南京小小服饰有限公司</td>
+		<td>值守</td>
+		<td>杭州</td>
+		<td>客服</td>
+		<td>9000</td>
+		<td>2016-02-15至2016-05-14</td>
+		<td>赵小冬</td>
+		<td class="status">服务中</td>
+		<td>
+			<span ng-click="contractInfo(this.contractList)">查看详情</span>
+		</td>
+	</tr>
+	<!--<tr class="inServer">
+		<td>201601200539</td>
+		<td>南京小小服饰有限公司</td>
+		<td>5000.00元</td>
+		<td>客服托管</td>
+		<td>3个月</td>
+		<td>2016-02-15至2016-05-14</td>
+		<td>按月</td>
+		<td>1500.00元</td>
+		<td>赵小冬</td>
+		<td class="status">服务中</td>
+	</tr>
+	<tr class="inServer">
+		<td>201601200539</td>
+		<td>南京小小服饰有限公司</td>
+		<td>5000.00元</td>
+		<td>客服托管</td>
+		<td>3个月</td>
+		<td>2016-02-15至2016-05-14</td>
+		<td>按月</td>
+		<td>1500.00元</td>
+		<td>赵小冬</td>
+		<td class="status">服务中</td>
+	</tr>
+	<tr class="inServer">
+		<td>201601200539</td>
+		<td>南京小小服饰有限公司</td>
+		<td>5000.00元</td>
+		<td>客服托管</td>
+		<td>3个月</td>
+		<td>2016-02-15至2016-05-14</td>
+		<td>按月</td>
+		<td>1500.00元</td>
+		<td>赵小冬</td>
+		<td class="status">服务中</td>
+	</tr>
+	<tr class="notinServer">
+		<td>201601200539</td>
+		<td>南京小小服饰有限公司</td>
+		<td>5000.00元</td>
+		<td>客服托管</td>
+		<td>3个月</td>
+		<td>2016-02-15至2016-05-14</td>
+		<td>按月</td>
+		<td>1500.00元</td>
+		<td>赵小冬</td>
+		<td>服务中</td>
+	</tr>
+	<tr class="notinServer">
+		<td>201601200539</td>
+		<td>南京小小服饰有限公司</td>
+		<td>5000.00元</td>
+		<td>客服托管</td>
+		<td>3个月</td>
+		<td>2016-02-15至2016-05-14</td>
+		<td>按月</td>
+		<td>1500.00元</td>
+		<td>赵小冬</td>
+		<td>已完成</td>
+	</tr>
+	<tr class="notinServer">
+		<td>201601200539</td>
+		<td>南京小小服饰有限公司</td>
+		<td>5000.00元</td>
+		<td>客服托管</td>
+		<td>3个月</td>
+		<td>2016-02-15至2016-05-14</td>
+		<td>按月</td>
+		<td>1500.00元</td>
+		<td>赵小冬</td>
+		<td>已到期</td>
+	</tr>
+	<tr class="notinServer">
+		<td>201601200539</td>
+		<td>南京小小服饰有限公司</td>
+		<td>5000.00元</td>
+		<td>客服托管</td>
+		<td>3个月</td>
+		<td>2016-02-15至2016-05-14</td>
+		<td>按月</td>
+		<td>1500.00元</td>
+		<td>赵小冬</td>
+		<td>已到期</td>
+	</tr>
+	<tr class="notinServer">
+		<td>201601200539</td>
+		<td>南京小小服饰有限公司</td>
+		<td>5000.00元</td>
+		<td>客服托管</td>
+		<td>3个月</td>
+		<td>2016-02-15至2016-05-14</td>
+		<td>按月</td>
+		<td>1500.00元</td>
+		<td>赵小冬</td>
+		<td>已到期</td>
+	</tr>-->
+</table>
+<div class="pagelist priv-pagelist">
+	<div id="paging1"></div>
+</div>

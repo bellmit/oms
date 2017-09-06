@@ -1,0 +1,413 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--------------- Content start ----------------->
+<div class="contractCreate-wraper fn-clear contractCreate-wraper-info">
+	<div class="col-md-11 fn-clear addContractBox">
+		<!--<form id='contractForm'>-->
+			<div class="fn-clear col-md-12 contractBaseInfoBox">
+				<div class="contractInfo col-md-12">
+					<!-- <div class="infoLine infoLinec fn-clear">
+						<div class="fn-left infoTitile">
+							<em class="am-ft-red mgr5">*</em>合同编号：
+						</div>
+						<input type="text" name="contractNum" />
+					</div> -->
+					<div class="infoLine infoLinea fn-clear">
+						<div class="fn-left infoTitile">
+							合同编号：
+						</div>
+						<span class="color333 fn-left">20160912001231</span>
+						<div class="fn-left infoTitile">
+							合同类型：
+						</div>
+						<span class="color333">新签</span>
+					</div>
+					<div class="infoLine infoLineb fn-clear">
+						<div class="fn-left infoTitile">
+							商戶名称：
+						</div>
+						<span class="color333">西西小可 潮品女装</span>
+					</div>
+					<div class="infoLine infoLineb fn-clear">
+						<div class="fn-left infoTitile">
+							店铺列表：
+						</div>
+						<div class="fn-left infocontentBox fn-clear" style="width: 800px;">
+							<!--<div ng-repeat="shop in contractInfo.shopList" class="mgt10" style="background:#f4f4f4; padding:20px;">
+								<p>
+									<img ng-if="shop.shopType=='2'" src="../static/base/images/icon_logo_taobao.png" />
+									<img ng-if="shop.shopType=='3'" src="../static/base/images/icon_logo_tmall.png"/>
+									<img ng-if="shop.shopType=='4'" src="../static/base/images/icon_logo_jindong.png"/>
+									<img ng-if="shop.shopType=='0'" src="../static/base/images/icon_1688.png"/>
+									<img ng-if="shop.shopType=='1'" src="../static/base/images/icon_AliExpress.png"/>
+									<img ng-if="shop.shopType=='5'" src="../static/base/images/icon_amazon.png"/>
+									<span class="mgr20">{{shop.shopName}} </span>
+								</p>
+								<p class="storeInfo_css">
+									<span class="am-ft-12">帐号：{{shop.thirdUserName}}</span>
+									<span class="am-ft-12">密码：{{shop.thirdPassWord}}</span>
+								</p>
+								<p class="storeInfo_css">{{shop.shopUrl}}</p>
+							</div>-->
+							<div  class="mgt10 infocontentBox_content" >
+								<p>
+									<img  src="../static/base/images/icon_logo_taobao.png" />
+									<span class="mgr20">悠悠服饰 </span>
+								</p>
+								<p class="storeInfo_css">
+									<span class="am-ft-12 mgr10">帐号：jkljk</span>
+									<span class="am-ft-12">密码：123</span>
+								</p>
+								<p class="storeInfo_css">
+									<span class="am-ft-12">地址：www.qinesy.com</span>
+								</p>
+							</div>
+							<div  class="mgt10 infocontentBox_content">
+								<p>
+									<img src="../static/base/images/icon_logo_tmall.png"/>
+									<span class="mgr20">悠悠服饰 </span>
+								</p>
+								<p class="storeInfo_css">
+									<span class="am-ft-12 mgr10">帐号：jkljk</span>
+									<span class="am-ft-12">密码：123</span>
+								</p>
+								<p class="storeInfo_css">
+									<span class="am-ft-12">地址：www.qinesy.com</span>
+								</p>
+							</div>
+							<div  class="mgt10 infocontentBox_content">
+								<p>
+									<img src="../static/base/images/icon_logo_tmall.png"/>
+									<span class="mgr20">悠悠服饰 </span>
+								</p>
+								<p class="storeInfo_css">
+									<span class="am-ft-12 mgr10">帐号：jkljk</span>
+									<span class="am-ft-12">密码：123</span>
+								</p>
+								<p class="storeInfo_css">
+									<span class="am-ft-12">地址：www.qinesy.com</span>
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="infoLine infoLinee fn-clear">
+						<div class="fn-left infoTitile">
+							产品类型：
+						</div>
+						<div class="proType_box fn-left">
+							<div class="proType_box_a">
+									<div class="proType_box_nav">
+										<span>客服</span>
+									</div>
+									<div class="proType_box_under">
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<!--<div class="" ng-class='{"am-ft-grey":!selectCustomer}'>-->
+												<!--<span>{{selectCustomer}}</span>-->
+												<div class="" >
+													席位数量：
+												</div>
+												<div class="proType_details fn-clear">
+													<span>1个</span>
+													<div class="proType_detailsR">
+														<span class="color666 mgl10" ng-class='{false:"colorDisable"}[selectCustomer]'>席位单价：</span>
+														<span class="color333" >200元</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" ng-class='{false:"colorDisable"}[selectCustomer]'>
+													服务周期：
+												</div>
+												<div class="proType_details">
+													<span>一个月</span>
+													<div class="proType_detailsR">
+														<span class="color666 mgl10 fn-left" ng-class='{false:"colorDisable"}[selectCustomer]'>服务类型：</span>
+														<span class="color333">值守</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													服务日期：
+												</div>
+												<div class="proType_details">
+													<span  class="color333">2016-03-04至2016-03-04</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													服务费用：
+												</div>
+												<div class="proType_details">
+													<span class="color333">200元</span>
+												</div>
+										</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" ng-class='{false:"colorDisable"}[selectCustomer]'>
+													产品备注：
+												</div>
+												<div class="proType_details  proType_memo">
+													<span class="color333">这是一段很长的备注这是一段很长的备注这是一段很长的
+														备注这是一段很长的备注这是一段很长的备注</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" ng-class='{false:"colorDisable"}[selectCustomer]'>
+													交接单：
+												</div>
+												<div class="proType_details">
+													<div class="checkContractInfo fn-clear">
+														<div class="checkContractInfoUpload" >
+															<img src="../static/base/images/icon_file.png" />
+															<span class="mgl5" id="fileName" >附件.jpg</span>
+															<!--<span class="mgl5" id="fileName1" ng-if="fileName1.length<8">{{fileName1}}</span>
+															<span class="mgl5" id="fileName1" ng-if="fileName1.length>=8">{{fileName1 |limitTo:8}}...</span>-->
+															<img src="../static/base/images/icon_download1.png"/>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+							</div>
+							<div class="proType_box_a">
+									<div class="proType_box_nav">
+										<span>美工</span>
+									</div>
+									<div class="proType_box_under">
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" ng-class='{false:"colorDisable"}[selectArt]'>
+													服务周期：
+												</div>
+												<div class="proType_details">
+													<span>一个月</span>
+													<div class="proType_detailsR">
+														<span class="color666 mgl20 fn-left" >服务类型：</span>
+														<span class="color333">单项</span>
+														<span class="fn-hide">包月</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" ng-class='{false:"colorDisable"}[selectArt]'>
+													服务日期：
+												</div>
+												<div class="proType_details">
+													<span class="color333">2016-03-04至2016-03-04</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" ng-class='{false:"colorDisable"}[selectArt]'>
+													服务费用：
+												</div>
+												<div class="proType_details">
+													<span class="color333">200元</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" ng-class='{false:"colorDisable"}[selectArt]'>
+													产品备注：
+												</div>
+												<div class="proType_details proType_memo">
+													<span class="color333">备注备注</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" ng-class='{false:"colorDisable"}[selectArt]'>
+													交接单：
+												</div>
+												<div class="proType_details">
+													<div class="checkContractInfo fn-clear">
+														<div class="checkContractInfoUpload" >
+															<img src="../static/base/images/icon_file.png" />
+															<span class="mgl5" id="fileName" >附件.jpg</span>
+															<!--<span class="mgl5" id="fileName2" ng-if="fileName2.length<8">{{fileName2}}</span>
+															<span class="mgl5" id="fileName2" ng-if="fileName2.length>=8">{{fileName2 |limitTo:8}}...</span>-->
+															<img src="../static/base/images/icon_download1.png"/>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+							</div>
+							<div class="proType_box_a">
+									<div class="proType_box_nav">
+										<span>运营</span>
+									</div>
+									<div class="proType_box_under">
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													服务日期：
+												</div>
+												<div class="proType_details">
+													<span class="color333">2016-03-04至2016-03-04</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" ng-class='{false:"colorDisable"}[selectOperation]'>
+													服务费用：
+												</div>
+												<div class="proType_details">
+													<span class="color333">200元</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" ng-class='{false:"colorDisable"}[selectOperation]'>
+													产品备注：
+												</div>
+												<div class="proType_details proType_memo">
+													<span class="color333">备注备注</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													交接单：
+												</div>
+												<div class="proType_details">
+													<div class="checkContractInfo fn-clear">
+														<div class="checkContractInfoUpload" >
+															<img src="../static/base/images/icon_file.png" />
+															<span class="mgl5" id="fileName" >附件.jpg</span>
+															<!--<span class="mgl5" id="fileName2" ng-if="fileName2.length<8">{{fileName2}}</span>
+															<span class="mgl5" id="fileName2" ng-if="fileName2.length>=8">{{fileName2 |limitTo:8}}...</span>-->
+															<img src="../static/base/images/icon_download1.png"/>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+							</div>
+							<div class="proType_box_a">
+									<div class="proType_box_nav">
+										<span>培训</span>
+									</div>
+									<div class="proType_box_under">
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" ng-class='{false:"colorDisable"}[selectTrain]'>
+													服务日期：
+												</div>
+												<div class="proType_details">
+													<span class="color333">2017-1-4</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" ng-class='{false:"colorDisable"}[selectTrain]'>
+													服务费用：
+												</div>
+												<div class="proType_details">
+													<span class="color333">200元</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" ng-class='{false:"colorDisable"}[selectTrain]'>
+													产品备注：
+												</div>
+												<div class="proType_details proType_memo">
+													<span class="color333">备注备注</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" ng-class='{false:"colorDisable"}[selectTrain]'>
+													交接单：
+												</div>
+												<div class="proType_details">
+													<div class="checkContractInfo fn-clear">
+														<div class="checkContractInfoUpload">
+															<img src="../static/base/images/icon_file.png" />
+															<span class="mgl5" id="fileName" >附件.jpg</span>
+															<!--<span class="mgl5" id="fileName4" ng-if="fileName4.length<8">{{fileName4}}</span>
+															<span class="mgl5" id="fileName4" ng-if="fileName4.length>=8">{{fileName4 |limitTo:8}}...</span>-->
+															<img src="../static/base/images/icon_download1.png"/>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="infoLine infoLinec fn-clear">
+						<div class="fn-left infoTitile">
+							合同费用：
+						</div>
+						<div class="contractCost fn-left">
+							<span class="color333">200元</span>
+							<span class="fn-left color333">已结转抵扣：</span>
+							<span class="fn-left color333">500元</span>
+						</div>
+					</div>
+					<div class="infoLine infoLineg fn-clear">
+						<div class="fn-left infoTitile">
+							合同备注：
+						</div>
+						<span class="color333">备注备注</span>
+					</div>
+					<div class="infoLine infoLinec fn-clear infoLine_bill">
+						<div class="fn-left infoTitile">
+							商务签单：
+						</div>
+						<span class="am-ft-gray mgl10 mgr10">武汉客服部>客服一组</span>
+						<span class="am-ft-gray "> 邹小丽</span>
+						<span class="color666">签单时间：</span>
+						<span class="color333 "> 2016-03-04</span>
+					</div>
+					<div class="infoLine infoLinec fn-clear infoLine_bill">
+						<div class="fn-left infoTitile">
+							商务续签：
+						</div>
+						<span class="am-ft-gray mgl10 mgr10">武汉客服部>客服一组</span>
+						<span class="am-ft-gray "> 邹小丽</span>
+					</div>
+				</div>
+			</div>
+		<!--</form>-->
+	</div>
+</div>
+</div>
+<div class="fn-clear"></div>
+
+<script>
+	$(function() {
+		var formArray = [];
+		formArray.push('{"contractForm":"/contract/addContract"}');
+		initValidate(formArray, pos);
+		$('.selectpicker').selectpicker('refresh');
+	})
+</script>

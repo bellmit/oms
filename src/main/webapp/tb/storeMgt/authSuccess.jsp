@@ -1,0 +1,160 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8" isELIgnored="false"%>
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8" />
+		<title>Document</title>
+		<link href="http://static.qineasy.com/base/css/reset_tb.css" rel="stylesheet" type="text/css" />
+		<script src="http://static.qineasy.com/base/js/jQuery-2.1.4.min.js"></script>
+		<script src="http://static.qineasy.com/base/js/jquery.md5.js"></script>
+
+		<script src="http://static.qineasy.com/base/js/qinyi_base.js"></script>
+
+	</head>
+	<style>
+		img {
+			vertical-align: top;
+		}
+		
+		header {
+			width: 100%;
+			height: 120px;
+			background-color: #b9e0f2;
+			margin-bottom: 130px;
+		}
+		
+		.banner {
+			width: 90%;
+			height: 120px;
+			margin: 0 auto;
+		}
+		
+		.banner img {
+			margin-top: 20px
+		}
+		
+		.warnPart {
+			width: 330px;
+			margin: 0 auto 53px;
+		}
+		
+		.warnPart img {
+			width: 60px;
+			height: 60px;
+		}
+		
+		.warnPart span {
+			line-height: 60px;
+			font-size: 22px;
+			color: #7ed321;
+			padding-left: 20px;
+		}
+		
+		.closePart {
+			width: 435px;
+			margin: 0 auto;
+		}
+		
+		.closePart span {
+			font-size: 14px;
+			color: #333333;
+		}
+		
+		.closePart span i {
+			color: #333333;
+			font-size: 16px;
+		}
+		
+		.closePart button {
+			width: 67px;
+			height: 30px display: block;
+			background-color: #00afd4;
+			color: #ffffff;
+			border-radius: 4px;
+			font-size: 12px;
+			line-height: 30px;
+			text-align: center;
+			margin-left: 15px;
+		}
+		
+		.closePart button:hover {
+			cursor: pointer;
+		}
+	</style>
+
+	<body>
+		<header>
+			<div class="banner">
+				<img src="http://static.qineasy.com/base/images/login-topLogo.png" alt="" />
+			</div>
+		</header>
+		<div class="content">
+			<div class="warnPart">
+				<img src="../../static/base/images/icon_added.png" alt="" />
+				<span>恭喜，您已经授权成功！</span>
+			</div>
+			<div class="closePart">
+				<span><i id="countDown">21</i>秒后会自动关闭本页面，如长时间没有反应，请点击</span>
+				<button id="closePage">关闭页面</button>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var startTime = 5;
+			document.getElementById("countDown").innerHTML = startTime;
+
+			function closePage() {
+				var interval = setInterval(function() {
+					startTime--;
+					document.getElementById("countDown").innerHTML = startTime;
+					if(startTime == 0) {
+						window.opener = null;
+						window.open('', '_self');
+						window.close();
+						clearInterval(interval)
+					}
+				}, 1000);
+
+			}
+			var ary = GetQueryString("state").split(",");
+			var jsonObject = {
+				"orgId": ary[0],
+				"code": GetQueryString("code")
+			};
+			jsonObject = JSON.stringify(jsonObject);
+			var pathurl = "";
+			if(ary[1] == 0){
+				pathurl = localStorage.pos + "/alibaba/getAlibabaToken";
+			}else if(ary[1] == 1){
+				pathurl = localStorage.pos + "/aliexpress/addAliExpressAuthInfo";
+			}else if(ary[1] == 2){
+				pathurl = localStorage.pos + "/alitaobao/addAliTaoBaoAuthInfo";
+			}
+			$.ajax({
+				async: false,
+				type: "post",
+				url: pathurl,
+				data: {
+					keyParams: getKeyParams(jsonObject, localStorage.keyParams),
+					jsonObject: getJsonObject(jsonObject)
+				},
+				success: function(data) {
+					document.getElementById("closePage").onclick = function() {
+						window.opener = null;
+						window.open('', '_self');
+						window.close();
+					}
+					closePage();
+				}
+			})
+
+			function GetQueryString(name) {
+				var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+				var r = window.location.search.substr(1).match(reg);
+				if(r != null)
+					return unescape(r[2]);
+				return null;
+			}
+		</script>
+	</body>

@@ -1,0 +1,319 @@
+qyApp.controller("contractAddController", function($scope, $timeout, $http, Upload, $compile, $route, $state, $stateParams) {
+	$scope.userInfo = angular.fromJson(localStorage.userInfo);
+	if($scope.userInfo.roleId=='5'){
+		$scope.roleId=$scope.userInfo.roleId;
+		$scope.trueName=$scope.userInfo.trueName;
+		$scope.saler=$scope.userInfo.userId;
+	}
+	$scope.myDate = new Date();
+//	$scope.data = myDate.getFullYear() + "-" + (1 + myDate.getMonth()) + "-" + myDate.getDate();
+	/*判断页面入口*/
+	if($stateParams.uiParams.orgInfo.orgId != undefined){
+		$scope.orgId=$stateParams.uiParams.orgInfo.orgId;
+		$scope.shopName=$stateParams.uiParams.orgInfo.shopName;
+		$scope.pageIn="1";/*商户添加合同进入*/
+	}else{
+		$scope.pageIn="2";/*直接添加合同进入*/
+	}
+	/*判断页面入口*/
+	/*选择服务类型的代码*/
+	$("#forwardaddForm .shopparent").on("click", function(e) {
+		e.stopPropagation();
+		$("#forwardaddForm .simulateSelect").toggle();
+		$("#forwardaddForm .orgshopName").val("");
+		$(window).on("click", function(event) {
+			if(event.target.className != "shopparent" && event.target.className != "searchpart" && event.target.className != "fangda" && event.target.tagName != "INPUT" && event.target.className != "selectLi") {
+				$("#forwardaddForm .simulateSelect").hide();
+			}
+		})
+	});
+	$("#forwardaddForm .selectePart").on("click", "li", function() {
+		var thisHtml = $(this).html();
+		var thisId = $(this).attr("data-Id");
+		var thisContent = $(this).attr("data-html");
+		$(this).css({
+				"background-color": "#00afd4",
+				"color": "#ffffff",
+			})
+			.siblings().css({
+				"background-color": "#ffffff",
+				"color": "#666666",
+			}).end().parents(".simulateSelect").hide().prev().attr("data-selectId", thisId).find("span").html(thisHtml)
+			$("#forwardaddForm .shopparent").val(thisHtml);
+	});
+	$("#forwardaddForm .selectePart").on("mouseover", "li", function() {
+		$(this).siblings().css({
+			"background-color": "#ffffff",
+			"color": "#666666"
+		})
+		$(this).css({
+			"background-color": "#00afd4",
+			"color": "#ffffff"
+		})
+	});
+	/*选择服务类型的代码*/
+	/*选择服务类型的代码*/
+	$("#forwardaddForma .shopparent").on("click", function(e) {
+		e.stopPropagation();
+		$("#forwardaddForma .simulateSelect").toggle();
+		$("#forwardaddForma .orgshopName").val("");
+		$(window).on("click", function(event) {
+			if(event.target.className != "shopparent" && event.target.className != "searchpart" && event.target.className != "fangda" && event.target.tagName != "INPUT" && event.target.className != "selectLi") {
+				$("#forwardaddForma .simulateSelect").hide();
+			}
+		})
+		$scope.loadOrgLists();
+	});
+	$("#forwardaddForma .selectePart").on("click", "li", function() {
+		var thisHtml = $(this).html();
+		var thisId = $(this).attr("data-Id");
+		var thisContent = $(this).attr("data-html");
+		$(this).css({
+				"background-color": "#00afd4",
+				"color": "#ffffff",
+			})
+			.siblings().css({
+				"background-color": "#ffffff",
+				"color": "#666666",
+			}).end().parents(".simulateSelect").hide().prev().attr("data-selectId", thisId).find("span").html(thisHtml)
+		$scope.orgId = $("#forwardaddForma .shopparent").attr("data-selectid");
+	});
+	$("#forwardaddForma .selectePart").on("mouseover", "li", function() {
+		$(this).siblings().css({
+			"background-color": "#ffffff",
+			"color": "#666666"
+		})
+		$(this).css({
+			"background-color": "#00afd4",
+			"color": "#ffffff"
+		})
+	});
+	/*加载客户数据*/
+	$scope.loadOrgList=function(jsonObject){
+		jsonObject = angular.toJson(jsonObject);
+		$http({
+			method: 'post',
+			url: stat + 'orgManage/getOrgListTB',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				//				data.data.orgManageList.unshift({orgId:"",shopName:"请选择"})
+				$scope.orgManageLists = data.data.orgManageList;
+			} else {
+//				alertmsg(data.msg, "error")
+			}
+		})
+	}
+	$scope.loadOrgLists = function() {
+		var jsonObject = {
+			orgId: "",
+			userId: "",
+			shopName: "",
+			nub: "",
+			size: ""
+		};
+		$scope.loadOrgList(jsonObject)
+	}
+	$scope.loadOrgLists();
+	/*输入框输入查询*/
+	$scope.searchOrgList=function(){
+		var jsonObject = {
+			orgId: "",
+			userId: "",
+			shopName: $scope.orgshopName,
+			nub: "",
+			size: ""
+		};
+		$scope.loadOrgList(jsonObject);
+	}
+	/*加载客户数据*/
+	/*选择服务类型的代码*/
+	if($stateParams.uiParams.type == '1') {
+		$stateParams.uiParams.source.push({
+			level: 1,
+			name: "contractAdd"
+		});
+
+	} else {
+		$stateParams.uiParams.source.splice($stateParams.uiParams.source.length - 1, 1);
+
+	};
+	$scope.goback = function() {
+		$stateParams.uiParams.type="2";
+		$stateParams.uiParams.source.splice($stateParams.uiParams.source.length - 1, 1);
+		$state.go($stateParams.uiParams.source[$stateParams.uiParams.source.length - 1].name, {
+			uiParams: $stateParams.uiParams
+		});
+	}
+	/*查找服务类型*/
+	$scope.loadServiceType=function(){
+		var jsonObject={};
+		jsonObject=JSON.stringify(jsonObject);
+		$http({
+			method: 'post',
+			url: pos + 'contract/getServiceType',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.typeListsa=data.data.typeList;
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		});
+	};
+	$scope.loadServiceType();
+	/*查找服务类型*/
+	$scope.dataCacu=function(data,monthStr){
+		var date1 = new Date(data);
+        date1.setMonth(date1.getMonth()+monthStr);
+        $scope.enddate = date1.getFullYear()+"-"+(date1.getMonth()+1)+"-"+(date1.getDate()-1);
+		};
+	
+	/*点击添加合同保存按钮*/
+	$scope.addContract = function() {
+		$scope.goback();
+//		if($scope.userInfo.roleId=='5'){
+//			$scope.saler=$scope.userInfo.userId;
+//		}
+//		$scope.serviceType=$("#forwardaddForm .shopparent").val();
+//		$scope.begindate = $("#effectdatatime").val();
+//		$scope.dataCacu($scope.begindate,Number($scope.months));
+//		if($scope.begindate == undefined) {
+//			alertmsg("请选择日期", "error");
+//			return;
+//		};
+//		if($scope.orgId == undefined) {
+//			alertmsg("请选择客户", "error");
+//			return;
+//		};
+//		if($scope.payType == undefined) {
+//			alertmsg("请选择付费方式", "error");
+//			return;
+//		};
+//		if($scope.serviceType == '') {
+//			alertmsg("请选择服务类型", "error");
+//			return;
+//		};
+//		var jsonObject = {
+//			contractNum: $scope.contractNum,
+//			totalprice: $scope.totalprice,
+//			begindate: $scope.begindate,
+//			enddate: $scope.enddate,
+//			remark: $scope.remark,
+//			payType: $scope.payType,
+//			months: $scope.months,
+//			orgId: $scope.orgId,
+//			userId: $scope.saler,
+//			pOrgId: $scope.userInfo.orgId,
+//			serviceType: $scope.serviceType
+//		}
+//		jsonObject=angular.toJson(jsonObject);
+//		$http({
+//			method: 'post',
+//			url: pos + 'contract/addContract',
+//			params: {
+//				keyParams: getKeyParams(jsonObject, keyParams),
+//				jsonObject: getJsonObject(jsonObject)
+//			}
+//		}).success(function(data, stauts, headers, config) {
+//			if(data.code == 1) {
+//				$scope.goback();
+//				alertmsg("添加合同成功");
+//			} else {
+//				alertmsg(data.msg, "error")
+//			}
+//		});
+	};
+	/*查询查询模块的销售人员数据*/
+	$scope.loadSalers = function() {
+		var jsonObject = {
+			trueName: "",
+			roleIds: "",
+			roleId: "5",
+			manageOrgId: "",
+			orgId: "",
+			userName: "",
+			nub: "0",
+			size: "0"
+		};
+		jsonObject = angular.toJson(jsonObject);
+		$http({
+			method: 'post',
+			url: cas + 'user/getUserList',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.userLists = data.data.userList;
+				$scope.firstObj = {
+					appId: "",
+					count: "",
+					email: "",
+					manageOrgId: "",
+					orgId: "",
+					orgName: "",
+					roleId: "",
+					roleName: "",
+					status: "",
+					telphone: "",
+					trueName: "请选择",
+					userId: "",
+					userName: ""
+				};
+				$scope.userLists.unshift($scope.firstObj);
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		});
+	};
+	$scope.loadSalers();
+	/*查询查询模块的销售人员数据*/
+	/*	查询付款方式*/
+	$scope.getPayType = function() {
+		var jsonObject = {
+			appId: "3",
+			type: "pay_type"
+		};
+		jsonObject = angular.toJson(jsonObject);
+		$http({
+			method: 'post',
+			url: pos + 'typeBase/getTypeBase',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				data.data.types.unshift({
+					"name": "请选择",
+					"value":""
+				})
+				$scope.typeLists = data.data.types;
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		});
+	}
+	$scope.getPayType();
+	/*查询付款方式*/
+	/*点击添加合同保存按钮*/
+	/*日期插件函数*/
+	$timeout(function() {
+		laydate({
+			elem: '#effectdatatime',
+			format: 'YYYY-MM-DD', // 分隔符可以任意定义，该例子表示只显示年月
+			festival: true, //显示节日
+			min: laydate.now(0),
+			istoday: true,
+		});
+	}, 500)
+	/*日期插件函数*/
+});

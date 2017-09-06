@@ -1,0 +1,98 @@
+qyApp.controller("addWdProController", function($scope, $http, Upload, $compile, $route, $state, $stateParams) {	
+	//规格切换
+	$scope.tabType='1';//初始化
+	$scope.shiftStandardTab=function(type){
+		$scope.tabType=type;
+	}
+	
+	//查询品牌
+	$scope.queryBrand = function() {
+			$http({
+				method: 'post',
+				url: pos + 'brand/getBrand',
+				params: {
+					keyParams: getKeyParams('{}', keyParams),
+					jsonObject: getJsonObject('{}')
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == 1) {
+					$scope.queryBrands = data.data.brandList;
+				} else {
+					alertmsg("获取品牌失败", "error");
+				}
+			})
+		}
+	$scope.queryBrand();
+	
+	/*获取大品类*/
+	$scope.item0 = [];
+	$scope.item1 = [];
+	$scope.item2 = [];
+	$scope.item3 = [];
+	$scope.selectSortId0 = "";
+	$scope.selectSortId1 = "";
+	$scope.selectSortId2 = "";
+	$scope.selectSortId3 = "";
+	var jsonSortPid = JSON.stringify({
+		"orgId": JSON.parse(keyParams).orgId,
+		"sortPid": 0
+	});//获取大品类
+	$http({
+		method: 'post',
+		url: pos + 'sort/getBaseAndCustomSort',
+		params: {
+			keyParams: getKeyParams(jsonSortPid, keyParams),
+			jsonObject: getJsonObject(jsonSortPid)
+		}
+	}).success(function(data, stauts, headers, config) {
+		if(data.code == "1") {
+			$scope.item0 = data.data.sortList;
+		} else {
+			alertmsg('获取大品类失败', "error");
+		}
+	});
+	
+	//tyep 1为获取第2级品类 、2为获取第3级品类、 3为获取第4级品类
+	$scope.sortIdChange = function(sortId, type) {
+		if(sortId != null) {
+			var jsonObject = {
+				"orgId": $scope.orgId,
+				"sortPid": sortId
+			};
+			jsonObject = JSON.stringify(jsonObject);
+			$http({
+				method: 'post',
+				url: pos + 'sort/getBaseAndCustomSort',
+				params: {
+					keyParams: getKeyParams(jsonObject, keyParams),
+					jsonObject: getJsonObject(jsonObject)
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == "1") {
+					if(type == "1") {
+						$scope.item1 = data.data.sortList;
+						$scope.item2 = [];
+						$scope.item3 = [];
+						$scope.selectSortId2 = "";
+						$scope.selectSortId3 = "";
+					} else if(type == "2") {
+						$scope.item2 = data.data.sortList;
+						if($scope.item2.length == 0) {
+							$scope.changeProName($scope.item1, $scope.selectSortId1);
+						}
+						$scope.item3 = [];
+						$scope.selectSortId3 = "";
+					} else if(type == "3") {
+						$scope.item3 = data.data.sortList;
+						$scope.getAttrValue(sortId);
+//						if($scope.item3.length == 0) {
+//							$scope.changeProName($scope.item2, $scope.selectSortId2);
+//						}
+					}
+				} else {
+					alertmsg('获取品类失败', "error");
+				}
+			})
+		}
+	}
+});

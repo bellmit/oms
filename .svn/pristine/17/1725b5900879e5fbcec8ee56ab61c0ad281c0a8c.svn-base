@@ -1,0 +1,319 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--------------- Content start ----------------->
+<div class="content-wrapper contractCreate-wraper fn-clear contractCreate-wraper-info contractCreate-wraper-wd">
+	<div class="col-md-11 pageTitl">
+		<span class="am-ft-14 fn-left color666">订单编号：</span>
+		<span class="am-ft-14 fn-left am-ft-black">123456789</span>
+		<span class="am-ft-d4 fn-right">待发货</span>
+	</div>
+	<div class="col-md-11 fn-clear addContractBox">
+		<div class="fn-clear col-md-12 contractBaseInfoBox">
+			<div class="contractInfo col-md-12">
+				<div class="wdOrder_detail pt10 pb10" >
+					<div class="infoLine infoLinea fn-clear">
+						<div class="fn-left infoTitile">
+							订单金额：
+						</div>
+						<span class="am-ft-orangeS fn-left">290元</span>
+						<span class="am-ft-gray fn-left mgl20">（商品金额&nbsp;&nbsp;300元&nbsp;&nbsp;运费&nbsp;&nbsp;0元&nbsp;&nbsp;优惠卷&nbsp;&nbsp;-10元）</span>
+					</div>
+					<div class="infoLine infoLineb fn-clear">
+						<div class="fn-left infoTitile">
+							支付方式：
+						</div>
+						<span class="am-ft-black fn-left">微信支付</span>
+						<span class="am-ft-black fn-left fn-hide">余额支付</span>
+						<span class="am-ft-gray fn-left mgl20">（微信支付&nbsp;&nbsp;300元&nbsp;&nbsp;余额&nbsp;&nbsp;0元）</span>
+					</div>
+					<div class="infoLine infoLinec fn-clear">
+						<div class="fn-left infoTitile">
+							备注：
+						</div>
+						<div class="infoLineccd">
+							<span>dsfjsdhfiosdafhisda</span>
+						</div>
+					</div>
+				</div>
+				<div class="wdOrder_detail  pt10 pb10">
+					<div class="infoLine infoLinea fn-clear">
+						<div class="fn-left infoTitile">
+							会员ID：
+						</div>
+						<span class="color333 fn-left">2461895492</span>
+						<div class="fn-left mgl10 mgr10">
+							<span class="color666">姓名：</span>
+							<span class="color333">张三</span>
+						</div>
+						<div class="fn-left">
+							<span class="color666">手机号：</span>
+							<span class="color333">13509246754</span>
+						</div>
+					</div>
+					<div class="infoLine infoLineb fn-clear">
+						<div class="fn-left infoTitile">
+							下单时间：
+						</div>
+						<span class="am-ft-black fn-left">2017-3-15 17:14</span>
+					</div>
+					<div class="infoLine infoLinec fn-clear">
+						<div class="fn-left infoTitile">
+							付款时间：
+						</div>
+						<span class="am-ft-black fn-left">2017-3-15 17:14</span>
+					</div>
+					<div class="infoLine infoLinec fn-clear">
+						<div class="fn-left infoTitile">
+							发货时间：
+						</div>
+						<span class="am-ft-black fn-left">-</span>
+					</div>
+					<div class="infoLine infoLinec fn-clear">
+						<div class="fn-left infoTitile">
+							完成时间：
+						</div>
+						<span class="am-ft-black fn-left">-</span>
+					</div>
+					<div class="infoLine infoLinec fn-clear">
+						<div class="fn-left infoTitile">
+							配送方式：
+						</div>
+						<span class="am-ft-black fn-left">快速模版1</span>
+					</div>
+				</div>
+				<!--快递信息-->
+				<div class="wdOrder_detail">
+					<div class="infoLine infoLinea fn-clear" style="background: #F0EFF5;border: 1px solid #F4F4F4;">
+						<span class="mgl10">快递信息</span>
+					</div>
+					<div class="infoLine infoLinea fn-clear mgt10">
+						<div class="fn-left infoTitile">
+							姓名：
+						</div>
+						<span class="color333 fn-left fn-hide">张三</span>
+						<input type="text" class="input-w80 fn-left"/>
+						<div class="fn-left mgl60">
+							<span class="color666">手机号：</span>
+							<span class="color333 fn-hide">13509246754</span>
+							<input type="text" class="input-w100"/>
+						</div>
+					</div>
+					<div class="infoLine infoLineb fn-clear mgt10">
+						<div class="fn-left infoTitile">
+							收货地址：
+						</div>
+						<div class="fn-left">
+							<p class="am-ft-black fn-hide">浙江省杭州市西湖区</p>
+							 <select class="col-md-3 mgr5 shopAddr1" ng-options="province.name for province in provinces" ng-model="province" ng-change="member.city='';member.district='';">
+                                	<option value="">请选择省</option>
+	                            </select>
+	                            <select class="col-md-3 mgr5 shopAddr2" ng-options="city.name for city in citys[province.id]" ng-model="city" ng-change="member.district='';">
+	                                <option value="">请选择市</option>
+	                            </select>
+	                            <select class="col-md-3 mgr5 shopAddr3" ng-options="district.name for district in districts[city.id]" ng-model="district">
+	                                <option value="">请选择区</option>
+	                         </select>
+							<p class="am-ft-black fn-hide">平海路18号1幢1单元101</p>
+							<p>
+								<input type="text" class="input-w300 mgt10"/>
+							</p>
+						</div>
+					</div>
+					<div class="infoLine fn-clear mgb10">
+						<div class="fn-right mgr15">
+							<button class="whiteGroundBlueBtn width120  fn-hide">修改收件人信息</button>
+							<button class="blueGroundWhiteBtn w70 ">保存</button>
+							<button class="whiteGroundBlueBtn w70">取消</button>
+						</div>
+					</div>
+				</div>
+				<!--商品信息-->
+				<div class="wdOrder_detail" style="border: none;">
+					<div class="infoLine infoLinea fn-clear mgb0" style="background: #F0EFF5;border: 1px solid #F4F4F4;">
+						<span class="mgl10">商品信息</span>
+					</div>
+					<div class="infoLine infoLinea fn-clear">
+						<div class="orderTbTabel wdOrderDetailTable mgl0">
+							<table>
+								<tr>
+									<th scope="col" width="23%">商品名称</th>
+									<th scope="col" width="10%">数量</th>
+									<th scope="col" width="12%">单价</th>
+									<th scope="col" width="12%">金额</th>
+								</tr>
+								<tr>
+									<td colspan="7" class="orderTbReponse orderTbReponsea pt0">
+										<table>
+											<tr>
+												<td scope="col" rowspan="" width="23%" class="orderTbProBox">
+													<div class="orderTbUnit img-set">
+														<img src="../static/base/images/compLogo.jpg" />
+													</div>
+													<div class="orderTbPro">
+														<p>超级好吃的香酥饼</p>
+														<p class="mgt5">口味：芝麻</p>
+														<p>品牌：</p>
+													</div>
+												</td>
+												<td rowspan="" width="8%">
+													2
+												</td>
+												<td rowspan="" width="12%" scope="col">
+													100.00元
+												</td>
+												<td rowspan="2" width="12%">
+													<p class="am-ft-orange">200.00元</p>
+													<p>（运费：10.00元）</p>
+													<p>优惠：40.00元</p>
+												</td>
+											</tr>
+											<tr>
+												<td scope="col" width="18%" class="orderTbProBox">
+													<div class="orderTbUnit img-set">
+														<img src="../static/base/images/compLogo.jpg" />
+													</div>
+													<div class="orderTbPro">
+														<p>超级好吃的香酥饼</p>
+														<p class="mgt5">口味：芝麻</p>
+														<p>品牌：</p>
+													</div>
+												</td>
+												<td rowspan="" width="8%">
+													2
+												</td>
+												<td rowspan="" width="12%" scope="col">
+													100.00元
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+									<tr>
+									<td colspan="7" class="orderTbReponse orderTbReponsea pt0">
+										<table>
+											<tr>
+												<td scope="col" width="23%" class="orderTbProBox">
+													<div class="orderTbUnit img-set">
+														<img src="../static/base/images/compLogo.jpg" />
+													</div>
+													<div class="orderTbPro">
+														<p>超级好吃的香酥饼</p>
+														<p class="mgt5">口味：芝麻</p>
+														<p>品牌：</p>
+													</div>
+												</td>
+												<td rowspan="" width="8%">
+													2
+												</td>
+												<td rowspan="" width="12%" scope="col">
+													100.00元
+												</td>
+												<td rowspan="" width="12%">
+													<p class="am-ft-orange">200.00元</p>
+													<p>（运费：10.00元）</p>
+													<p>优惠：40.00元</p>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!--物流信息-->
+				<div class="wdOrder_detail">
+					<div class="infoLine infoLinea fn-clear" style="background: #F0EFF5;border: 1px solid #F4F4F4;">
+						<span class="mgl10">物流信息</span>
+					</div>
+					<div class="infoLine infoLinea fn-clear mgt10">
+						<div class="fn-left infoTitile">
+							下单时间：
+						</div>
+						<span class="color333 fn-left">2016-04-10 10:30:30</span>
+					</div>
+					<div class="infoLine infoLineb fn-clear">
+						<div class="fn-left infoTitile">
+							发货时间：
+						</div>
+						<span class="color333 fn-left">2016-04-10 10:30:30</span>
+					</div>
+					<div class="infoLine infoLineb fn-clear">
+						<div class="fn-left infoTitile">
+							物流时间：
+						</div>
+						<div class="fn-left">
+							<p class="am-ft-black ">
+								<span class="am-ft-gray mgr15">2016-04-10 14:31:30</span>
+								<span class="am-ft-black ">您的订单开始处理</span>
+							</p>
+							<p class="am-ft-black ">
+								<span class="am-ft-gray mgr15">2016-04-10 14:31:30</span>
+								<span class="am-ft-black ">您的包裹已出库</span>
+							</p>
+							<p class="am-ft-black ">
+								<span class="am-ft-gray mgr15">2016-04-10 14:31:30</span>
+								<span class="am-ft-black ">商家正通知快递公司揽件</span>
+							</p>
+							<p class="am-ft-black ">
+								<span class="am-ft-gray mgr15">2016-04-10 14:31:30</span>
+								<span class="am-ft-black ">【杭州市】中通快递 西湖区收件员 已揽件</span>
+							</p>
+							<p class="am-ft-black ">
+								<span class="am-ft-gray mgr15">2016-04-10 14:31:30</span>
+								<span class="am-ft-black ">【杭州市】西湖区 已发出</span>
+							</p>
+							<p class="am-ft-black ">
+								<span class="am-ft-gray mgr15">2016-04-10 14:31:30</span>
+								<span class="am-ft-black ">【杭州市】快件已签收，感谢您使用中通快递，期待再次为您服务</span>
+							</p>
+						</div>
+					</div>
+					<div class="infoLine infoLineb fn-clear mgb10">
+						<div class="fn-left infoTitile">
+							收货时间：
+						</div>
+						<span class="am-ft-gray mgr15">2016-04-10 14:31:30</span>
+						<span class="am-ft-black ">李依依  确认收货</span>
+					</div>
+				</div>
+				<!--退款申请-->
+				<div class="wdOrder_detail">
+					<div class="infoLine infoLinea fn-clear" style="background: #F0EFF5;border: 1px solid #F4F4F4;">
+						<span class="mgl10">退款申请</span>
+					</div>
+					<div class="infoLine infoLinea fn-clear mgt10">
+						<div class="fn-left infoTitile">
+							退款类型：
+						</div>
+						<span class="color333 fn-left">只退款</span>
+					</div>
+					<div class="infoLine infoLineb fn-clear">
+						<div class="fn-left infoTitile">
+							退款原因：
+						</div>
+						<span class="color333 fn-left">卖家缺货，迟迟不发货</span>
+					</div>
+					<div class="infoLine infoLineb fn-clear">
+						<div class="fn-left infoTitile">
+							退款金额：
+						</div>
+						<span class="color333 fn-left">100元</span>
+					</div>
+					<div class="infoLine infoLineb fn-clear">
+						<div class="fn-left infoTitile">
+							退款说明：
+						</div>
+						<span class="am-ft-black ">卖家缺货，迟迟不发货</span>
+					</div>
+					<div class="infoLine infoLineb fn-clear mgb10">
+						<div class="fn-left infoTitile">
+							退款时间：
+						</div>
+						<span class="am-ft-black "> 2017-3-15 17:14</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="fn-clear"></div>
+</div>

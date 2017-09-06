@@ -1,0 +1,21 @@
+[
+{	
+	"insertPage":"proParameter",
+	"name":"color",
+	"controller":"colorController",  
+	"url":"../pos/color/color.jsp"
+},
+{	
+	"insertPage":"proParameter",
+	"name":"size",
+	"controller":"sizeController",  
+	"url":"../pos/size/managesize.jsp"
+}
+,
+{
+	"insertPage":"proParameter",
+	"name":"managCategory",
+	"controller":"managCategoryController",  
+	"url":"../pos/managcategory/managCategory.jsp"
+}
+]

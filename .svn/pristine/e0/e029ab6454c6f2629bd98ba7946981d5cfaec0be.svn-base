@@ -1,0 +1,33 @@
+qyApp.controller("editCategoryController", function($scope, $http, Upload, $compile, $route, $state, $stateParams) {
+
+	if ($stateParams.uiParams.type == "1") {
+		$stateParams.uiParams.source.push({
+			level: $stateParams.uiParams.source.length,
+			name: "editCategory"
+		})
+		$scope.sortInfo = $stateParams.uiParams.sortInfo;
+	} 
+	/* 点击返回按钮 */
+	$scope.goback = function() {
+		$stateParams.uiParams.source.splice(
+		$stateParams.uiParams.source.length - 1, 1);
+		$state.go(
+		$stateParams.uiParams.source[$stateParams.uiParams.source.length - 1].name, {
+			uiParams: {
+				"source": $stateParams.uiParams.source,
+				"type": "2"
+			}
+		})
+	}
+
+	$scope.model = {
+		'isTab': '0'
+	}
+
+	/* 品类选项卡切换 */
+	$scope.shiftCategoryTab = function(type) {
+		$scope.model.isTab = type;
+
+	}
+
+});

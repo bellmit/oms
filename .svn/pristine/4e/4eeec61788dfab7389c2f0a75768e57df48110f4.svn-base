@@ -1,0 +1,122 @@
+qyApp.controller("forwardStoreListController", ["$scope", "$http", "Upload","$route", "$state", "$stateParams", function($scope, $http, Upload,$route, $state, $stateParams) {
+	var nub1 = 0;
+	var size1 = 10;
+	var total1 = 0;
+	var userInfo = JSON.parse(localStorage.userInfo);
+	$scope.count = 0;
+	$scope.orgType = userInfo.orgType;
+	$scope.createPagePlugin1 = function(total, pageSize) {
+		$scope.startIndex=0;
+		$("#paging1").empty();
+		paging = pagePlugin.createPaging({
+			renderTo: 'paging1',
+			total: total,
+			pageSize: pageSize
+		});
+		paging.goPage = function(from, to) {
+			$scope.page1(from - 1, pageSize);
+		}
+	};
+	$scope.startIndex=0;
+	$scope.page1 = function(nub, size) {
+		$scope.startIndex=nub;
+		$scope.jsonPage = {
+			"nub": "" + nub + "",
+			"size": "" + size + ""
+		};
+		$.extend($scope.jsonPage, $scope.param);
+		$scope.jsonObject = JSON.stringify($scope.jsonPage);
+		$http({
+			method: 'post',
+			url: pos + 'shop/getShopTB',
+			params: {
+				keyParams: getKeyParams($scope.jsonObject, keyParams),
+				jsonObject: getJsonObject($scope.jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.shopList1 = data.data.shopList;
+			} else {
+				alertmsg("获取商户失败", "error");
+			}
+		})
+	}
+	var nub = 0;
+		var size = 10;
+		$scope.orgId = JSON.parse(keyParams).orgId;
+		$scope.roleType = '1';
+	$scope.loadList = function() {
+		$scope.orgId = JSON.parse(keyParams).orgId;
+		//区分登陆的账户是商户还是代运
+		var jsonObject1 = "{\"orgId\":\"" + $scope.orgId + "\",\"nub\":\"" + nub + "\",\"size\":\"" + size1 + "\"}";
+		if(userInfo.orgType == "6") {
+			$http({
+				method: 'post',
+				url: pos + 'shop/getShopTB',
+				params: {
+					keyParams: getKeyParams(jsonObject1, keyParams),
+					jsonObject: getJsonObject(jsonObject1)
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == 1) {
+					$scope.shopList1 = data.data.shopList;
+					if($scope.shopList1.length > 0) {
+						$scope.count1 = $scope.shopList1[0].count;
+						$scope.param = {
+							"orgId": "" + $scope.orgId + ""
+						}
+						if($scope.shopList1.length == 0) {
+							total1 = 0;
+						} else {
+							total1 = parseInt($scope.shopList1[0].count);
+							if(Number(total1) > Number(size1)) {
+								$scope.createPagePlugin1(total1, size1);
+							}
+						}
+					} else {
+						$scope.count1 = 0;
+					}
+				} else {
+					alertmsg("获取商户失败", "error");
+				}
+			});
+		}
+	}
+	$scope.loadList();
+	//跳转路由
+	$scope.goRoute = function(routeName,obj) {
+		//公共参数部分
+	var params="";
+	if($stateParams.uiParams==""){
+		var sourceArr = [{
+			level: 0,
+			name: "storesMgt"
+		}];
+		params = {
+			"source": sourceArr,
+			"type": "1"
+		};
+	}else{
+		$stateParams.uiParams.type="1";
+		params=$stateParams.uiParams;
+	}
+		//个性化参数部分
+		if(routeName == "storeAdd") {
+			//添加路由
+			$.extend(params, {
+				"type":"1",
+				"orgType":$scope.orgType
+			});
+		} else if(routeName == "storeEdit") {
+			$.extend(params, {
+				"shop": obj.shop,
+				"type":"1",
+				"orgType":$scope.orgType
+			});
+		} 
+		//跳转
+		$state.go(routeName, {
+			uiParams: params
+		});
+	}
+}]);

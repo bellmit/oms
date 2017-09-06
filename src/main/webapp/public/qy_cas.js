@@ -1,0 +1,13 @@
+document.write("<script src='../cas/user/user.js'></script>");
+document.write("<script src='../cas/menu/menu.js'></script>");
+document.write("<script src='../cas/app/app.js'></script>");
+document.write("<script src='../cas/priv/priv.js'></script>");
+document.write("<script src='../cas/role/role.js'></script>");
+document.write("<script src='../cas/org/org.js'></script>");
+document.write("<script src='../cas/user/accountInfo.js'></script>");
+document.write("<script src='../cas/user/alterPassword.js'></script>");
+document.write("<script src='../cas/user/managerUser.js'></script>");
+document.write("<script src='../cas/service/serviceOpen.js'></script>");
+document.write("<script src='../cas/service/serviceOrder.js'></script>");
+document.write("<script src='../cas/user/userApply.js'></script>");
+document.write("<script src='../cas/service/service.js'></script>");

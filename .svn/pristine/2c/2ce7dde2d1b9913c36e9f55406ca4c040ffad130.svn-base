@@ -1,0 +1,35 @@
+<div class="saleSearch" >
+	<div class="clientName">
+		<span>{{inputName}}：</span><input type="text" placeholder="{{placeholder}}" ng-model="contractNum"/>
+	</div>
+	<div class="clientInfo fn-clear">
+		<p class="fn-left pdr20 mgt20">
+			<span>地区：</span>
+			<select name="" id="" ng-init="province='全部'" ng-model="province" ng-options="provinceList.province as provinceList.province for provinceList in provinceLists">
+			</select>
+		</p>
+		<p class="fn-left pdr20 mgt20">
+			<span>部门：</span>
+			<select name="" id="">
+				<option value="">全部</option>
+				<option value="">部门1</option>
+			</select>
+		</p>
+		<p class="fn-left pdr20 mgt20">
+			<span>销售人员：</span>
+			<select name="" id="" ng-init="saler=''" ng-model="saler" ng-options="userList.userId as userList.trueName   for userList in userLists">
+			</select>
+		</p>
+		<p class="fn-left mgt20">
+			<span>状态：</span>
+			<select ng-init="contractType=''" ng-model="contractType">
+				<option value="" selected>全部</option>
+				<option value="0">服务中</option>
+				<option value="1">已到期</option>
+			</select>
+		</p>
+		<p class="fn-left pdl15 mgt20">
+			<button ng-click="searchData()">查询</button>
+		</p>
+	</div>
+</div>

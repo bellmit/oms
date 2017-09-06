@@ -1,0 +1,12 @@
+qyApp.controller("wdOrdersController", function($scope, $http, Upload, $compile, $route, $state, $stateParams) {
+	/*编辑分类商品*/
+	$scope.checkDetail=function(){
+		$state.go("wdOrderDetail",{
+			uiParams:''
+		})
+		
+		
+		
+		
+	}
+})

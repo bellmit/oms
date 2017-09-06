@@ -1,0 +1,110 @@
+qyApp.controller('artDesignerController', ['$scope', '$http', '$compile', '$state', '$stateParams', function($scope, $http, $compile, $state, $stateParams) {
+	$scope.model={
+		'isShiftTab':"1",
+	}
+	
+	
+	
+	/*店铺选项卡*/
+	$scope.shiftShopTab=function(type,contractStatus){
+		if(type=='1'){
+			$scope.model.isShiftTab='1';
+		}else if(type=='2'){
+			$scope.model.isShiftTab='2';
+		}else if(type=='3'){
+			$scope.model.isShiftTab='3';
+		}else{
+			$scope.model.isShiftTab='4';
+		}
+		$scope.contractStatus=contractStatus;
+		console.log($scope.contractStatus);
+		$scope.getContracts();
+	}
+	
+	/*查询合同列表*/
+	var from='0';
+	var pageSize='0';
+	$scope.contractStatus='3';
+	$scope.getContracts =function(){
+		$scope.param=JSON.parse($('#search').serializeJson());
+//		if($scope.param.inputId){
+//			$scope.param.contractId=$scope.param.inputId.substring(6);
+//		}		
+		/*默认查询在册店铺*/
+		$scope.param.contractStatus=$scope.contractStatus;
+		$scope.param.roleId=JSON.parse(localStorage.userInfo).roleId;
+		$scope.param.departId=JSON.parse(localStorage.userInfo).departId;
+		//$scope.param=jsonObject.roleId;
+		$scope.jsonPage={"nub":""+from+"","size":""+pageSize+""};
+		$.extend($scope.jsonPage,$scope.param);
+		$scope.jsonObject=JSON.stringify($scope.jsonPage);
+		console.log($scope.jsonObject)
+		$http({
+			method: 'post',
+			url: pos + 'contract/getContract',
+			params: {
+				keyParams: getKeyParams($scope.jsonObject, keyParams),
+				jsonObject: getJsonObject($scope.jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			console.log(data)
+			if(data.code == 1) {
+				if(data.data.contractList){
+					$scope.contractList = data.data.contractList;
+//					$scope.createPagePlugin(data.data.count,pageSize);
+				}
+			} else {
+				alertmsg("查询失败", "error")
+			}
+		});
+	}
+	$scope.getContracts();
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*查看日志*/
+	$scope.queryLog=function(){
+		$state.go("artDesignerDetails", {
+			uiParams: ""
+		});
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+}]);

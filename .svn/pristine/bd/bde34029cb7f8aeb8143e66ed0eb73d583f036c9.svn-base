@@ -1,0 +1,770 @@
+qyApp.controller("contractAddController", function($scope, $timeout, $http, Upload, $compile, $route, $state, $stateParams) {
+	$scope.parts1=[];
+	$scope.parts2=[];
+	$scope.parts3=[];
+	$scope.parts4=[];
+	$scope.parts5=[];
+	$scope.selectpartId1='';
+	$scope.selectpartId2='';
+	$scope.selectpartId3='';
+	$scope.selectpartId4='';
+	$scope.selectpartId5='';
+	$scope.userInfo = angular.fromJson(localStorage.userInfo);
+	if($scope.userInfo.roleId=='5'){
+		$scope.roleId=$scope.userInfo.roleId;
+		$scope.trueName=$scope.userInfo.trueName;
+		$scope.saler=$scope.userInfo.userId;
+	}
+	$scope.myDate = new Date();
+//	$scope.data = myDate.getFullYear() + "-" + (1 + myDate.getMonth()) + "-" + myDate.getDate();
+	/*判断页面入口*/
+	if($stateParams.uiParams.orgInfo.orgId != undefined){
+		$scope.orgId=$stateParams.uiParams.orgInfo.orgId;
+		$scope.shopName=$stateParams.uiParams.orgInfo.shopName;
+		$scope.pageIn="1";/*商户添加合同进入*/
+	}else{
+		$scope.pageIn="2";/*直接添加合同进入*/
+	}
+	/*判断页面入口*/
+	/*选择服务类型的代码*/
+	$("#forwardaddForm .shopparent").on("click", function(e) {
+		e.stopPropagation();
+		$("#forwardaddForm .simulateSelect").toggle();
+		$("#forwardaddForm .orgshopName").val("");
+		$(window).on("click", function(event) {
+			if(event.target.className != "shopparent" && event.target.className != "searchpart" && event.target.className != "fangda" && event.target.tagName != "INPUT" && event.target.className != "selectLi") {
+				$("#forwardaddForm .simulateSelect").hide();
+			}
+		})
+	});
+	$("#forwardaddForm .selectePart").on("click", "li", function() {
+		var thisHtml = $(this).html();
+		var thisId = $(this).attr("data-Id");
+		var thisContent = $(this).attr("data-html");
+		$(this).css({
+			"background-color": "#00afd4",
+			"color": "#ffffff",
+		})
+		.siblings().css({
+			"background-color": "#ffffff",
+			"color": "#666666",
+		}).end().parents(".simulateSelect").hide().prev().attr("data-selectId", thisId).find("span").html(thisHtml)
+		$("#forwardaddForm .shopparent").val(thisHtml);
+	});
+	$("#forwardaddForm .selectePart").on("mouseover", "li", function() {
+		$(this).siblings().css({
+			"background-color": "#ffffff",
+			"color": "#666666"
+		})
+		$(this).css({
+			"background-color": "#00afd4",
+			"color": "#ffffff"
+		})
+	});
+	/*选择服务类型的代码*/
+	/*选择服务类型的代码*/
+	$("#forwardaddForma .shopparent").on("click", function(e) {
+		e.stopPropagation();
+		$("#forwardaddForma .simulateSelect").toggle();
+		$("#forwardaddForma .orgshopName").val("");
+		$(window).on("click", function(event) {
+			if(event.target.className != "shopparent" && event.target.className != "searchpart" && event.target.className != "fangda" && event.target.tagName != "INPUT" && event.target.className != "selectLi") {
+				$("#forwardaddForma .simulateSelect").hide();
+			}
+		})
+		$scope.loadOrgLists();
+	});
+	$("#forwardaddForma .selectePart").on("click", "li", function() {
+		var thisHtml = $(this).html();
+		var thisId = $(this).attr("data-Id");
+		var thisContent = $(this).attr("data-html");
+		$(this).css({
+			"background-color": "#00afd4",
+			"color": "#ffffff",
+		})
+		.siblings().css({
+			"background-color": "#ffffff",
+			"color": "#666666",
+		}).end().parents(".simulateSelect").hide().prev().attr("data-selectId", thisId).find("span").html(thisHtml)
+		$scope.orgId = $("#forwardaddForma .shopparent").attr("data-selectid");
+	});
+	$("#forwardaddForma .selectePart").on("mouseover", "li", function() {
+		$(this).siblings().css({
+			"background-color": "#ffffff",
+			"color": "#666666"
+		})
+		$(this).css({
+			"background-color": "#00afd4",
+			"color": "#ffffff"
+		})
+	});
+	/*加载客户数据*/
+	$scope.loadOrgList=function(jsonObject){
+		jsonObject = angular.toJson(jsonObject);
+		$http({
+			method: 'post',
+			url: stat + 'orgManage/getOrgListTB',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				//data.data.orgManageList.unshift({orgId:"",shopName:"请选择"})
+				$scope.orgManageLists = data.data.orgManageList;
+				var html=[];
+				$.each($scope.orgManageLists,function(i,n){
+					html.push('<option value="'+n.orgId+'">'+n.shopName+'</option>')
+				})
+				$('#comCiaList').append(html.join(""));
+				$('.selectpicker').selectpicker('refresh');
+			} else {
+//				alertmsg(data.msg, "error")
+			}
+		})
+	}
+	$scope.loadOrgLists = function() {
+		var jsonObject = {
+				orgId: "",
+				userId: "",
+				shopName: "",
+				nub: "",
+				size: ""
+		};
+		$scope.loadOrgList(jsonObject)
+	}
+	$scope.loadOrgLists();
+	/*输入框输入查询*/
+	$scope.searchOrgList=function(){
+		var jsonObject = {
+				orgId: "",
+				userId: "",
+				shopName: $scope.orgshopName,
+				nub: "",
+				size: ""
+		};
+		$scope.loadOrgList(jsonObject);
+	}
+	/*加载客户数据*/
+	/*选择服务类型的代码*/
+	if($stateParams.uiParams.type == '1') {
+		$stateParams.uiParams.source.push({
+			level: 1,
+			name: "contractAdd"
+		});
+
+	} else {
+		$stateParams.uiParams.source.splice($stateParams.uiParams.source.length - 1, 1);
+
+	};
+	$scope.goback = function() {
+		$stateParams.uiParams.type="2";
+		$stateParams.uiParams.source.splice($stateParams.uiParams.source.length - 1, 1);
+		$state.go($stateParams.uiParams.source[$stateParams.uiParams.source.length - 1].name, {
+			uiParams: $stateParams.uiParams
+		});
+	}
+	/*查找服务类型*/
+	$scope.loadServiceType=function(){
+		var jsonObject={};
+		jsonObject=JSON.stringify(jsonObject);
+		$http({
+			method: 'post',
+			url: pos + 'contract/getServiceType',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.typeListsa=data.data.typeList;
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		});
+	};
+//	$scope.loadServiceType();
+	/*查找服务类型*/
+	$scope.dataCacu=function(data,monthStr){
+		var date1 = new Date(data);
+		date1.setMonth(date1.getMonth()+monthStr);
+		$scope.enddate = date1.getFullYear()+"-"+(date1.getMonth()+1)+"-"+(date1.getDate()-1);
+	};
+	/*选择服务类型*/
+	$scope.isServiceType='0';
+	$scope.selectServiceType=function(type){
+		if(type=='1'){
+			$scope.isServiceType='0';
+		}else{
+			$scope.isServiceType='1';
+		}
+	}
+	/*点击添加合同保存按钮*/
+	$scope.addContract = function() {
+		if(validateForm("contractForm")){
+			var jsonObject=JSON.parse($('#contractForm').serializeJson());
+			console.log(jsonObject)
+			var shopId="";
+			if(jsonObject.shopId instanceof Array){
+				if(jsonObject.shopId!=undefined){
+					for(var i=0;i<jsonObject.shopId.length;i++){
+						if(shopId==""){
+							shopId=jsonObject.shopId[i];
+						}else{
+							shopId=shopId+","+jsonObject.shopId[i];
+						}
+					}
+				}
+				jsonObject.shopId=shopId;
+			}
+			if(jsonObject.serviceType=='值守'){
+				jsonObject.deductRate='0';
+			}
+			jsonObject.userId=$scope.userInfo.userId;
+			jsonObject.departId=$scope.userInfo.departId;
+			jsonObject.contractStatus='0';
+			jsonObject.orgId=$scope.orgManage;
+			jsonObject=JSON.stringify(jsonObject);
+			console.log(jsonObject);
+			$http({
+				method: 'post',
+				url: pos + 'contract/addContract',
+				params: {
+					keyParams: getKeyParams(jsonObject, keyParams),
+					jsonObject: getJsonObject(jsonObject)
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == 1) {
+					$scope.goback();
+					alertmsg("添加合同成功");
+				} else {
+					alertmsg(data.msg, "error")
+				}
+			});
+		}else{
+			alertmsg(validateForm("contractForm","msg"),'error');
+		}
+	};
+	/*查询查询模块的销售人员数据*/
+	$scope.loadSalers = function() {
+		var jsonObject = {
+				trueName: "",
+				roleIds: "",
+				roleId: "5",
+				manageOrgId: "",
+				orgId: "",
+				userName: "",
+				nub: "0",
+				size: "0"
+		};
+		jsonObject = angular.toJson(jsonObject);
+		$http({
+			method: 'post',
+			url: cas + 'user/getUserList',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.userLists = data.data.userList;
+				$scope.firstObj = {
+						appId: "",
+						count: "",
+						email: "",
+						manageOrgId: "",
+						orgId: "",
+						orgName: "",
+						roleId: "",
+						roleName: "",
+						status: "",
+						telphone: "",
+						trueName: "请选择",
+						userId: "",
+						userName: ""
+				};
+				$scope.userLists.unshift($scope.firstObj);
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		});
+	};
+	//$scope.loadSalers();
+	/*查询查询模块的销售人员数据*/
+	/*	查询付款方式*/
+	$scope.getPayType = function() {
+		var jsonObject = {
+				appId: "3",
+				type: "pay_type"
+		};
+		jsonObject = angular.toJson(jsonObject);
+		$http({
+			method: 'post',
+			url: pos + 'typeBase/getTypeBase',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				data.data.types.unshift({
+					"name": "请选择",
+					"value":""
+				})
+				$scope.typeLists = data.data.types;
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		});
+	}
+	//$scope.getPayType();
+	/*查询付款方式*/
+	/*点击添加合同保存按钮*/
+	/*日期插件函数*/
+	/*$timeout(function() {
+		laydate({
+			//elem: '#effectdatatime',
+			format: 'YYYY-MM-DD', // 分隔符可以任意定义，该例子表示只显示年月
+			festival: true, //显示节日
+			//min: laydate.now(0),
+			istoday: true,
+		});
+	}, 500)*/
+	/*日期插件函数*/
+
+
+	$scope.getShopList=function(){
+		if($scope.orgManage==undefined||$scope.orgManage==""){
+			return;
+		}
+		var shopObject={
+				orgId:$scope.orgManage,
+				shopProp:"3"
+		};
+		jsonObject = angular.toJson(shopObject);
+		$http({
+			method: 'post',
+			url: pos + 'shop/getMerchantShop',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.shopList = data.data.shopList;
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		});
+	}
+
+	//获取部门区域
+	$scope.getDepartArea=function(){
+		var jsonObject = {};
+		jsonObject = angular.toJson(jsonObject);
+		$http({
+			method: 'post',
+			url: cas + 'depart/getDepartArea',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.departAreaList = data.data.departAreaList;
+			} else {
+				alertmsg("获取失败", "error");
+			}
+		});
+	}
+	$scope.getDepartArea();
+	//查询区域下的部门列表
+	$scope.getDepartList = function(departArea,objClass){
+		console.log(objClass);
+		if(departArea==""){
+			$('.'+objClass+'1').remove();
+		}else{
+			$('.'+objClass+'1').remove();
+			var jsonObject = "{\"pDepartId\":\""+0+"\",\"departArea\":\""+departArea+"\"}";
+			$http({
+				method: 'post',
+				url: cas + 'depart/getDepartList',
+				params: {
+					keyParams: getKeyParams(jsonObject, keyParams),
+					jsonObject: getJsonObject(jsonObject)
+				}
+			}).success(function(data, stauts, headers, config) {
+				if (data.code == 1) {
+					$scope.parts1 = data.data.departList;
+					$scope.type="1";
+					var html=[];
+					html.push('<select class="col-md-2 mgr10 '+objClass+'1" ng-model="'+objClass+'select"  ng-change="sortIdChange('+objClass+'select,type)">');
+					html.push('<option value="" selected="selected">请选择</option>');
+					$.each($scope.parts1,function(i,n){
+						html.push('<option value="'+n.departId+'">'+n.departName+'</option>');
+					})
+					html.push('</select>');
+
+					var template=angular.element(html.join(""));
+					html=$compile(template)($scope);
+					angular.element($('.'+objClass).append(html));
+				} else {
+					alertmsg("获取部门分组失败", "error");
+				}
+			})
+		}
+
+	}
+	//查询部门分组
+	$scope.sortIdChange = function(id, type){
+		$scope.departId=id;
+		var jsonObject = "{\"pDepartId\":\""+id+"\"}";
+		$http({
+			method: 'post',
+			url: cas + 'depart/getDepartList',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if (data.code == 1) {              	
+				if(type == "1") {
+					$scope.parts2 = data.data.departList; 
+//					$scope.type="2";
+//					var html=[];
+//					html.push('<select class="col-md-2 mgr10 '+objClass+'1" ng-model="'+objClass+'select1"  ng-change="sortIdChange('+objClass+'select,type)">');
+//					html.push('<option value="" selected="selected">请选择</option>');
+//					$.each($scope.parts2,function(i,n){
+//					html.push('<option value="'+n.departId+'">'+n.departName+'</option>');
+//					})
+//					html.push('</select>');
+
+//					var template=angular.element(html.join(""));
+//					html=$compile(template)($scope);
+//					angular.element($('.'+objClass).append(html));
+				}else if(type == "2"){
+					$scope.parts3 = data.data.departList; 
+					$scope.parts4 = [];
+					$scope.parts5 = [];
+					$scope.selectpartId4='';
+					$scope.selectpartId5='';
+				}else if(type == "3"){
+					$scope.parts4 = data.data.departList; 
+					$scope.parts5 = [];
+					$scope.selectpartId5='';
+				}else if(type == "4"){
+					$scope.parts5 = data.data.departList; 
+				}
+			} else {
+				alertmsg("获取部门列表信息失败", "error");
+			}
+		})
+	}
+	//跳转添加客户
+	$scope.gotoMemberAdd = function(type){
+		var params = {
+				"source":$stateParams.uiParams.source,
+				"addtype": type,
+				"type": 1
+		};
+		$state.go("commercialAdd", {
+			uiParams: params,
+			orgType:$scope.userInfo.orgType 			
+		}); 
+	};
+
+	//跳转添加部门
+	$scope.goToStreAdd = function(){
+		var params = {
+				"source":$stateParams.uiParams.source,
+				"type": 1
+		};
+		$state.go("storeAdd", {
+			uiParams: params,
+			orgType:$scope.userInfo.orgType			
+		}); 
+	};
+
+	$scope.qian=function($event){
+		var obj=$event.target;
+		if($(obj).val()=="1"){
+			$('#contractNum').show();
+		}else{
+			$('#contractForm')[0].reset();
+			$('.selectpicker').selectpicker('refresh');
+			$('#contractNum').hide();
+		}
+
+	}
+
+	//合同续签
+	$scope.getNewContract=function($event){
+		var obj=$event.target;
+		var contractNum=$(obj).val();
+//		$scope.orgManage="12378";
+//		$('[name="shopNum"]').val("1234");
+//		$('[name="totalprice"]').val("1");
+		if(contractNum!=""){
+			$http({
+				method: 'post',
+				url: pos + 'contract/getContractByContractNum',
+				params: {
+					keyParams: getKeyParams("{\"contractNum\":\""+contractNum+"\"}", keyParams),
+					jsonObject: getJsonObject("{\"contractNum\":\""+contractNum+"\"}")
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == 1) {
+					var contractList=data.data.contractList;
+					if(contractList){
+						var contract=contractList[0];
+						$scope.orgManage=contract.orgId;
+						$('[name="orgId"]').val(contract.orgId);
+						$scope.getShopList();
+
+						$('.selectpicker').selectpicker('refresh');
+						$('[name="shopNum"]').val(contract.shopNum);
+						$('[name="totalprice"]').val(contract.totalprice);
+						//$('[name="serviceType"]').val(contract.serviceType);
+						if(contract.serviceType=="1"){
+							$('#zh').prop("checked",true);
+						}else{
+							$('#ti').prop("checked",false);
+						}
+						//$('[name="productType"]').val(contract.productType);
+						if(contract.productType=="客服"){
+							$('#ke').prop("checked",true);
+						}
+						if(contract.productType=="美工"){
+							$('#mei').prop("checked",true);
+						}
+						if(contract.productType=="运营"){
+							$('#yun').prop("checked",true);
+						}
+						if(contract.productType=="培训"){
+							$('#pei').prop("checked",true);
+						}
+						$('[name="serviceMemo"]').val(contract.serviceMemo);
+						$('[name="begindate"]').val(contract.begindate);
+						$('[name="enddate"]').val(contract.enddate);
+						$('[name="planDate"]').val(contract.planDate);
+						//$('[name="serviceArea"]').val(contract.serviceArea);
+						if(contract.serviceArea=="杭州"){
+							$('#hz').prop("checked",true);
+						}
+						if(contract.serviceArea=="武汉"){
+							$('#wh').prop("checked",true);
+						}
+						if(contract.serviceArea=="合肥"){
+							$('#hf').prop("checked",true);
+						}
+						$('[name="serviceDepart"]').val(contract.serviceDepart);
+						$('[name="remark"]').val(contract.remark);
+					}
+					//$scope.shopList = data.data.shopList;
+				} else {
+					alertmsg(data.msg, "error")
+				}
+			});
+		}
+
+	}
+
+	$scope.updateContract=function(){
+		var jsonObject=JSON.parse($('#contractForm').serializeJson());
+		var shopId="";
+		if(jsonObject.shopId instanceof Array){
+			if(jsonObject.shopId!=undefined){
+				for(var i=0;i<jsonObject.shopId.length;i++){
+					if(shopId==""){
+						shopId=jsonObject.shopId[i];
+					}else{
+						shopId=shopId+","+jsonObject.shopId[i];
+					}
+
+				}
+			}
+			jsonObject.shopId=shopId;
+		}
+		jsonObject.userId=$scope.userInfo.userId;
+		jsonObject.departId=$scope.userInfo.deptId;
+		jsonObject.contractStatus='0';
+		jsonObject.orgId=$scope.orgManage;
+		jsonObject=JSON.stringify(jsonObject);
+		$http({
+			method: 'post',
+			url: pos + 'contract/addContract',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.goback();
+				alertmsg("续签合同成功");
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		});
+	}
+
+	$scope.shopChecked=function($event){
+		var shopNum=parseInt($('[name="shopNum"]').val());
+		if($($event.target).prop("checked")){
+			shopNum++;
+		}else{
+			shopNum--;
+		}
+		$('[name="shopNum"]').val(shopNum);
+	}
+
+	$scope.productTypeChecked=function($event){
+		var val=$($event.target).val();
+		var objClass;
+		if(val=="客服") objClass="ke";
+		if(val=="美工") objClass="mei";
+		if(val=="运营") objClass="yun";
+		if(val=="培训") objClass="pei";
+
+		if($($event.target).prop("checked")){
+			var html=[];
+			html.push('<div class="infoLine infoLinec fn-clear '+objClass+'Depart">');
+			html.push('<div class="fn-left infoTitile">');
+			html.push('<em class="am-ft-red mgr5">*</em>'+val+'部门：');
+			html.push('</div><div class="'+objClass+'">');
+			html.push('<select class="col-md-2 mgr10 '+objClass+'1" name="departId"  id="departName"   data="'+objClass+'"  onchange="getDepartList(this)">');
+			html.push('<option value="" selected="selected">请选择</option>');
+			$.each($scope.departAreaList,function(i,n){
+				html.push('<option value="'+n.areaName+'">'+n.areaName+'</option>');
+			})
+			html.push('</select>');
+			html.push('</div>');
+			html.push('</div>');
+
+//			var template=angular.element(html.join(""));
+//			html=$compile(template)($scope);
+//			angular.element($('.contractRemark').before(html));
+			$('.contractRemark').before(html.join(''));
+		}else{
+			$('.'+objClass+'Depart').remove();
+		}
+	}
+
+
+//	<div class="infoLine infoLinec fn-clear serviceDepart">
+//	<div class="fn-left infoTitile">
+//	<em class="am-ft-red mgr5">*</em>服务部门：
+//	</div>
+
+//	<div>
+//	<select class="col-md-2 mgr10" ng-model="depart1" ng-options='depart.areaName as depart.areaName for depart in departAreaList' ng-change="getDepartList(depart1)">
+//	<option value="">请选择</option>
+//	</select>
+//	<select class="col-md-2 mgr10" ng-show="parts1.length != 0" ng-options="n.departId as n.departName for n in parts1" ng-model="selectKe1" ng-change="sortIdChange(selectKe1,1)">
+//	<option value="">请选择</option>
+//	</select>
+//	<select class="col-md-2 mgr10" ng-show="parts2.length != 0" ng-options="x.departId as x.departName for x in parts2" ng-model="selectKe2" ng-change="sortIdChange(selectKe1,2)">
+//	<option value="">请选择</option>
+//	</select>
+//	<select class="col-md-2 mgr10" ng-show="parts3.length != 0" ng-options="a.departId as a.departName for a in parts3" ng-model="selectKe3" ng-change="sortIdChange(selectKe3,3)">
+//	<option value="">请选择</option>
+//	</select>
+//	</div>
+//	<!-- <input type="text" name='serviceDepart' /> -->
+//	</div>
+
+
+});
+
+function getDepartList(obj){
+	var objClass=$(obj).attr("data");
+	var departArea=$(obj).val();
+	if(departArea==""){
+		$('.'+objClass+'2').remove();
+	}else{
+		$('.'+objClass+'2').remove();
+		var jsonObject = "{\"pDepartId\":\""+0+"\",\"departArea\":\""+departArea+"\"}";	 			       	       	       
+		$.ajax({
+			type:"post",
+			url: cas + 'depart/getDepartList',			
+			data : {
+				keyParams:getKeyParams(jsonObject, keyParams),
+				jsonObject:getJsonObject(jsonObject)},
+				success : function(data) {
+					data=JSON.parse(data);
+					if (data.code == 1) {
+						if(data.data.departList.length>0){							
+							var html=[];
+							html.push('<select class="col-md-2 mgr10 '+objClass+'1 '+objClass+'2" data="'+objClass+'" type="1" name="departId" onchange="sortIdChange(this)">');
+							html.push('<option value="" selected="selected">请选择</option>');
+							$.each(data.data.departList,function(i,n){
+								html.push('<option value="'+n.departId+'">'+n.departName+'</option>');
+							})
+							html.push('</select>');
+							$('.'+objClass).append(html.join(''));
+						}
+						
+					} else {
+						alertmsg("获取部门分组失败", "error");
+					}
+				}
+		});
+	}
+}
+
+//查询部门分组
+function sortIdChange(obj){
+	var objClass=$(obj).attr("data");
+	var departId=$(obj).val();
+	var type=$(obj).attr("type");
+	var jsonObject = "{\"pDepartId\":\""+departId+"\"}";
+
+	$.ajax({
+		type:"post",
+		url: cas + 'depart/getDepartList',	
+		data : {
+			keyParams:getKeyParams(jsonObject, keyParams),
+			jsonObject:getJsonObject(jsonObject)},
+			success : function(data) {
+				data=JSON.parse(data);
+				if (data.code == 1) {              	
+					if(type == "1") {
+						$('.'+objClass+'3').remove();
+						if(data.data.departList.length>0){
+							$('.'+objClass+'2').removeAttr('name');
+							var html=[];
+							html.push('<select class="col-md-2 mgr10 '+objClass+'1 '+objClass+'2 '+objClass+'3" type="2" name="departId" ng-change="sortIdChange(this)">');
+							html.push('<option value="" selected="selected">请选择</option>');
+							$.each(data.data.departList,function(i,n){
+								html.push('<option value="'+n.departId+'">'+n.departName+'</option>');
+							})
+							html.push('</select>');
+							$('.'+objClass).append(html.join(''));
+						}
+					}else if(type == "2"){
+						$('.'+objClass+'4').remove();
+						if(data.data.departList.length>0){
+							$('.'+objClass+'3').removeAttr('name');
+							var html=[];
+							html.push('<select class="col-md-2 mgr10 '+objClass+'1 '+objClass+'2 '+objClass+'3 '+objClass+'4" type="3" name="departId" ng-change="sortIdChange(this)">');
+							html.push('<option value="" selected="selected">请选择</option>');
+							$.each(data.data.departList,function(i,n){
+								html.push('<option value="'+n.departId+'">'+n.departName+'</option>');
+							})
+							html.push('</select>');
+							$('.'+objClass).append(html.join(''));
+						}
+					}else if(type == "3"){
+//						$scope.parts4 = data.data.departList; 
+//						$scope.parts5 = [];
+//						$scope.selectpartId5='';
+					}else if(type == "4"){
+//						$scope.parts5 = data.data.departList; 
+					}
+				} else {
+					alertmsg("获取部门列表信息失败", "error");
+				}
+			}
+	});
+
+
+}

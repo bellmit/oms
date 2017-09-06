@@ -1,0 +1,113 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<script src="../public/barGraph.js"></script>
+<div class="content-wrapper content-wrapper-bossWb index_wrapper index_sale">
+	<div class="workbench-nav" style="width: 98%;" ng-if="isShow=='1'">
+		<img  ng-if="undeal!=0 && undeal!=undefined" src="../static/base/images/icon_fire.png" />
+		<p ng-if="undeal==0||undeal==undefined" class="am-ft-black">无待处理合同</p>
+		<p class="am-ft-orange"  ng-if="undeal!=0 && undeal!=undefined">待处理：共有<a href="javascript:;" class="am-ft-red" ng-click="goRoute('saleManage','2')">{{undeal}}</a>个合同需处理</p>
+	</div>
+	<!--part1-->
+	<div class="part_titl mgt20 line-cut">
+		{{months}}月销售概况
+	</div>
+	<!--top-->
+	<div class="top_nav am-flexbox ">
+		<div class="am-flexbox-item">
+			<p>销售额</p>
+			<p class="am-ft-18 am-ft-orange">￥{{contractStat.totalAmount}}</p>
+		</div>
+		<div class="am-flexbox-item">
+			<p>实际到账</p>
+			<p class="am-ft-18 am-ft-orange">￥{{contractStat.paidAmount}}</p>
+		</div>
+		<div class="am-flexbox-item">
+			<p>待收总额</p>
+			<p class="am-ft-18 am-ft-orange">￥{{contractStat.notPaidAmount}}</p>
+		</div>
+		<div class="am-flexbox-item">
+			<p>新签合同数</p>
+			<p class="am-ft-18 am-ft-orange">{{contractStat.newSignCount}}份</p>
+		</div>
+		<div class="am-flexbox-item">
+			<p>续签合同数</p>
+			<p class="am-ft-18 am-ft-orange">{{contractStat.reSignCount}}份</p>
+		</div>
+		<div class="am-flexbox-item">
+			<p>暂停合同数</p>
+			<p class="am-ft-18 am-ft-orange">{{contractStat.pauseCount}}份</p>
+		</div>
+	</div>
+	<!--/top-->
+	<!--part1-->
+	<div class="par1_nav mgt20 saleSurver_map" ng-show='childDepartCount>0' >
+		<!--charts1整年销售业绩-->
+		<div class="charts1 fn-left" id="charts1" ></div>
+		<!--charts2各产品销售业绩-->
+		<div class="charts2 fn-right" >
+				<div class="part3_info part5_info_last pd0">
+				<div class="type_title">
+					{{months}}月产品销售业绩
+				</div>
+				<div class="part5_info_in" id="lineInfo1">
+					<div class="progress_box" ng-repeat='product in rsListType track by $index'>
+						<span class="am-ft-black" ng-if='product.taskType=="0"'>客服</span>
+						<span class="am-ft-black" ng-if='product.taskType=="1"'>美工</span>
+						<span class="am-ft-black" ng-if='product.taskType=="2"'>运营</span>
+						<span class="am-ft-black" ng-if='product.taskType=="3"'>培训</span>
+						<span class="am-ft-black" ng-if='product.taskType=="4"'>套餐</span>
+						<div class="progress_line">
+							<p class="progress_bar progress_bar1" id="" style='width:{{product.width}}'></p>
+						</div>
+						<span>¥{{product.serviceAmount}}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="charts1 fn-left mgt10 " ng-show='roleId=="11"'>
+			<button class="blue-white-btn checkDetail" ng-click='goPart()'>查看详细数据</button>
+			<div id="charts3" class="charts5"></div>
+		</div>
+		<!--charts5-->
+		<div class="charts1 fn-left mgt10 "  ng-show='roleId!="11"'>
+			<button class="blue-white-btn checkDetail" ng-click='goPart()'>查看详细数据</button>
+			<div id="charts5" class="charts5"></div>
+		</div>
+		<!--个人业绩排行右2-->
+		<div class="charts2 fn-right mgt10 " >
+			<div class="part3_info part5_info_last pd0">
+				<div class="type_title mgb10">
+					<span class="fn-left">{{months}}月个人新签排行榜</span>
+					<a href="javascript:;" class="fn-right am-ft-d4" ng-click='goPart("1")'>更多>></a>
+				</div>
+				<div class="part5_info_in rank_person" ng-repeat='person in rsListSign'>
+					<div class="index_rank" ng-if='person.num==1'>{{person.num}}</div>
+					<div class="index_rank" style="background:#FA9B42;" ng-if='person.num==2'>{{person.num}}</div>
+					<div class="index_rank" style="background: #FCBC91;" ng-if='person.num==3'>{{person.num}}</div>
+					<div class="index_rank" style="background: #F0D7C6;" ng-if='person.num>3'>{{person.num}}</div>
+					<div class="depart_rank">
+						<p class="am-ft-black">{{person.trueName}}</p>
+						<p class="am-ft-gray">{{person.departName}}</p>
+					</div>
+					<div class="progress_box progress_box1">
+						<div class="progress_line progress_line1">
+							<p class="progress_bar" style="width: {{person.width}};"></p>
+							<!--<p class="progress_bar progress_bar_full" style="width: 80%;"></p> 为100%时追加class-->
+						</div>
+						<p>¥{{person.newSignAmount}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--/part1-->
+	<!--part2-->
+	<div class="par1_nav mgt20 saleSurver_map " ng-show='childDepartCount==0' >
+		<div class="charts1 fn-left w100" id="charts2" ></div>
+		<div class="charts1 fn-left mgt10 w100"  >
+			<button class="blue-white-btn checkDetail" ng-click='goPart("1")'>查看详细数据</button>
+			<div id="charts4" class="charts4"></div>
+		</div>
+	</div>
+	<div class="fn-clear"></div>
+</div>

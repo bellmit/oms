@@ -1,0 +1,63 @@
+<div class="saleSearch">
+	<form id='search'>
+		<div class="clientName">
+			<span>{{inputName}}：</span><input type="text" name='inputId'
+				placeholder="{{placeholder}}" />
+		</div>
+		<div class="clientInfo fn-clear">
+			<p class="fn-left pdr20 mgt20">
+				<span>服务区域：</span>
+				<!--<select name="" id="" ng-init="province='全部'" ng-model="province" ng-options="provinceList.province as provinceList.province for provinceList in provinceLists">
+			</select>-->
+				<select name='serviceArea'>
+					<option value=''></option>
+					<option value='杭州'>杭州</option>
+					<option value='武汉'>武汉</option>
+					<option value='合肥'>合肥</option>
+				</select>
+			</p>
+			<p class="fn-left pdr20 mgt20" ng-if='productTab=="2"'>
+				<span>产品类型：</span> 
+				<select name="productType">
+					<option value=''></option>
+					<option value="客服">客服</option>
+					<option value="美工">美工</option>
+					<option value="运营<">运营</option>
+					<option value="培训">培训</option>
+				</select>
+			</p>
+			<p class="fn-left pdr20 mgt20" ng-if='productTab=="2"'>
+				<span>商户名称：</span>
+				<select id="comCiaList" class="selectpicker" data-live-search="true" name="orgId" ng-model="orgManage" ng-change="getShopList()">
+					<option value=" ">请选择</option>
+				</select>
+			</p>
+			<p class="fn-left pdr20 mgt20" ng-if='productTab=="1"'>
+				<span>销售人：</span> <select name="" ng-init="saler=''"
+					ng-model="saler"
+					ng-options="userList.userId as userList.trueName   for userList in userLists">
+				</select>
+			</p>
+			<p class="fn-left pdr20 mgt20" ng-if='productTab=="2"'>
+				<!-- <span>提交人：</span> <select name="userId" ng-model="userId"
+					ng-options="userList.userId as userList.trueName   for userList in userLists">
+				</select> -->
+			</p>
+			<p class="fn-left mgt20">
+				<span>状态：</span> <select name='contractStatus'>
+					<option value=""></option>
+					<option value="0">待审核</option>
+					<option value="1">待分配</option>
+					<option value="2">待确认</option>
+					<option value="3">服务中</option>
+					<option value="4">已完成</option>
+					<option value="5">暂停</option>
+					<option value="6">终止</option>
+				</select>
+			</p>
+			<p class="fn-left pdl15 mgt20">
+				<button class="selectContractBtn" ng-click="searchData()">查询</button>
+			</p>
+		</div>
+	</form>
+</div>

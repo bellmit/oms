@@ -1,0 +1,20 @@
+qyApp.controller("contractInfoController",  function($scope, $http, Upload, $compile,$route, $state, $stateParams) {
+	if($stateParams.uiParams.type=="1"){
+		$stateParams.uiParams.source.push({
+			level:1,
+			name: "contractInfo"
+		})
+	}else if($stateParams.uiParams.type=="2"){
+		$stateParams.uiParams.source.splice($stateParams.uiParams.source.length-1,1)
+	}
+	$scope.contractInfo=$stateParams.uiParams.orgInfo;
+	$scope.timeArr=$scope.contractInfo.begindate.split("-");
+	$scope.goback=function(){
+		$stateParams.uiParams.type="2";
+		$stateParams.uiParams.source.splice($stateParams.uiParams.source.length-1,1);
+		$state.go($stateParams.uiParams.source[$stateParams.uiParams.source.length-1].name,{
+			uiParams:$stateParams.uiParams
+		})
+	}
+	
+});

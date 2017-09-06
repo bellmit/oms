@@ -1,0 +1,309 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--------------- Content start ----------------->
+<div class="contractCreate-wraper contractCreate-wraperaa fn-clear contractCreate-wraper-info contractCreate-wraper-infoa">
+	<div class="col-md-11 fn-clear addContractBox">
+		<!--<form id='contractForm'>-->
+			<div class="fn-clear col-md-12 contractBaseInfoBox">
+				<div class="contractInfo col-md-12">
+					<!-- <div class="infoLine infoLinec fn-clear">
+						<div class="fn-left infoTitile">
+							<em class="am-ft-red mgr5">*</em>合同编号：
+						</div>
+						<input type="text" name="contractNum" />
+					</div> -->
+					<div class="infoLine infoLinea fn-clear">
+						<div class="fn-left infoTitile">
+							合同编号：
+						</div>
+						<span class="color333 fn-left">{{contractPayInfo.contractNum}}</span>
+						<div class="fn-left infoTitile">
+							合同类型：
+						</div>
+						<span class="color333" ng-if="contractPayInfo.contractType=='0'">新签</span>
+						<span class="color333" ng-if="contractPayInfo.contractType=='1'">续签</span>
+						<span class="color333 mgl25" ng-if="contractTabInfo.contractType==1">（原合同：{{contractPayInfo.sourceContractNum}}）</span>
+					</div>
+					<div class="infoLine infoLineb fn-clear">
+						<div class="fn-left infoTitile">
+							商戶名称：
+						</div>
+						<span class="color333">{{contractPayInfo.orgInfo.shopName}}</span>
+					</div>
+					<div class="infoLine infoLineb fn-clear">
+						<div class="fn-left infoTitile">
+							合同费用：
+						</div>
+						<div class="fn-left infocontentBox fn-clear" style="width: 739px;">
+							<div>
+								<span class="am-ft-orangeS mgr20">{{contractPayInfo.totalAmount|number:2}}元</span>
+								<span class="color666" ng-if="contractPayInfo.carryAmount>0">已结转抵扣：</span>
+								<span class="color333" ng-if="contractPayInfo.carryAmount>0">{{contractPayInfo.carryAmount|number:2}}元</span>
+							</div>
+							<div ng-repeat="payInfo in contractPayInfo.payList"  class="mgt10 infocontentBox_content infocontentBox_content_info" >
+								<div>
+									<span class="color999" ng-if="payInfo.accountAmount>0">到账：</span>
+									<span class="color999" ng-if="payInfo.accountAmount<0">退款：</span>
+									<span class="mgr20" ng-class='{"am-ft-orangeS":payInfo.accountAmount>0,"am-ft-blue":payInfo.accountAmount<0}'>{{payInfo.accountAmount|number:2}}元</span>
+									<span class="color999">收款时间：</span>
+									<span class="am-ft-black">{{payInfo.accountTime}}</span>
+								</div>
+								<div>
+									<span class="color999">备注：</span>
+									<span class="am-ft-black">{{payInfo.memo}}</span>
+								</div>
+								<div>
+									<span class="color666 mgl15">{{payInfo.userName}}</span>
+									<span class="color666">{{payInfo.createTime}}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--客服暂停-->
+					<div class="infoLine infoLineb fn-clear" ng-repeat="contractTask in contractPayInfo.contractTaskList">
+						<div class="fn-left infoTitile artDes_info_r3 finance_content">
+							<div class="proType_Btn finance_type" ng-if="contractTask.taskType=='0'">客服</div>
+							<div class="proType_Btn finance_type" ng-if="contractTask.taskType=='1'">美工</div>
+							<div class="proType_Btn finance_type" ng-if="contractTask.taskType=='2'">运营</div>
+							<div class="proType_Btn finance_type" ng-if="contractTask.taskType=='3'">培训</div>
+							<div class="fn-left infoTitile">
+								<span ng-if="contractTask.taskStatus=='7'&&contractTask.deductAmount==0">完结临时费用：</span>
+								<span ng-if="contractTask.taskStatus=='7'&&contractTask.deductAmount>0">完结结算费用：</span>
+								<span ng-if="contractTask.taskStatus=='6'">暂停结算费用：</span>
+							</div>
+						</div>
+						<div class="fn-left infocontentBox fn-clear" style="width: 739px;">
+							<div>
+								<span class=" mgr20" ng-class='{"am-ft-orangeS":contractTask.amount>0,"am-ft-blue":contractTask.amount<0}'>{{contractTask.amount}}元</span>
+							</div>
+							<div class="financeInfo_again" ng-if="contractTask.taskStatus=='6'&&contractTask.amount>0">
+								<span class="color666 mgr20" ng-if="contractTask.deductAmount>0">提成金额 {{contractTask.deductAmount}}元</span>
+							</div>
+							<div class="financeInfo_again" ng-if="contractTask.taskStatus=='6'&&contractTask.amount<0">
+								<span class="color666 mgr20" ng-if="contractTask.carryFlag=='0'">结转商户余额</span>
+								<span class="color666 mgr20" ng-if="contractTask.carryFlag=='1'">退款</span>
+							</div>
+							<div class="financeInfo_again" ng-if="contractTask.taskStatus=='7'&&contractTask.deductAmount>0">
+								<span class="color666 mgr20">其中：提成金额 {{contractTask.deductAmount}}元</span>
+								<span class="color666">临时费用{{contractTask.extendAmount}}元</span>
+							</div>
+						</div>
+					</div>
+					<div class="infoLine infoLinee fn-clear mgt10" ng-if="userInfo.roleId=='12'||userInfo.userId=='1973'">
+						<div class="fn-left infoTitile">
+							收款状态：
+						</div>
+						<div class="financeStauts">
+							<div >
+								<p class="am-ft-14 am-ft-orangeS" ng-if="contractPayInfo.notPaidAmount>0">待收款</p>
+								<p class="am-ft-14 am-ft-orangeS" ng-if="contractPayInfo.notPaidAmount==0">已结清</p>
+								<p class="am-ft-14 am-ft-orangeS" ng-if="contractPayInfo.notPaidAmount<0">待退款</p>
+								<div class="proType_box_a proType_box_b" ng-if="contractPayInfo.contractStatus=='0'">
+									<div class="proType_box_nav" >
+										<span>财务审批</span>
+									</div>
+									<div class="proType_box_under" ng-if="contractPayInfo.contractStatus=='0'">
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<!--<div class="" ng-class='{"am-ft-grey":!selectCustomer}'>-->
+												<!--<span>{{selectCustomer}}</span>-->
+												<div class="" >
+													待收金额：
+												</div>
+												<div class="proType_details fn-clear">
+													<span class="am-ft-orangeS">{{contractPayInfo.notPaidAmount|number:2}}元</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" ng-class='{false:"colorDisable"}[selectCustomer]'>
+													服务类型：
+												</div>
+												<div class="proType_details">
+													<div class="financeType">
+														<label class="label-input">
+															<input type="radio" name="payType" checked="checked" ng-click="changePayType('0')"/>已到账
+														</label>
+														<label class="label-input">
+															<input type="radio" name="payType" ng-click="changePayType('1')"/>未到账
+														</label>
+													</div>
+													<div>
+														<span>到账金额：</span>
+														<input type="text" class="mgr5" ng-model="dealContractTask.accountAmount" ng-disabled="payDis"/>元
+														<span class="mgl15">到账时间：</span>
+														<input id="accountTime" type="text" class=" laydate-icon form-control effectdatatime"
+														name="accountTime" placeholder="到账时间" onclick="laydate()" style="display: inline;" ng-disabled="payDis"/>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													备注：
+												</div>
+												<div class="proType_details  proType_memo">
+													<textarea ng-model="dealContractTask.memo"></textarea>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+											<div class="" >
+												<span>确认人：</span>
+											</div>
+											<div class="proType_details">
+												<span class="am-ft-black">{{userInfo.trueName}}</span>
+											</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" style="height: 1px;">
+												</div>
+												<div class="proType_details">
+													<button type="button" class="btn btn-primary mgr10 " ng-click="updateContractCW()">确认</button>
+												</div>
+											</div>
+										</div>
+									</div>
+							</div>
+							<!--财务收款-->
+							<div class="proType_box_a proType_box_b" ng-if="contractPayInfo.contractStatus!='0'&&contractPayInfo.notPaidAmount>0">
+									<div class="proType_box_nav" >
+										<span>财务收款</span>
+									</div>
+									<div class="proType_box_under">
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													待收金额：
+												</div>
+												<div class="proType_details fn-clear">
+													<span class="am-ft-orangeS">{{contractPayInfo.notPaidAmount}}元</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" ng-class='{false:"colorDisable"}[selectCustomer]'>
+													到账金额：
+												</div>
+												<div class="proType_details">
+													<div class="financeType">
+														<input type="text" class="mgr5" ng-model="contractPay.accountAmount"/>元
+														<span class="mgl15">到账时间：</span>
+														<input id="accountTime" id="accountTime" type="text" class=" laydate-icon form-control effectdatatime"
+														name="accountTime" placeholder="到账时间" onclick="laydate()" style="display: inline;"/>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													备注：
+												</div>
+												<div class="proType_details  proType_memo">
+													<textarea ng-model="contractPay.memo"></textarea>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+											<div class="" >
+												<span>确认人：</span>
+											</div>
+											<div class="proType_details">
+												<span class="am-ft-black">{{userInfo.trueName}}</span>
+											</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" style="height: 1px;">
+												</div>
+												<div class="proType_details">
+													<button type="button" class="btn btn-primary mgr10 " ng-click="addContractPay()">确认</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="proType_box_a proType_box_b" ng-if="contractPayInfo.contractStatus!='0'&&contractPayInfo.notPaidAmount<0">
+										<div class="proType_box_nav" >
+											<span>财务退款情况</span>
+										</div>
+										<div class="proType_box_under">
+											<div class="proType_box_contenr">
+												<div class="proType_detailsBox fn-clear">
+													<div class="" >
+														待退款：
+													</div>
+													<div class="proType_details fn-clear">
+														<span class="am-ft-orangeS">{{contractPayInfo.notPaidAmount}}元</span>
+													</div>
+												</div>
+											</div>
+											<div class="proType_box_contenr">
+												<div class="proType_detailsBox fn-clear">
+													<div class="" ng-class='{false:"colorDisable"}[selectCustomer]'>
+														退款情况：
+													</div>
+													<div class="proType_details">
+														<div class="financeType">
+															<label class="label-input">
+																<input type="radio" checked="checked"/>已退款
+															</label>
+															<span class="mgl15">退款时间：</span>
+															<input type="text" class=" laydate-icon form-control effectdatatime"
+															name="accountTime" placeholder="退款时间" onclick="laydate()" style="display: inline;"/>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="proType_box_contenr">
+												<div class="proType_detailsBox fn-clear">
+													<div class="" >
+														备注：
+													</div>
+													<div class="proType_details  proType_memo">
+														<textarea ng-model="contractPay.memo"></textarea>
+													</div>
+												</div>
+											</div>
+											<div class="proType_box_contenr">
+												<div class="proType_detailsBox fn-clear">
+													<div class="" >
+													<span>确认人：</span>
+													</div>
+													<div class="proType_details">
+														<span class="am-ft-black">{{userInfo.trueName}}</span>
+													</div>
+												</div>
+											</div>
+											<div class="proType_box_contenr">
+												<div class="proType_detailsBox fn-clear">
+													<div class="" style="height: 1px;">
+													</div>
+													<div class="proType_details">
+														<button type="button" class="btn btn-primary mgr10 " ng-click="addContractPay()">确认</button>
+													</div>
+												</div>
+											</div>
+										</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="infoLine infoLinec fn-clear infoLine_bill mgb10" style="border-bottom:1px dashed #DDDDDD ;text-align: right;" >
+						<span class="am-ft-gray">创建时间：{{contractInfo.createTime}}</span>
+					</div>
+			</div>
+		<!--</form>-->
+	</div>
+</div>
+</div>
+
+

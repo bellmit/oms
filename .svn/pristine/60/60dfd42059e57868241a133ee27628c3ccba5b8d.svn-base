@@ -1,0 +1,4 @@
+qyApp.controller('distributorMgtController', ['$scope','$http','$compile','Upload',function($scope,$http,$compile,Upload) {
+
+}]);
+

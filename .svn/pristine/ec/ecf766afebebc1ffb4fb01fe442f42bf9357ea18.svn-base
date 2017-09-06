@@ -1,0 +1,45 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<script src="../public/barGraph.js"></script>
+<div class="content-wrapper content-wrapper-bossWb index_wrapper index_sale">
+	<!--part1-->
+	<div class="part_titl mgt20 line-cut">
+		销售概况<span>（近7天）</span>
+	</div>
+	<!--top-->
+	<div class="top_nav am-flexbox ">
+		<div class="am-flexbox-item">
+			<p>销售额</p>
+			<p class="am-ft-18 am-ft-orange">￥10,000.00</p>
+		</div>
+		<div class="am-flexbox-item">
+			<p>实际到账</p>
+			<p class="am-ft-18 am-ft-orange">￥10,000.00</p>
+		</div>
+		<div class="am-flexbox-item">
+			<p>待收总额</p>
+			<p class="am-ft-18 am-ft-orange">￥10,000.00</p>
+		</div>
+		<div class="am-flexbox-item">
+			<p>新签合同数</p>
+			<p class="am-ft-18 am-ft-orange">60份</p>
+		</div>
+		<div class="am-flexbox-item">
+			<p>续签合同数</p>
+			<p class="am-ft-18 am-ft-orange">60份</p>
+		</div>
+		<div class="am-flexbox-item">
+			<p>暂停合同数</p>
+			<p class="am-ft-18 am-ft-orange">60份</p>
+		</div>
+	</div>
+	<!--/top-->
+	<!--part1-->
+	<div class="par1_nav mgt20 saleSurver_map">
+		<div class="charts1 fn-left" id="charts1" ></div>
+		<div class="charts2 fn-right" id="charts2"></div>
+		<div class="charts1 fn-left mgt10" id="charts3" ></div>
+		<div class="charts2 fn-right mgt10" id="charts4"></div>
+	</div>
+	<!--/part1-->
+	<div class="fn-clear"></div>
+</div>

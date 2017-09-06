@@ -1,0 +1,13 @@
+qyApp.controller("categoryMgtController", function($scope, $http, Upload, $compile, $route, $state, $stateParams) {
+
+
+
+
+
+
+
+
+
+
+
+});

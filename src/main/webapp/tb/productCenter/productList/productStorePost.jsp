@@ -1,0 +1,82 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<div class="col-md-12" ng-if="publishInfoList.length!=0">
+	<div class="col-md-12 publishStoreList" ng-repeat='x in publishInfoList'>
+		<div class="col-md-3 publishStoreListDeil pl0 pr0">
+			<!--<img ng-if="x.shopType == 4" src="../static/base/images/icon_logo_tmall.png" />-->
+			<img ng-if="x.shopType == 3" src="../static/base/images/icon_logo_tmall.png" />
+			<img ng-if="x.shopType == 2" src="../static/base/images/icon_logo_taobao.png" />
+			<img ng-if="x.shopType == 4" src="../static/base/images/icon_logo_jindong.png" />
+            <img  ng-if="x.shopType=='0'" src="../static/base/images/icon_1688.png" />
+            <img  ng-if="x.shopType=='1'" src="../static/base/images/icon_AliExpress.png" />
+            <img  ng-if="x.shopType=='5'" src="../static/base/images/icon_amazon.png" />
+			<span class="mgl5">{{x.shopName}}</span>
+		</div>
+		<div class="col-md-2 pl0 pr0">
+			<a href="javascript:;" class="publishStoreColor" ng-click="showPlatformInfo()" >平台基本属性</a>
+		</div>
+		<div class="col-md-2 pl0 pr0">
+			<a href="javascript:;" class="publishStoreColor">PC端详情页</a>
+		</div>
+		<div class="col-md-2 pl0 pr0">
+			<a href="javascript:;" class="publishStoreColor">手机端详情页</a>
+		</div>
+<!-- 		<div class="col-md-1 pl0 pr0" >
+			<span class="noPublish" ng-show="x.publishStatus == '未发布'">下架</span>
+			<span class="hasPublish" ng-show="x.publishStatus == '已发布'">上架</span>
+		</div> -->
+		<div class="col-md-2 pl0 pr0" >
+<!-- 			<button class="publishBtn" ng-show="x.publishStatus == '未发布'" ng-click="getShop()">上架</button>
+			<button class="publishBtn" ng-show="x.publishStatus == '已发布'" ng-click="releaseAgain(x.orgId)">重新发布</button>
+ -->			
+<!--   			<button class="publishBtn" ng-if="x.publishStatus == '未发布'" ng-click="getShop()">发布</button>
+ --> 			<button class="publishBtn" ng-if="x.publishStatus == '未上架'" ng-click="updateListing(x.shopType,x.orgId,modelid1)">上架</button>
+			<button class="publishBtn" ng-if="x.publishStatus == '已上架'"  ng-click="updateDelisting(x.shopType,x.orgId,modelid1)">下架</button>
+		</div>
+		<!--<div class="col-md-2" ng-if="x.publishStatus == '未发布'">
+			<span class="noPublish">未发布</span>
+			<button class="publishBtn" ng-click="getShop()">发布</button>
+		</div>
+		<div class="col-md-2" ng-if="x.publishStatus == '已发布'">
+			<span class="hasPublish">已发布</span>
+			<button class="publishBtn" ng-click="releaseAgain(x.orgId)">重新发布</button>
+		</div>-->
+	</div>
+</div>
+<!--缺省-->
+<div class="col-md-12 dafaultWapper" ng-if="publishInfoList.length==0">
+	<div class="loadingFormal">
+		<p>您还没有添加店铺</p>
+		<!--<img src="../../../static/base/images/icon_wait.png" />-->
+		<button>立即添加店铺</button>
+	</div>
+</div>
+<!--发布商品弹框-->
+<div id="showShops" class="showshopName setDayTargetL publishPro fn-hide">
+	<div class="setDayTargetTitle publishTitle">
+		<span>发布商品</span>
+		<img class="closeDia" src="http://static.qineasy.com/base/images/closelogo.png" />
+	</div>
+	<div class="setDayTargetContent">
+		<p class="willPublishStore">请选择要发布的店铺</p>
+		<div class="allStoreName fn-clear">
+			<div ng-repeat="x in publishInfoList" ng-click="chooseShopPublish(x.orgId,x.shopType)" ng-if="x.publishStatus!= '已发布'">
+				<div class="storeName fn-clear selec-stores {{x.orgId}}">
+					<input type="hidden" value="{{x.orgId}}" />
+					<img ng-if="x.shopType == 4" class="typelogo" src="../static/base/images/icon_logo_tmall.png" />
+					<img ng-if="x.shopType == 3" class="typelogo" src="../static/base/images/icon_logo_taobao.png" />
+					<img ng-if="x.shopType == 5" class="typelogo" src="../static/base/images/icon_logo_jindong.png" />
+					<img ng-if="x.shopType=='0'" class="typelogo" src="../static/base/images/icon_1688.png" />
+					<img ng-if="x.shopType=='1'" class="typelogo" src="../static/base/images/icon_AliExpress.png" />
+					<img ng-if="x.shopType=='2'" class="typelogo" src="../static/base/images/icon_amazon.png" />
+					<span class="shopNameaa">{{x.shopName}}</span>
+					<img src="../static/base/images/icon_selected.png" class="iconSelect fn-hide" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="publishFrame">
+		<!--<button type="button" class="surePublishFrame" ng-click="publishPro()">发布</button>-->
+		<button type="button" class="surePublishFrame" ng-click="goRoute2()">发布</button>
+		<button type="button" class="publishFrameReset" ng-click="selectReset($event)">重置</button>
+	</div>
+</div>

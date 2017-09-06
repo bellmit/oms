@@ -1,0 +1,415 @@
+qyApp.controller("commercialPageController", function($scope, $http, Upload, $route, $state, $stateParams) {
+			/*加载模板函数*/
+			$scope.loadPage = function(obj) {
+					var jsonObject = JSON.stringify(obj);
+					$http({
+						method: 'post',
+						url: pos + 'template/getTemplateC',
+						params: {
+							keyParams: getKeyParams(jsonObject, keyParams),
+							jsonObject: getJsonObject(jsonObject)
+						}
+					}).success(function(data, stauts, headers, config) {
+						if(data.code == "1") {
+							$scope.pageLists = data.data.templateList;
+							$scope.pageCount = data.data.count;
+							if($scope.pageCount > 24) {
+								$scope.createPagePlugin($scope.pageCount, $scope.pageSize);
+							} else {
+								$("#pagingMem").empty();
+							}
+						} else {
+							alertmsg(data.msg, "error");
+						}
+					})
+				}
+				/*加载模板函数*/
+			$scope.pageSize = "24";
+			$scope.from = "0";
+			$scope.keyP = JSON.parse(keyParams);
+			$scope.loadPageList = function() {
+				if($scope.templateName == undefined) {
+					$scope.templateName = "";
+				}
+				if($scope.merchantId == undefined) {
+					$scope.merchantId = "";
+				}
+				var jsonObject = {
+					orgId: "",
+					userId: "",
+					templateId: "",
+					title: "",
+					templateType: "1",
+					/*(0 详情页模板, 1 首页, 2 首页模板)*/
+					merchantId: $scope.keyP.orgId,
+					nub: $scope.from,
+					size: $scope.pageSize
+				};
+				$scope.loadPage(jsonObject);
+			};
+			$scope.loadPageList();
+			/*查询页面列表*/
+			/*分页代码*/
+			$scope.createPagePlugin = function(total, pageSize) {
+				$("#pagingModel").empty();
+				paging = pagePlugin.createPaging({
+					renderTo: 'pagingModel',
+					total: total,
+					pageSize: pageSize
+				});
+				paging.goPage = function(from, to) {
+					$scope.page(from - 1, pageSize);
+				}
+			};
+			$scope.page = function(from, pageSize) {
+					if($scope.templateName == undefined) {
+						$scope.templateName = "";
+					}
+					if($scope.merchantId == undefined) {
+						$scope.merchantId = "";
+					}
+					var jsonObject = {
+						orgId: "",
+						userId: "",
+						templateId: "",
+						title: $scope.templateName,
+						templateType: "1",
+						/*(0 详情页模板, 1 首页, 2 首页模板)*/
+						merchantId: $scope.keyP.orgId,
+						nub: from,
+						size: pageSize
+					};
+					jsonObject = JSON.stringify(jsonObject);
+					console.log(jsonObject);
+					$http({
+						method: 'post',
+						url: pos + 'template/getTemplateC',
+						params: {
+							keyParams: getKeyParams(jsonObject, keyParams),
+							jsonObject: getJsonObject(jsonObject)
+						}
+					}).success(function(data, stauts, headers, config) {
+						if(data.code == "1") {
+							console.log(data)
+							$scope.pageLists = data.data.templateList;
+							$scope.pageCount = data.data.count;
+						} else {
+							alertmsg(data.msg, "error");
+						}
+					})
+				}
+				/*分页代码*/
+				/*图片预览代码*/
+				/*图片预览代码*/
+				/*js精确计算函数*/
+			$scope.compute = function(arg1, arg2) {
+				var t1 = 0,
+					t2 = 0,
+					r1, r2;
+				try {
+					t1 = arg1.toString().split(".")[1].length
+				} catch(e) {}
+				try {
+					t2 = arg2.toString().split(".")[1].length
+				} catch(e) {}
+				with(Math) {
+						r1 = Number(arg1.toString().replace(".", ""))
+						r2 = Number(arg2.toString().replace(".", ""))
+						return(r1 / r2) * pow(10, t2 - t1);
+					}
+				}
+					/*js精确计算函数*/
+					/*图片预览功能*/
+					//	计算图片位置的函数
+					/*图片预览功能*/
+					/*新建一个数组存放当前页的图片链接*/
+				var ImgArr, thisImgIndex, thisImgSrc, mulriple;
+				var showImgBox = $(".showScanImg img");
+				var winWidth = $(window).width();
+				var winHeight = $(window).height();
+				$(".fodderMainRow").on("click", ".scan", function() {
+					ImgArr = [];
+					var thisPageImgs = $(this).parents(".fodderMainRow").children(".fodderMain[foldtype='proimg']").find("img");
+					thisPageImgs.each(function(index, ele) {
+						ImgArr.push(ele.currentSrc);
+					});
+					/*当前选中的图片的序号*/
+					thisImgIndex = $(".fodderMainRow").children(".fodderMain[foldtype='proimg']").index($(this).parents(".fodderMain[foldtype='proimg']"));
+					thisImgSrc = ImgArr[thisImgIndex];
+					if(ImgArr.length == 1) {
+						$('#prevImg').hide();
+						$('#nextImg').hide();
+					} else {
+						if(thisImgIndex == 0) {
+							$('#prevImg').hide();
+							$('#nextImg').show();
+						} else if(thisImgIndex == ImgArr.length - 1) {
+							$('#prevImg').show();
+							$('#nextImg').hide();
+						} else {
+							$('#prevImg').show();
+							$('#nextImg').show();
+						}
+					}
+					$(".showScanImg").show();
+					showImgBox.attr("src", thisImgSrc);
+					var showImg = new Image();
+					showImg.src = thisImgSrc;
+					showImgBox.width(showImg.width);
+					showImgBox.height(showImg.height);
+					/*图片的宽和高*/
+					var showImgWid = showImgBox.width();
+					var showImgHei = showImgBox.height();
+					mulriple = $scope.compute(showImgHei,showImgWid);
+					if(showImgHei > winHeight) {
+						showImgBox.css({
+							"position": "absolute",
+							"left": (winWidth - showImgWid) / 2 + "px",
+							"top": "0px"
+						})
+					} else if(showImgHei <= winHeight) {
+						showImgBox.centera();
+					}
+					/*图片的位置*/
+				});
+				/*点击下一张图片*/
+				$("#nextImg").on("click", function() {
+						thisImgIndex++;
+						if(thisImgIndex <= ImgArr.length - 1) {
+							$('#prevImg').show();
+							$('#nextImg').show();
+							showImgBox.attr("src", ImgArr[thisImgIndex]);
+							var showImg = new Image();
+							showImg.src = ImgArr[thisImgIndex];
+							showImgBox.width(showImg.width);
+							showImgBox.height(showImg.height);
+							/*图片的宽和高*/
+							var showImgWid = showImgBox.width();
+							var showImgHei = showImgBox.height();
+mulriple = $scope.compute(showImgHei,showImgWid);
+							if(showImgHei > winHeight) {
+								showImgBox.css({
+									"position": "absolute",
+									"left": (winWidth - showImgWid) / 2 + "px",
+									"top": "0px"
+								})
+							} else if(showImgHei <= winHeight) {
+								showImgBox.centera();
+							}
+							if(thisImgIndex == ImgArr.length - 1) {
+								$('#prevImg').show();
+								$('#nextImg').hide();
+							}
+						}
+					})
+					/*点击下一张图片*/
+					/*点击上一张图片*/
+				$("#prevImg").on("click", function() {
+						thisImgIndex--;
+						if(thisImgIndex >= 0) {
+							$('#prevImg').show();
+							$('#nextImg').show();
+							showImgBox.attr("src", ImgArr[thisImgIndex]);
+							var showImg = new Image();
+							showImg.src = ImgArr[thisImgIndex];
+							showImgBox.width(showImg.width);
+							showImgBox.height(showImg.height);
+							/*浏览器视口的宽和高*/
+
+							/*图片的宽和高*/
+							var showImgWid = showImgBox.width();
+							var showImgHei = showImgBox.height();
+mulriple = $scope.compute(showImgHei,showImgWid);
+							if(showImgHei > winHeight) {
+								showImgBox.css({
+									"position": "absolute",
+									"left": (winWidth - showImgWid) / 2 + "px",
+									"top": "0px"
+								})
+							} else if(showImgHei <= winHeight) {
+								showImgBox.centera();
+							}
+
+							if(thisImgIndex == 0) {
+								$('#prevImg').hide();
+								$('#nextImg').show();
+							}
+						}
+						//		else{
+						//			$('#prevImg').hide();
+						//			$('#nextImg').show();
+						//		}
+					})
+					/*点击上一张图片*/
+					//关闭预览弹窗
+				$("#closeScanImg").click(function($event) {
+					$(".showScanImg").hide();
+				});
+				/*图片预览功能*/
+				/*	图片拖拽效果*/
+				//	showImgBox.mousedown(function(e) {
+				//			e.preventDefault();
+				//			showImgBox.on("mousemove", function(e) {
+				//				var showImgBoxLeft = showImgBox.position().left;
+				//				var showImgBoxTop = showImgBox.position().top;
+				//				var showImgWid = showImgBox.width() / 2;
+				//				var showImgHei = showImgBox.height() / 2;
+				//				var event = e;
+				//				showImgBox.offset({
+				//					left: event.pageX - showImgWid,
+				//					top: event.pageY - showImgHei
+				//				})
+				//			})
+				//			showImgBox.parent().on("mouseup", function() {
+				//				showImgBox.unbind("mousemove")
+				//			})
+				//		})
+				/*鼠标滚轮滚动对图片进行缩放*/
+				var myimage = document.getElementById('showImg');
+				if(myimage.addEventListener) {
+					// IE9, Chrome, Safari, Opera   
+					myimage.addEventListener("mousewheel", MouseWheelHandler, false);
+					// Firefox   
+					myimage.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
+				}
+				// IE 6/7/8   
+				else {
+					myimage.attachEvent("onmousewheel", MouseWheelHandler);
+				}
+
+				function MouseWheelHandler() {
+
+					var e = window.event || e; // old IE support   
+					var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+					myimage.style.width = Math.max(50, Math.min(3000, myimage.width + (30 * delta))) + "px";
+					myimage.style.height = mulriple * Math.max(50, Math.min(3000, myimage.width + (30 * delta))) + "px";
+					var myimageheight = Math.round(myimage.style.height.substr(0, myimage.style.height.indexOf("p")))
+					var myimagewidth = Math.round(myimage.style.width.substr(0, myimage.style.width.indexOf("p")))
+					if(myimageheight > winHeight) {
+						showImgBox.css({
+							"position": "absolute",
+							"left": (winWidth - myimagewidth) / 2 + "px",
+							"top": "0px"
+						})
+					} else if(myimageheight <= winHeight) {
+						showImgBox.css({
+							"position": "absolute",
+							"left": (winWidth - myimagewidth) / 2 + "px",
+							"top": (winHeight - myimageheight) / 2 + "px",
+						})
+					}
+					return false;
+				}
+				$("#showImg").mouseover(function() {
+					if(document.getElementById("showScanImg").addEventListener) {
+						document.getElementById("showScanImg").addEventListener('DOMMouseScroll', scrollFunc, false);
+					} //W3C  
+					document.getElementById("showScanImg").onmousewheel = scrollFunc; //IE/Opera/Chrome  
+
+					function scrollFunc(evt) {
+						return false;
+					}
+				})
+				$("#showImg").mouseout(function() {
+						if(document.getElementById("showScanImg").addEventListener) {
+							document.getElementById("showScanImg").addEventListener('DOMMouseScroll', scrollFunc, false);
+						} //W3C  
+						document.getElementById("showScanImg").onmousewheel = scrollFunc; //IE/Opera/Chrome  
+
+						function scrollFunc(evt) {
+							return true;
+						}
+					})
+					/*图片预览代码*/
+					/*选择图片的代码*/
+					/*单选*/
+				$scope.imgArr = [];
+				$scope.selected = "notselected";
+				$scope.doselect = function(type, obj, index) {
+						if(type == "one") {
+							if(!$(".fodderMain[index='" + index + "']").hasClass("currentFodderMain")) {
+								$(".fodderMain[index='" + index + "']").addClass("currentFodderMain")
+								$scope.imgArr.push(obj.pageList)
+							} else if($(".fodderMain[index='" + index + "']").hasClass("currentFodderMain")) {
+								$(".fodderMain[index='" + index + "']").removeClass("currentFodderMain")
+								$scope.imgArr.forEach(function(ele, index) {
+									if(ele.templateId == obj.pageList.templateId) {
+										$scope.imgArr.splice(index, 1);
+										return;
+									}
+								})
+							}
+						} else if(type == "all") {
+							if($scope.selectall == true) {
+								$(".fodderMain").addClass("currentFodderMain");
+								$scope.imgArr = $scope.imgArr.concat(obj);
+								var unique = {};
+								$scope.imgArr.forEach(function(gpa) {
+									unique[JSON.stringify(gpa)] = gpa
+								});
+								$scope.imgArr = Object.keys(unique).map(function(u) {
+									return JSON.parse(u)
+								});
+							} else if($scope.selectall == false) {
+								$(".fodderMain").removeClass("currentFodderMain");
+								for(var i = 0; i < $scope.imgArr.length; i++) {
+									for(var j = 0; j < obj.length; j++) {
+										if($scope.imgArr[i].templateId == obj[j].templateId) {
+											$scope.imgArr.splice(i, 1);
+										}
+									}
+									i--;
+								}
+							}
+						}
+					}
+					/*选择图片的代码*/
+					/*保存图片的代码*/
+					//	单张图片下载 start
+				$scope.downloadone = function(obj) {
+						var pro = obj;
+						if(pro == null) {
+							alertmsg("请选择文件！", "error")
+						}
+						var brower = myBrowser();
+						if(brower == "IE") {
+							var imgURL = "";
+							//如果隐藏IFRAME不存在，则添加  
+							if(!document.getElementById("IframeReportImg" + pro.proAttrId))
+								$('<iframe style="display:none;" id="IframeReportImg' + pro.templateId + '" name="IframeReportImg' + pro.templateId + '" onload="DoSaveAsIMG(' + pro.templateId + ');" width="0" height="0" src="about:blank"></iframe>').appendTo("body");
+							//加载图片
+							document.getElementById("IframeReportImg" + pro.templateId).src = pro.templateImage;
+						} else if(brower == "DOWNLOAD") {
+							var fileName = pro.title + ".png";
+							var aLink = document.createElement('a');
+							var evt = document.createEvent("HTMLEvents");
+							evt.initEvent("click", false, false);
+							aLink.download = fileName;
+							aLink.href = pro.templateImage;
+							//				aLink.dispatchEvent(evt);
+							aLink.click();
+						}
+					}
+					//判断浏览器类型
+				function myBrowser() {
+					if(!!window.ActiveXObject || "ActiveXObject" in window) {
+						return "IE";
+					}
+					if('download' in document.createElement('a')) {
+						return "DOWNLOAD";
+					}
+					return "OTHER";
+				}
+				//多选下载
+				$scope.downLoadPic = function() {
+						if($scope.imgArr.length == 0) {
+							alertmsg("请选择下载素材", "error");
+							return;
+						}
+						for(var i = 0; i < $scope.imgArr.length; i++) {
+							$scope.downloadone($scope.imgArr[i], i);
+						}
+					}
+					//	单张图片下载 end
+					/*保存图片的代码*/
+			});

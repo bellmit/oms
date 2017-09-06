@@ -1,0 +1,42 @@
+qyApp.controller("departMgtController", function($scope, $http, Upload, $compile, $route, $state, $stateParams) {	
+ 
+ 
+ 	//添加部门
+	$scope.goToAddDepart = function(obj){ 		
+ 		$state.go("departAdd", {
+ 			uiParams:''
+ 		});      
+   };
+   
+	//跳转人员列表
+	$scope.goToMemberList = function(obj){
+		var sourceArr = [{level:0,name:"departMgt"}];
+ 		var params = {
+// 			"source":sourceArr
+// 			"type":"1",
+//	        "status": obj.status,
+//	        "userId": obj.userId,
+//	        "orgId": obj.orgId,
+	        "fromPage": "depart"
+ 		};
+
+ 		$state.go("memberMgt", {
+ 			uiParams: params
+ 		}); 
+	};
+	
+	//编辑部门信息
+	$scope.goToEditDepart = function(obj){
+//		var sourceArr=[{level:0,name:"departMgt"}];
+// 		var params={
+// 			"source":sourceArr
+// 			"type":"1",
+// 		};
+ 		
+ 		$state.go("departEdit", {
+ 			uiParams:''
+ 		});      
+   };
+	
+
+})

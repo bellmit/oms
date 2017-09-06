@@ -1,0 +1,133 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+    <!--------------- Content start ----------------->
+    <div class="content-wrapper content-forwardAdd-wrapper pb20">
+        <div class="col-md-11 pageTitl">
+            <h2 class="am-ft-16 fn-left">添加商户</h2>
+            <a href="javascript:;" class="line-btn fn-right" ng-click="goback()">返回</a>
+        </div>
+        <div class="fn-clear"></div>
+        <section class="container-fluid">
+       		<form id="merchantForm">
+            <div class="row">
+                <div class="prodet-nav">
+                    <div class="prodet-box">
+                        <!-- row1 -->
+                        <div class="row">
+                            <div class="nowraps-text inprodet-titl am-ft-14 mgt25">
+                                <em class="am-ft-red mgr5">*</em>商户logo：
+                            </div>
+                            <div class="col-md-3 memImg">
+                            	<input type="file" ngf-select="uploadshopLogo($files)" /> <img
+								class="media-object" src="../static/base/images/icon_upload.png" width="80" alt="请选择商户logo" id="shopLogo">
+                                <!-- <input type="file" class="" />
+                                <img src="../static/base/images/icon_upload.png" /> -->
+                            </div>
+                            <p class="am-ft-red note-brandAdd">(请上传700*700以上图片，小于3M)</p>
+                        </div>
+                        <!-- row2 -->
+                        <div class="row">
+                            <div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>商户全称：</div>
+                            <div class="col-md-3 form-group needValInfo">
+                                <input type="text" class="col-md-8 text-overflow" name="shopName" placeholder="" value=""/>
+                            </div>
+                        </div>
+
+                        <!-- row2 -->
+                        <div class="row">
+                            <div class="nowraps-text inprodet-titl am-ft-14">商户简介：</div>
+                            <div class="col-md-3 form-group needValInfo">
+                                <textarea class="mgb0" name="shopInfo"></textarea>
+                            </div>
+                        </div>
+                        <!-- row3 -->
+                        <div class="row">
+                            <div class="nowraps-text inprodet-titl am-ft-14">通讯地址：</div>
+                            <div class="col-md-8 form-group needValInfo">
+                                <select class="col-md-3 mgr5 shopAddr1" ng-options="province.name for province in provinces" ng-model="province" ng-change="member.city='';member.district='';">
+                                	<option value="">请选择省</option>
+	                            </select>
+	                            <select class="col-md-3 mgr5 shopAddr2" ng-options="city.name for city in citys[province.id]" ng-model="city" ng-change="member.district='';">
+	                                <option value="">请选择市</option>
+	                            </select>
+	                            <select class="col-md-3 mgr5 shopAddr3" ng-options="district.name for district in districts[city.id]" ng-model="district">
+	                                <option value="">请选择区</option>
+	                            </select>
+                            </div>
+                        </div>
+                        <!--row4-->
+                        <div class="row">
+                            <div class="nowraps-text inprodet-titl am-ft-14">详细地址：</div>
+                            <div class="col-md-5 form-group needValInfo">
+                                <input type="text" class="col-md-8 text-overflow" name="shopAddr" placeholder="" value="">
+                            </div>
+                        </div>
+                        <!-- row5 -->
+                        <div class="row">
+                            <div class="nowraps-text inprodet-titl am-ft-14">联系人：</div>
+                            <div class="col-md-3 form-group needValInfo">
+                                <input type="text" class="col-md-8 text-overflow" name="contacts" placeholder="" value="">
+                            </div>
+                        </div>
+                        <!-- row6 -->
+                        <div class="row">
+                            <div class="nowraps-text inprodet-titl am-ft-14">联系电话：</div>
+                            <div class="col-md-3 form-group needValInfo">
+                                <input type="text" class="col-md-8 text-overflow" name="shopTel" placeholder="" value="">
+                            </div>
+                        </div>
+                        <!-- row7 -->
+                        <div class="row">
+                            <div class="nowraps-text inprodet-titl am-ft-14">管理员信息：</div>
+                            <div class="col-md-10 form-group pro-property mgl5">
+                                <div class="row">
+                                    <div class="col-md-2 pl0 inprodet-titl am-ft-12"><em class="am-ft-red mgr5">*</em>管理员帐号：</div>
+                                    <div class="col-md-9 form-group needValInfo">
+                                        <input type="text" class="col-md-5 text-overflow" autocomplete="off" name="userName" placeholder="" value="" ng-model="orgUserName" ng-blur="checkUserName()"/>
+                                        <span class="mgl20">请输入11位手机号码</span>
+                                    </div>
+                                    <p class="error col-md-9" ng-show="userNameWarn" style="margin-left: 105px;margin-top: -15px;">该用户已存在！</p>
+                                </div>
+                                 <div class="row">
+                                    <div class="col-md-2 inprodet-titl am-ft-12"><em class="am-ft-red mgr5">*</em>昵称：</div>
+                                    <div class="col-md-9 form-group needValInfo">
+                                        <input type="text" class="col-md-5 text-overflow" autocomplete="off"  id="trueNamea" placeholder="" value="" ng-model="trueName" ng-blur="checkUserName()"/>
+                                        <span class="mgl20">4-16个字符，一个汉字为两个字符，推荐使用中文昵称</span>
+                                    </div>
+                                </div>
+                                <div class="row addMember-row">
+                                    <div class="col-md-2 inprodet-titl am-ft-12"><em class="am-ft-red mgr5">*</em>初始密码：</div>
+                                    <div class="col-md-9 form-group needValInfo">
+                                        <input type="text" onfocus="this.type='password'" autocomplete="off" class="col-md-5 text-overflow" name="password" placeholder="" value=""/>
+                                        <span class="mgl20">6-16位的英文字母及数字组成</span>
+                                    </div>
+                                </div>
+                                 <div class="row">
+                                    <div class="col-md-2 inprodet-titl am-ft-12">邮箱：</div>
+                                    <div class="col-md-9 form-group needValInfo">
+                                        <input type="text" class="col-md-5 text-overflow" autocomplete="off"  id="email" placeholder="" value="" ng-model="email" ng-blur="checkUserName()"/>
+                                        <span class="mgl20">请输入正确的邮箱格式</span>
+                                    </div>
+                                </div>
+                                <!--<div class="mgl60">
+                                	<p class="mgl30">说明：<em class="am-ft-red">为当前添加的商户创建超级管理员的帐号。</em></p>
+                                </div>-->
+                            </div>
+                        </div>
+                        <!-- row8 -->
+                       <!--  <div class="row">
+                            <div class="nowraps-text inprodet-titl am-ft-14">运营人员：</div>
+                            <div class="col-md-3 form-group needValInfo">
+                                <select class="col-md-7" ng-model="userIds" ng-disabled="canSelect">
+                       				<option ng-repeat="user in userList" value="{{user.userId}}" ng-if="user.status != 2">{{user.trueName}}</option>
+                       			</select>  
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary addBrandBtn" ng-click="addMerchant(this)">确认添加</button>
+            <button type="button" class="btn btn-default mgl10" ng-click="goback()">取消</button>
+        	</form>
+        </section>
+        
+    </div>

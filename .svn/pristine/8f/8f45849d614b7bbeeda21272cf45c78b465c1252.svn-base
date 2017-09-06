@@ -1,0 +1,641 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<div class="content-wrapper content-wrapper-itemshow content-wrapper-itemshow2 saleSumary-wrapper fn-clear">
+<div  class="col-md-11 artDes_nav">
+	<p class="fn-left">
+		<span class="am-ft-gray">合同编号：</span>
+		<span class="am-ft-black">20160912001231</span>
+		<span class="am-ft-green">服务中</span>
+	</p>
+	<a href="javascript:;" class="line-btn" ng-click="gobackByRoute()" >返回</a>
+</div>
+<div  class="col-md-11 artDes_info">
+	<div class="artDes_info_r1">
+		<span class="am-ft-gray">店铺名称：</span>
+		<img src="../static/base/images/icon_logo_tmall.png" />
+		<span class="am-ft-black">小衣橱儿童针织一号店</span>
+	</div>
+	<div class="artDes_info_r2 fn-clear">
+		<div class="">
+			<span class="am-ft-gray">席位数量：</span>
+			<span class="am-ft-black">2个</span>
+		</div>
+		<div class="">
+			<span class="am-ft-gray">席位单价：</span>
+			<span class="am-ft-black">1200.00元</span>
+		</div>
+		<div class="">
+			<span class="am-ft-gray">武汉客服部>客服一组	</span>
+			<span class="am-ft-black"> 邹小丽</span>
+		</div>
+	</div>
+	<div class="artDes_info_r3">
+		<div class="">
+			<span class="am-ft-gray">服务周期：</span>
+			<span class="am-ft-black">1个月</span>
+		</div>
+		<div class="">
+			<span class="am-ft-gray">合同周期：</span>
+			<span class="am-ft-black">2017-01-04 至 2017-02-03</span>
+		</div>
+		<div class="">
+			<span class="am-ft-gray">签订时间：2017年03月10日	</span>
+		</div>
+	</div>
+</div>
+<div class="firstTab col-md-11 mgl20 mgt10">
+		<ul class="fn-clear">
+			<li class="fn-left tabactive"  ng-click="shiftProductTab('1','thisMonth')">流程日志(3)</li>
+			<li class="fn-left"  ng-click="shiftProductTab('2','thisYear')">服务日志(6)</li>
+		</ul>
+		<!--流程日志-->
+	<div class="fn-hide">
+		<div class="flowLog fn-clear mgt20">
+			<div class="flowLogL" style="height: 1px;">
+				
+			</div>
+			<div  class="flowLogR flowLogRFirst">
+				<button class="grey_bg_black">＋资料审核</button>
+				<button class="grey_bg_black">＋服务审核</button>
+			</div>
+		</div>
+		<div class="flowLog fn-clear">
+			<div class="flowLogL">
+				<p>
+					<span class="am-ft-gray">女装2组</span>
+					<span class="am-ft-black">李文</span>
+				</p>
+				<p class="am-ft-gray">
+					2016-11-29 10:40
+				</p>
+			</div>
+			<div  class="flowLogR">
+					<div class="flowLogR1">资料审核</div>
+					<div class="flowLogR2">
+						<p class="am-ft-12 am-ft-black mgb10 mgt10">杭州勤易科技有限公司是一家立足于移动互联网产品开发及服务的高科技公司，
+							主要面向高端品牌客户提供行业化软件体系。公司拥有强大的技术研发与产品设计团队，
+							积累了丰富的企业应用软件开发。
+						</p>
+						<div class="checkContractInfo fn-clear">
+							<div class="checkContractInfoUpload" >
+									<img src="../static/base/images/icon_file.png"/>
+									<span class="mgl5" id="fileName" >附件.jpg</span>
+									<!--<span class="mgl5" id="fileName" ng-if="fileName.length<8">{{fileName}}</span>
+									<span class="mgl5" id="fileName" ng-if="fileName.length>=8">{{fileName |limitTo:8}}...</span>-->
+									<img src="../static/base/images/icon_download1.png"/>
+							</div>
+							<!--<div class="checkContractInfoFile">
+								<input ngf-select="uploadWork($files)" name="files" type="file" value="" />						
+								<button class="addFileBtn">上传附件</button>	
+							</div>-->
+						</div>
+					</div>
+					<div class="flowLogR3 fn-clear">
+						<span class="am-ft-gray">状态：</span>
+						<span class="am-ft-orangeS">待审核</span>
+						<button class="">审核</button>
+					</div>
+			</div>
+		</div>
+		<div class="flowLog fn-clear">
+			<div class="flowLogL">
+				<p>
+					<span class="am-ft-gray">女装2组</span>
+					<span class="am-ft-black">李文</span>
+				</p>
+				<p class="am-ft-gray">
+					2016-11-29 10:40
+				</p>
+			</div>
+			<div  class="flowLogR">
+					<div class="flowLogR1">资料审核</div>
+					<div class="flowLogR2">
+						<p class="am-ft-12 am-ft-black mgb10 mgt10">杭州勤易科技有限公司是一家立足于移动互联网产品开发及服务的高科技公司，
+							主要面向高端品牌客户提供行业化软件体系。公司拥有强大的技术研发与产品设计团队，
+							积累了丰富的企业应用软件开发。
+						</p>
+						<div class="checkContractInfo fn-clear">
+							<div class="checkContractInfoUpload" >
+									<img src="../static/base/images/icon_file.png"/>
+									<span class="mgl5" id="fileName" >附件.jpg</span>
+									<!--<span class="mgl5" id="fileName" ng-if="fileName.length<8">{{fileName}}</span>
+									<span class="mgl5" id="fileName" ng-if="fileName.length>=8">{{fileName |limitTo:8}}...</span>-->
+									<img src="../static/base/images/icon_download1.png"/>
+							</div>
+							<!--<div class="checkContractInfoFile">
+								<input ngf-select="uploadWork($files)" name="files" type="file" value="" />						
+								<button class="addFileBtn">上传附件</button>	
+							</div>-->
+						</div>
+					</div>
+					<div class="flowLogR3 fn-clear">
+						<span class="am-ft-gray">状态：</span>
+						<span class="am-ft-orangeS">待审核</span>
+						<!--<button class="">审核</button>-->
+					</div>
+			</div>
+		</div>
+		<div class="flowLog fn-clear">
+			<div class="flowLogL">
+				<p>
+					<span class="am-ft-gray">女装2组</span>
+					<span class="am-ft-black">李文</span>
+				</p>
+				<p class="am-ft-gray">
+					2016-11-29 10:40
+				</p>
+			</div>
+			<div  class="flowLogR" style="border: 1px solid #D8E5ED;">
+					<div class="flowLogR1" style="background: #E9F8FF;">资料审核</div>
+					<div class="flowLogR2">
+						<p class="am-ft-12 am-ft-black mgb10 mgt10">杭州勤易科技有限公司是一家立足于移动互联网产品开发及服务的高科技公司，
+							主要面向高端品牌客户提供行业化软件体系。公司拥有强大的技术研发与产品设计团队，
+							积累了丰富的企业应用软件开发。
+						</p>
+						<div class="checkContractInfo fn-clear">
+							<div class="checkContractInfoUpload" >
+									<img src="../static/base/images/icon_file.png"/>
+									<span class="mgl5" id="fileName" >附件.jpg</span>
+									<!--<span class="mgl5" id="fileName" ng-if="fileName.length<8">{{fileName}}</span>
+									<span class="mgl5" id="fileName" ng-if="fileName.length>=8">{{fileName |limitTo:8}}...</span>-->
+									<img src="../static/base/images/icon_download1.png"/>
+							</div>
+							<!--<div class="checkContractInfoFile">
+								<input ngf-select="uploadWork($files)" name="files" type="file" value="" />						
+								<button class="addFileBtn">上传附件</button>	
+							</div>-->
+						</div>
+					</div>
+					<div class="flowLogR3 fn-clear" style="border-top: 1px solid #D8E5ED;">
+						<span class="am-ft-gray">审核意见：</span>
+						<span class="am-ft-green">同意</span>
+						<div class="fn-right">
+							<p>
+								<span class="am-ft-gray">V2部</span>
+								<span class="am-ft-black">张三</span>
+							</p>
+							<p>
+								2016-11-29 10:40
+							</p>
+						</div>
+					</div>
+			</div>
+		</div>
+		<div class="flowLog fn-clear">
+			<div class="flowLogL">
+				<p>
+					<span class="am-ft-gray">女装2组</span>
+					<span class="am-ft-black">李文</span>
+				</p>
+				<p class="am-ft-gray">
+					2016-11-29 10:40
+				</p>
+			</div>
+			<div  class="flowLogR" style="border: 1px solid #D8E5ED;">
+					<div class="flowLogR1" style="background: #E9F8FF;">服务审核
+						<!--<img src="../static/base/images/icon_file.png" />-->
+						<img src="../static/base/images/icon_audited.png" />
+					</div>
+					<div class="flowLogR2">
+						<p class="am-ft-12 am-ft-black mgb10 mgt10">杭州勤易科技有限公司是一家立足于移动互联网产品开发及服务的高科技公司，
+							主要面向高端品牌客户提供行业化软件体系。公司拥有强大的技术研发与产品设计团队，
+							积累了丰富的企业应用软件开发。
+						</p>
+						<p>
+							<span class="am-ft-gray am-ft-14">申请类型：</span>
+							<span class="am-ft-red am-ft-14">暂停服务</span>
+						</p>
+					</div>
+					<div class="flowLogR3 fn-clear" style="border-top: 1px solid #D8E5ED;">
+						<span class="am-ft-gray">审核意见：</span>
+						<span class="am-ft-red">不同意</span>
+						<div class="fn-right">
+							<p class="mgb5">
+								<span class="am-ft-gray">V2部</span>
+								<span class="am-ft-black">张三</span>
+							</p>
+							<p>
+								2016-11-29 10:40
+							</p>
+						</div>
+					</div>
+			</div>
+		</div>
+		<div class="flowLog fn-clear">
+			<div class="flowLogL">
+				<p>
+					<span class="am-ft-gray">女装2组</span>
+					<span class="am-ft-black">李文</span>
+				</p>
+				<p class="am-ft-gray">
+					2016-11-29 10:40
+				</p>
+			</div>
+			<div  class="flowLogR" style="border: 1px solid #D8E5ED;">
+					<div class="flowLogR1" style="background: #E9F8FF;">服务审核
+						<!--<img src="../static/base/images/icon_file.png" />-->
+						<img src="../static/base/images/icon_audited.png" />
+					</div>
+					<div class="flowLogR2">
+						<p class="am-ft-12 am-ft-black mgb10 mgt10">杭州勤易科技有限公司是一家立足于移动互联网产品开发及服务的高科技公司，
+							主要面向高端品牌客户提供行业化软件体系。公司拥有强大的技术研发与产品设计团队，
+							积累了丰富的企业应用软件开发。
+						</p>
+						<p>
+							<span class="am-ft-gray am-ft-14">申请类型：</span>
+							<span class="am-ft-green am-ft-14">继续服务</span>
+						</p>
+					</div>
+					<div class="flowLogR3 fn-clear" style="border-top: 1px solid #D8E5ED;">
+						<span class="am-ft-gray">审核意见：</span>
+						<span class="am-ft-green">同意</span>
+						<div class="fn-right">
+							<p class="mgb5">
+								<span class="am-ft-gray">V2部</span>
+								<span class="am-ft-black">张三</span>
+							</p>
+							<p>
+								2016-11-29 10:40
+							</p>
+						</div>
+					</div>
+			</div>
+		</div>
+	</div>
+	<!--/流程日志-->	
+	<!--服务日志-->	
+	<div>
+		<div class="flowLog fn-clear mgt20">
+			<div class="flowLogL" style="height: 1px;">
+			</div>
+			<div  class="flowLogR flowLogRFirst">
+				<button class="grey_bg_black">＋内部质检</button>
+				<button class="grey_bg_black">＋续签反馈</button>
+				<button class="grey_bg_black">＋QC抽检</button>
+			</div>
+		</div>
+		<div class="flowLog fn-clear">
+			<div class="flowLogL">
+				<p>
+					<span class="am-ft-gray">女装2组</span>
+					<span class="am-ft-black">李文</span>
+				</p>
+				<p class="am-ft-gray">
+					2016-11-29 10:40
+				</p>
+			</div>
+			<div  class="flowLogR" style="border: 1px solid #D8E5ED;">
+				<div class="flowLogR1" style="background: #E9F8FF;">内部质检</div>
+					<div class="flowLogR2 fn-clear">
+						<div class="flowLogR2_box fn-clear">
+							<div class="flowLogR2_boxL">
+								品牌商回访结果：
+							</div>
+							<div class="flowLogR2_boxR">
+								3月8号赵大电话回访品牌商，品牌商对服务质量相对满意。3月8号赵大电话回访品牌商，品牌商对服务质量相对满意
+							</div>
+						</div>
+						<div class="flowLogR2_box  fn-clear">
+							<div class="flowLogR2_boxL">
+								服务质检结果：
+							</div>
+							<div class="flowLogR2_boxR">
+								客服回复效率较高，态度不错
+							</div>
+						</div>
+						<div class="flowLogR2_box  fn-clear">
+							<div class="flowLogR2_boxL">
+								店铺操作措施：
+							</div>
+							<div class="flowLogR2_boxR">
+								按照品牌商要求严格把控服务时间，对服务人员服务质量监管
+							</div>
+						</div>
+					</div>
+			</div>
+		</div>
+		<div class="flowLog fn-clear">
+			<div class="flowLogL">
+				<p>
+					<span class="am-ft-gray">客服主管</span>
+					<span class="am-ft-black">吴国飞</span>
+				</p>
+				<p class="am-ft-gray">
+					2016-11-29 10:40
+				</p>
+			</div>
+			<div  class="flowLogR" style="border: 1px solid #D8E5ED;">
+				<div class="flowLogR1" style="background: #E9F8FF;">续签反馈</div>
+					<div class="flowLogR2 fn-clear">
+						<div class="flowLogR2_box fn-clear">
+							<div class="flowLogR2_boxL">
+								品牌商回访结果
+							</div>
+							<div class="flowLogR2_boxR">
+								觉得客服服务不是很用心 一些问题重复出现 服务跟不上
+							</div>
+						</div>
+						<div class="flowLogR2_box  fn-clear">
+							<div class="flowLogR2_boxL">
+								投诉问题处理措施：
+							</div>
+							<div class="flowLogR2_boxR">
+								对相关客服做出批评，监督改正，提高效率，对问题做登记
+							</div>
+						</div>
+						<div class="flowLogR2_box  fn-clear">
+							<div class="flowLogR2_boxL">
+								执行措施后效果：
+							</div>
+							<div class="flowLogR2_boxR">
+								服务质量较为明显提升，品牌商反馈满意
+							</div>
+						</div>
+					</div>
+			</div>
+		</div>
+			<div class="flowLog fn-clear">
+			<div class="flowLogL">
+				<p>
+					<span class="am-ft-gray">QC</span>
+					<span class="am-ft-black">李达</span>
+				</p>
+				<p class="am-ft-gray">
+					2016-11-29 10:40
+				</p>
+			</div>
+			<div  class="flowLogR" style="border: 1px solid #D8E5ED;">
+				<div class="flowLogR1" style="background: #E9F8FF;">QC抽检</div>
+					<div class="flowLogR2 fn-clear">
+						<div class="flowLogR2_box fn-clear">
+							<div class="flowLogR2_boxL">
+								得分：
+							</div>
+							<div class="flowLogR2_boxR" style="color: #1AAD19;">
+								80分
+							</div>
+						</div>
+						<div class="flowLogR2_box  fn-clear">
+							<div class="flowLogR2_boxL">
+								问题：
+							</div>
+							<div class="flowLogR2_boxR">
+								客服交接不到位答非所问导致买家退货 回复间隔时间较长
+							</div>
+						</div>
+					</div>
+			</div>
+		</div>
+	
+	</div>
+	<!--/服务日志-->	
+	</div>
+</div>
+<!--提交资料弹框-->
+<div class="maskbgCover fn-hide " >
+	<div class="isTipsFrame ">
+		<div class="isTipsFrameTitle">
+			<span class="am-ft-14 am-ft-black">提示</span>
+			<img class="fn-right closeDia" src="../static/base/images/closelogo.png" />
+		</div>
+		<div class="isTipsFrameContent am-ft-14">
+			<img src="../static/base/images/icon_cue.png" />
+			<span class="am-ft-gray">是否同意</span>
+			<span class="am-ft-black">“女装二组  李斯”</span>	
+			<span class="am-ft-gray">提交的</span>
+			<span class="am-ft-black">《资料审核》</span>
+			<span class="am-ft-gray">？</span>
+		</div>
+		<div class="isTipsFrameFooter">
+			<button class="closeDia whiteGroundBlueBtn" ng-click="cancle()">同意</button>
+			<button class="blueGroundWhiteBtn" ng-click="sure()">不同意</button>
+		</div>
+	</div>
+</div>
+<!--/提交资料弹框-->
+<!--服务审核弹框-->
+<div class="maskbgCover fn-hide" >
+	<div class="isTipsFrame isTipsFrame_Service">
+		<div class="isTipsFrameTitle">
+			<span  class="am-ft-14 am-ft-black">服务审核</span>
+			<img class="fn-right closeDia" src="../static/base/images/closelogo.png" />
+		</div>
+		<div class="am-ft-14">
+			<div class="serviceCheck_box fn-clear">
+				<div>审核类型：</div>
+				<div>
+					<label class="mgr10 fn-left">
+						<input type="radio" />继续服务
+					</label>
+					<label>
+						<input type="radio" />暂停服务
+					</label>
+				</div>
+			</div>
+			<div class="serviceCheck_box fn-clear">
+				<div>备注：</div>
+				<div>
+					<textarea></textarea>
+					<!--<textarea ng-model='memo1' name="memo" rows="3" cols="3" style="width: 400px;"></textarea>-->
+					<!--<span> <i ng-if="memo1.length==undefined">0</i> 
+						<i ng-if="memo1.length!=undefined">{{memo1.length}}</i> /200
+					</span>-->
+				</div>
+			</div>
+			<div class="serviceCheck_box fn-clear">
+				<div style="height: 1px;"></div>
+				<div class="mgt20">
+					<button class="blueGroundWhiteBtn  mgr20" ng-click="cancle()">确认</button>
+					<button class=" greybtn_black closeDia" ng-click="sure()">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--/服务审核弹框-->
+<!--资料审核-->
+<div class="maskbgCover fn-hide" >
+	<div class="isTipsFrame isTipsFrame_Service">
+		<div class="isTipsFrameTitle">
+			<span class="am-ft-14 am-ft-black">资料审核</span>
+			<img class="fn-right closeDia" src="../static/base/images/closelogo.png" />
+		</div>
+		<div class="am-ft-14">
+			<div class="serviceCheck_box fn-clear">
+				<div>文件：</div>
+				<div class="mgb20">
+					<div class="checkContractInfo fn-clear">
+							<div class="checkContractInfoUpload" >
+									<img src="../static/base/images/icon_file.png"/>
+									<span class="mgl5" id="fileName" >附件.jpg</span>
+									<!--<span class="mgl5" id="fileName" ng-if="fileName.length<8">{{fileName}}</span>
+									<span class="mgl5" id="fileName" ng-if="fileName.length>=8">{{fileName |limitTo:8}}...</span>-->
+									<!--<img src="../static/base/images/icon_download1.png"/>-->
+							</div>
+							<div class="checkContractInfoFile checkContractInfoFile_data">
+								<input ngf-select="uploadWork($files)" name="files" type="file" value=""  />						
+								<button class="addFileBtn">上传附件</button>	
+							</div>
+					</div>
+				</div>
+			</div>
+			<div class="serviceCheck_box fn-clear">
+				<div>备注：</div>
+				<div>
+					<textarea></textarea>
+					<!--<textarea ng-model='memo1' name="memo" rows="3" cols="3" style="width: 400px;"></textarea>-->
+					<!--<span> <i ng-if="memo1.length==undefined">0</i> 
+						<i ng-if="memo1.length!=undefined">{{memo1.length}}</i> /200
+					</span>-->
+				</div>
+			</div>
+			<div class="serviceCheck_box fn-clear">
+				<div style="height: 1px;"></div>
+				<div class="mgt20">
+					<button class="blueGroundWhiteBtn  mgr20" ng-click="cancle()">确认</button>
+					<button class=" greybtn_black closeDia" ng-click="sure()">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--/资料审核-->
+<!--内部质检-->
+<div class="maskbgCover fn-hide" >
+	<div class="isTipsFrame isTipsFrame_check">
+		<div class="isTipsFrameTitle">
+			<span class="am-ft-14 am-ft-black" >内部质检</span>
+			<img class="fn-right closeDia" src="../static/base/images/closelogo.png" />
+		</div>
+		<div class="am-ft-14">
+			<div class="serviceCheck_box  serviceCheck_box_inner fn-clear">
+				<div>品牌商回访结果：</div>
+				<div>
+					<textarea>3月8号赵大电话回访品牌商，品牌商对服务质量相对满意。3月8号赵大电话回访品牌商，品牌商对服务质量相对满意。</textarea>
+					<!--<textarea ng-model='memo1' name="memo" rows="3" cols="3" style="width: 400px;"></textarea>-->
+					<!--<span> <i ng-if="memo1.length==undefined">0</i> 
+						<i ng-if="memo1.length!=undefined">{{memo1.length}}</i> /200
+					</span>-->
+				</div>
+			</div>
+			<div class="serviceCheck_box serviceCheck_box_inner fn-clear">
+				<div>服务质检结果：</div>
+				<div>
+					<textarea>客服回复效率较高，态度不错。</textarea>
+					<!--<textarea ng-model='memo1' name="memo" rows="3" cols="3" style="width: 400px;"></textarea>-->
+					<!--<span> <i ng-if="memo1.length==undefined">0</i> 
+						<i ng-if="memo1.length!=undefined">{{memo1.length}}</i> /200
+					</span>-->
+				</div>
+			</div>
+			<div class="serviceCheck_box serviceCheck_box_inner fn-clear">
+				<div>店铺操作措施：</div>
+				<div>
+					<textarea>服务质量较为明显提升，品牌商反馈满意。</textarea>
+					<!--<textarea ng-model='memo1' name="memo" rows="3" cols="3" style="width: 400px;"></textarea>-->
+					<!--<span> <i ng-if="memo1.length==undefined">0</i> 
+						<i ng-if="memo1.length!=undefined">{{memo1.length}}</i> /200
+					</span>-->
+				</div>
+			</div>
+			<div class="serviceCheck_box serviceCheck_box_inner fn-clear">
+				<div style="height: 1px;"></div>
+				<div class="mgt20">
+					<button class="blueGroundWhiteBtn  mgr20" ng-click="cancle()">确认</button>
+					<button class=" greybtn_black closeDia" ng-click="sure()">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--/内部质检-->
+<!--续签反馈-->
+<div class="maskbgCover fn-hide" >
+	<div class="isTipsFrame isTipsFrame_check">
+		<div class="isTipsFrameTitle">
+			<span class="am-ft-14 am-ft-black" >续签反馈</span>
+			<img class="fn-right closeDia" src="../static/base/images/closelogo.png" />
+		</div>
+		<div class="am-ft-14">
+			<div class="serviceCheck_box  serviceCheck_box_inner fn-clear">
+				<div>品牌商投诉问题：</div>
+				<div>
+					<textarea>3月8号赵大电话回访品牌商，品牌商对服务质量相对满意。3月8号赵大电话回访品牌商，品牌商对服务质量相对满意。</textarea>
+					<!--<textarea ng-model='memo1' name="memo" rows="3" cols="3" style="width: 400px;"></textarea>-->
+					<!--<span> <i ng-if="memo1.length==undefined">0</i> 
+						<i ng-if="memo1.length!=undefined">{{memo1.length}}</i> /200
+					</span>-->
+				</div>
+			</div>
+			<div class="serviceCheck_box serviceCheck_box_inner fn-clear">
+				<div>投诉问题处理措施：</div>
+				<div>
+					<textarea>客服回复效率较高，态度不错。</textarea>
+					<!--<textarea ng-model='memo1' name="memo" rows="3" cols="3" style="width: 400px;"></textarea>-->
+					<!--<span> <i ng-if="memo1.length==undefined">0</i> 
+						<i ng-if="memo1.length!=undefined">{{memo1.length}}</i> /200
+					</span>-->
+				</div>
+			</div>
+			<div class="serviceCheck_box serviceCheck_box_inner fn-clear">
+				<div>执行措施后效果：</div>
+				<div>
+					<textarea>服务质量较为明显提升，品牌商反馈满意。</textarea>
+					<!--<textarea ng-model='memo1' name="memo" rows="3" cols="3" style="width: 400px;"></textarea>-->
+					<!--<span> <i ng-if="memo1.length==undefined">0</i> 
+						<i ng-if="memo1.length!=undefined">{{memo1.length}}</i> /200
+					</span>-->
+				</div>
+			</div>
+			<div class="serviceCheck_box serviceCheck_box_inner fn-clear">
+				<div style="height: 1px;"></div>
+				<div class="mgt20">
+					<button class="blueGroundWhiteBtn  mgr20" ng-click="cancle()">确认</button>
+					<button class=" greybtn_black closeDia" ng-click="sure()">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--续签反馈-->
+<!--QC质检反馈-->
+<div class="maskbgCover " >
+	<div class="isTipsFrame isTipsFrame_Service">
+		<div class="isTipsFrameTitle">
+			<span  class="am-ft-14 am-ft-black">QC质检反馈</span>
+			<img class="fn-right closeDia" src="../static/base/images/closelogo.png" />
+		</div>
+		<div class="am-ft-14">
+			<div class="serviceCheck_box fn-clear">
+				<div>得分：</div>
+				<div>
+					<input type="text"  class="mgr10"/>分
+				</div>
+			</div>
+			<div class="serviceCheck_box fn-clear">
+				<div>问题：</div>
+				<div>
+					<textarea></textarea>
+					<!--<textarea ng-model='memo1' name="memo" rows="3" cols="3" style="width: 400px;"></textarea>-->
+					<!--<span> <i ng-if="memo1.length==undefined">0</i> 
+						<i ng-if="memo1.length!=undefined">{{memo1.length}}</i> /200
+					</span>-->
+				</div>
+			</div>
+			<div class="serviceCheck_box fn-clear">
+				<div style="height: 1px;"></div>
+				<div class="mgt20">
+					<button class="blueGroundWhiteBtn  mgr20" ng-click="cancle()">确认</button>
+					<button class=" greybtn_black closeDia" ng-click="sure()">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--QC质检反馈-->
+<script type="text/javascript">
+	$(function(){
+		$(".isTipsFrame").center();
+		
+		
+	})
+</script>

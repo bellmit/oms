@@ -1,0 +1,388 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--------------- Content start ----------------->
+<div class="contractCreate-wraper fn-clear contractCreate-wraper-info">
+	<div class="col-md-11 fn-clear addContractBox">
+		<!--<form id='contractForm'>-->
+			<div class="fn-clear col-md-12 contractBaseInfoBox">
+				<div class="contractInfo col-md-12">
+					<div class="infoLine infoLinea fn-clear">
+						<div class="fn-left infoTitile">
+							合同编号：
+						</div>
+						<span class="color333 fn-left">{{contractTabInfo.contractNum}}</span>
+						<div class="fn-left infoTitile">
+							合同类型：
+						</div>
+						<span class="color333" ng-if="contractTabInfo.contractType==0">新签</span>
+						<span class="color333" ng-if="contractTabInfo.contractType==1">续签</span>
+					</div>
+					<div class="infoLine infoLineb fn-clear">
+						<div class="fn-left infoTitile">
+							商戶名称：
+						</div>
+						<span class="color333">{{contractTabInfo.orgInfo.shopName}}</span>
+					</div>
+					<div class="infoLine infoLineb fn-clear">
+						<div class="fn-left infoTitile">
+							店铺列表：
+						</div>
+						<div class="fn-left infocontentBox fn-clear" style="width: 800px;">
+							<div  class="mgt10 infocontentBox_content" ng-repeat="shop in contractTabInfo.shopList">
+								<p>
+									<img ng-if="shop.shopType=='2'" src="../static/base/images/icon_logo_taobao.png" />
+									<img ng-if="shop.shopType=='3'" src="../static/base/images/icon_logo_tmall.png"/>
+									<img ng-if="shop.shopType=='4'" src="../static/base/images/icon_logo_jindong.png"/>
+									<img ng-if="shop.shopType=='0'" src="../static/base/images/icon_1688.png"/>
+									<img ng-if="shop.shopType=='1'" src="../static/base/images/icon_AliExpress.png"/>
+									<img ng-if="shop.shopType=='5'" src="../static/base/images/icon_amazon.png"/>
+									<span class="mgr20">{{shop.shopName}}</span>
+								</p>
+								<p class="storeInfo_css">
+									<span class="am-ft-12 mgr10">帐号：{{shop.thirdUserName}}</span>
+									<span class="am-ft-12">密码：{{shop.thirdPassWord}}</span>
+								</p>
+								<p class="storeInfo_css">
+									<span class="am-ft-12">地址：{{shop.shopUrl}}</span>
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="infoLine infoLinee fn-clear">
+						<div class="fn-left infoTitile">
+							产品类型：
+						</div>
+						<div class="proType_box fn-left">
+							<div class="proType_box_a" ng-if="contractTabInfo.productType.indexOf('客服')>=0">
+									<div class="proType_box_nav">
+										<span>客服</span>
+									</div>
+									<div class="proType_box_under">
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													席位数量：
+												</div>
+												<div class="proType_details fn-clear">
+													<span>{{contractTabInfo.taskInfoKF.serviceNum}}个</span>
+													<div class="proType_detailsR">
+														<span class="color666 mgl10">席位单价：</span>
+														<span class="color333" >{{contractTabInfo.taskInfoKF.unitPrice}}元</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="">
+													服务周期：
+												</div>
+												<div class="proType_details">
+													<span ng-if="contractTabInfo.taskInfoKF.months=='1'">一个月</span>
+													<span ng-if="contractTabInfo.taskInfoKF.months=='2'">二个月</span>
+													<span ng-if="contractTabInfo.taskInfoKF.months=='3'">三个月</span>
+													<span ng-if="contractTabInfo.taskInfoKF.months=='4'">四个月</span>
+													<span ng-if="contractTabInfo.taskInfoKF.months=='5'">五个月</span>
+													<span ng-if="contractTabInfo.taskInfoKF.months=='6'">六个月</span>
+													<span ng-if="contractTabInfo.taskInfoKF.months=='7'">七个月</span>
+													<span ng-if="contractTabInfo.taskInfoKF.months=='8'">八个月</span>
+													<span ng-if="contractTabInfo.taskInfoKF.months=='9'">九个月</span>
+													<span ng-if="contractTabInfo.taskInfoKF.months=='10'">十个月</span>
+													<span ng-if="contractTabInfo.taskInfoKF.months=='11'">十一个月</span>
+													<span ng-if="contractTabInfo.taskInfoKF.months=='12'">十二个月</span>
+													<div class="proType_detailsR">
+														<span class="color666 mgl10 fn-left">服务类型：</span>
+														<span class="color333" ng-if="contractTabInfo.taskInfoKF.serviceType=='0'">值守</span>
+														<span class="color333" ng-if="contractTabInfo.taskInfoKF.serviceType=='1'">提成 	提成比例{{contractTabInfo.taskInfoKF.deductRate}}%</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													服务日期：
+												</div>
+												<div class="proType_details">
+													<span  class="color333">{{contractTabInfo.taskInfoKF.beginDate}}至{{contractTabInfo.taskInfoKF.endDate}}</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													服务费用：
+												</div>
+												<div class="proType_details">
+													<span class="color333">{{contractTabInfo.taskInfoKF.serviceAmount}}元</span>
+												</div>
+										</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													产品备注：
+												</div>
+												<div class="proType_details  proType_memo">
+													<span class="color333">{{contractTabInfo.taskInfoKF.taskMemo}}</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													交接单：
+												</div>
+												<div class="proType_details">
+													<div class="checkContractInfo fn-clear">
+														<div class="checkContractInfoUpload" ng-repeat="extendList in contractTabInfo.taskInfoKF.contractExtendList">
+															<img src="../static/base/images/icon_file.png" />
+															<span class="mgl5" ng-if="extendList.fileName.length<8">{{extendList.fileName}}</span>
+															<span class="mgl5" ng-if="extendList.fileName.length>=8">{{extendList.fileName |limitTo:8}}
+															<a href="{{extendList.fileUrl}}"><img  src="../static/base/images/icon_download1.png"/></a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+							</div>
+							<div class="proType_box_a" ng-if="contractTabInfo.productType.indexOf('美工')>=0">
+									<div class="proType_box_nav">
+										<span>美工</span>
+									</div>
+									<div class="proType_box_under">
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													服务周期：
+												</div>
+												<div class="proType_details">
+													<span ng-if="contractTabInfo.taskInfoMG.months=='1'">一个月</span>
+													<span ng-if="contractTabInfo.taskInfoMG.months=='2'">二个月</span>
+													<span ng-if="contractTabInfo.taskInfoMG.months=='3'">三个月</span>
+													<span ng-if="contractTabInfo.taskInfoMG.months=='4'">四个月</span>
+													<span ng-if="contractTabInfo.taskInfoMG.months=='5'">五个月</span>
+													<span ng-if="contractTabInfo.taskInfoMG.months=='6'">六个月</span>
+													<span ng-if="contractTabInfo.taskInfoMG.months=='7'">七个月</span>
+													<span ng-if="contractTabInfo.taskInfoMG.months=='8'">八个月</span>
+													<span ng-if="contractTabInfo.taskInfoMG.months=='9'">九个月</span>
+													<span ng-if="contractTabInfo.taskInfoMG.months=='10'">十个月</span>
+													<span ng-if="contractTabInfo.taskInfoMG.months=='11'">十一个月</span>
+													<span ng-if="contractTabInfo.taskInfoMG.months=='12'">十二个月</span>
+													<div class="proType_detailsR">
+														<span class="color666 mgl20 fn-left" >服务类型：</span>
+														<span class="color333" ng-if="contractTabInfo.taskInfoMG.serviceType=='0'">单项</span>
+														<span class="color333" ng-if="contractTabInfo.taskInfoMG.serviceType=='1'">包月</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													服务日期：
+												</div>
+												<div class="proType_details">
+													<span class="color333">{{contractTabInfo.taskInfoMG.beginDate}}至{{contractTabInfo.taskInfoMG.endDate}}</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													服务费用：
+												</div>
+												<div class="proType_details">
+													<span class="color333">{{contractTabInfo.taskInfoMG.serviceAmount}}元</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													产品备注：
+												</div>
+												<div class="proType_details proType_memo">
+													<span class="color333">{{contractTabInfo.taskInfoMG.taskMemo}}</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													交接单：
+												</div>
+												<div class="proType_details">
+													<div class="checkContractInfo fn-clear">
+														<div class="checkContractInfoUpload" ng-repeat="extendList in contractTabInfo.taskInfoMG.contractExtendList">
+															<img src="../static/base/images/icon_file.png" />
+															<span class="mgl5" ng-if="extendList.fileName.length<8">{{extendList.fileName}}</span>
+															<span class="mgl5" ng-if="extendList.fileName.length>=8">{{extendList.fileName |limitTo:8}}
+															<a href="{{extendList.fileUrl}}"><img  src="../static/base/images/icon_download1.png"/></a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+							</div>
+							<div class="proType_box_a" ng-if="contractTabInfo.productType.indexOf('运营')>=0">
+									<div class="proType_box_nav">
+										<span>运营</span>
+									</div>
+									<div class="proType_box_under">
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													服务日期：
+												</div>
+												<div class="proType_details">
+													<span class="color333">{{contractTabInfo.taskInfoYY.beginDate}}至{{contractTabInfo.taskInfoYY.endDate}}</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="">
+													服务费用：
+												</div>
+												<div class="proType_details">
+													<span class="color333">{{contractTabInfo.taskInfoYY.serviceAmount}}元</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="">
+													产品备注：
+												</div>
+												<div class="proType_details proType_memo">
+													<span class="color333">{{contractTabInfo.taskInfoYY.taskMemo}}</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													交接单：
+												</div>
+												<div class="proType_details">
+													<div class="checkContractInfo fn-clear">
+														<div class="checkContractInfoUpload" ng-repeat="extendList in contractTabInfo.taskInfoYY.contractExtendList">
+															<img src="../static/base/images/icon_file.png" />
+															<span class="mgl5" ng-if="extendList.fileName.length<8">{{extendList.fileName}}</span>
+															<span class="mgl5" ng-if="extendList.fileName.length>=8">{{extendList.fileName |limitTo:8}}
+															<a href="{{extendList.fileUrl}}"><img  src="../static/base/images/icon_download1.png"/></a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+							</div>
+							<div class="proType_box_a" ng-if="contractTabInfo.productType.indexOf('培训')>=0">
+									<div class="proType_box_nav">
+										<span>培训</span>
+									</div>
+									<div class="proType_box_under">
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													服务日期：
+												</div>
+												<div class="proType_details">
+													<span class="color333">{{contractTabInfo.taskInfoPX.beginDate}}至{{contractTabInfo.taskInfoPX.endDate}}</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													服务费用：
+												</div>
+												<div class="proType_details">
+													<span class="color333">{{contractTabInfo.taskInfoPX.serviceAmount}}元</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													产品备注：
+												</div>
+												<div class="proType_details proType_memo">
+													<span class="color333">{{contractTabInfo.taskInfoPX.taskMemo}}</span>
+												</div>
+											</div>
+										</div>
+										<div class="proType_box_contenr">
+											<div class="proType_detailsBox fn-clear">
+												<div class="" >
+													交接单：
+												</div>
+												<div class="proType_details">
+													<div class="checkContractInfo fn-clear">
+														<div class="checkContractInfoUpload" ng-repeat="extendList in contractTabInfo.taskInfoPX.contractExtendList">
+															<img src="../static/base/images/icon_file.png" />
+															<span class="mgl5" ng-if="extendList.fileName.length<8">{{extendList.fileName}}</span>
+															<span class="mgl5" ng-if="extendList.fileName.length>=8">{{extendList.fileName |limitTo:8}}
+															<a href="{{extendList.fileUrl}}"><img  src="../static/base/images/icon_download1.png"/></a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="infoLine infoLinec fn-clear">
+						<div class="fn-left infoTitile">
+							合同费用：
+						</div>
+						<div class="contractCost fn-left">
+							<span class="color333">{{contractTabInfo.totalAmount|number:2}}元</span>
+							<span class="fn-left color333" ng-if="contractTabInfo.carryAmount>0">已结转抵扣：</span>
+							<span class="fn-left color333" ng-if="contractTabInfo.carryAmount>0">{{contractTabInfo.carryAmount|number:2}}元</span>
+						</div>
+					</div>
+					<div class="infoLine infoLineg fn-clear">
+						<div class="fn-left infoTitile">
+							合同备注：
+						</div>
+						<span class="color333">{{contractTabInfo.memo}}</span>
+					</div>
+					<div class="infoLine infoLinec fn-clear infoLine_bill">
+						<div class="fn-left infoTitile">
+							商务签单：
+						</div>
+						<span class="am-ft-gray mgl10 mgr10">{{contractTabInfo.departNameTree}}</span>
+						<span class="am-ft-gray ">{{contractTabInfo.userName}}</span>
+						<span class="color666">签单时间：</span>
+						<span class="color333 ">{{contractTabInfo.signDate}}</span>
+					</div>
+					<div class="infoLine infoLinec fn-clear infoLine_bill">
+						<div class="fn-left infoTitile">
+							商务续签：
+						</div>
+						<span class="am-ft-gray mgl10 mgr10">武汉客服部>客服一组</span>
+						<span class="am-ft-gray "> 邹小丽</span>
+					</div>
+					<!--/合同操作-->	
+					<div class=" fn-clear" style="    margin-top: 20px;margin-left: 80px;">
+						<div class="fn-left">
+							<button type="button" class="btn btn-primary " >暂停</button>
+							<button type="button" class="btn btn-primary " >续签</button>
+							<button type="button" class="btn btn-primary " >完成</button>
+							<button type="button" class="btn btn-primary " >指派</button>
+							<button type="button" class="btn btn-primary " >编辑</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		<!--</form>-->
+	</div>
+</div>
+</div>
+

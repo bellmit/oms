@@ -1,0 +1,10 @@
+qyApp.controller("departEditController", function($scope, $http, Upload, $compile, $route, $state, $stateParams) {	
+	//$scope.orgId = $stateParams.uiParams.orgId;
+	//返回
+	$scope.goBack = function(){
+		$state.go("departMgt", {
+ 			uiParams: ''
+ 		});
+	};
+	
+})

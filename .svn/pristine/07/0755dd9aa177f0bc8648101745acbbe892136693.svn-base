@@ -1,0 +1,13 @@
+qyApp.controller("addCategoryController", function($scope, $http, Upload, $compile, $route, $state, $stateParams) {
+
+
+
+
+
+
+
+
+
+
+
+});

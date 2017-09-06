@@ -1,0 +1,72 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--------------- Content start ----------------->
+<div class="content-wrapper contractInfo-wrapper content-wrapper-itemshow content-wrapper-itemshow2">
+	<div class="col-md-11 contractTitle pageTitl">
+		<p class="fn-left contractCode mgr20">
+			<span>合同编号：</span>
+			<span>{{contractInfo.contractNum}}</span>
+		</p>
+		<p class="fn-left contractSeller">
+			<span>销售人员：</span>
+			<span>{{contractInfo.userName}}
+				<!--({{contractInfo.shopName}})-->
+			</span>
+		</p>
+		<!--<a href="javascript:;" class="line-btn fn-right" ng-click="goback()">返回</a>-->
+		<a href="javascript:;" class="line-btn fn-right" ng-click="goback()">返回</a>
+	</div>
+	<div class="forwardTop-content fn-left">
+		<div class="forwardTop-left">
+			<img ng-src="{{contractInfo.shopLogo}}" style="width: 60px;height: 60px;margin-right: 20px;float: right;"/>
+			<!--<img src="http://static.qineasy.com/base/images/img_default_company.png"/>-->
+		</div>
+		<div class="forwardTop-right fn-clear">
+			<div class="fn-left">
+				<div class="forwardTop-righttop">
+					<p href="javascript:;" class="forwardTop-rightTitl">{{contractInfo.shopName}}</p>
+					<div class="fn-clear"></div>
+				</div>
+				<p>
+					<span>联系电话：{{contractInfo.contractNum}}</span>
+				</p>
+				<p>
+					<span class="fn-left">详细地址：浙江  杭州  西湖区文一西路数娱大厦801室</span>
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="infoTitle col-lg-10">
+		服务信息
+	</div>
+	<div class="col-lg-10 fn-clear">
+		<div class="fn-left infoDetailleft">
+			<div class="fn-clear infoDetail">
+				<div class="fn-left infotitle">总金额：</div>
+				<div class="fn-left info">{{contractInfo.totalprice}}元</div>
+			</div>
+			<div class="fn-clear infoDetail">
+				<div class="fn-left infotitle">付费方式：</div>
+				<div class="fn-left info">{{contractInfo.payTypeName}}付费</div>
+			</div>
+			<div class="fn-clear infoDetail">
+				<div class="fn-left infotitle">服务期限：</div>
+				<div class="fn-left info">{{contractInfo.months}}个月</div>
+			</div>
+			<div class="fn-clear infoDetail">
+				<div class="fn-left infotitle">有效期：</div>
+				<div class="fn-left info">{{contractInfo.begindate}}至{{contractInfo.enddate}}</div>
+			</div>
+		</div>
+		<div class="fn-left infoDetailright">
+			<div class="fn-clear infoDetail">
+				<div class="fn-left infotitle">服务类型：</div>
+				<div class="fn-left info">{{contractInfo.serviceType}}</div>
+			</div>
+			<div class="fn-clear infoDetail">
+				<div class="fn-left infotitle">合同备注：</div>
+				<div class="fn-left info">这里是{{timeArr[0]}}年{{timeArr[1]}}月{{timeArr[2]}}签订的编号为{{contractInfo.contractNum}}的合同备注。</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="fn-clear"></div>

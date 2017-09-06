@@ -1,0 +1,99 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--全选下载-->
+<div class="content-wrapper-itemshow2 mgl20 mgr20" ng-if="imgListCountZs > 0">
+	<div class="col-md-12 mgb10 select-wrap">
+		<label class="storeProLabel">
+				<input type="checkbox" id="selectAllQ" ng-click="selectAll(imgListZ,'selectAllQ')"> 
+				<span>全选</span>
+				</label>
+		<a href="javascript:;" class="mgl10" ng-click="downLoadPic()">
+			<i class="downLoad-icon">
+						<img src="http://static.qineasy.com/base/images/icon_download.png">
+					</i> 下载选中
+		</a>
+	</div>
+</div>
+<!--全选下载-->
+
+<div>
+	<div class="col-md-12 mgb10" ng-if="userInfo.orgType == '6' && imgListCountZs > 0">
+		<input type="file" multiple="multiple" ngf-select="addImageB($files)" class="fn-left loadImgFolder" />
+		<button class="blueGroundWhiteBtn mgr5">上传文件</button>
+	</div>
+	<!-- <div class="col-md-12 mgb10 mgt20 paddingleft20" ng-if="imgListCountZs > 0">
+		<label class="storeProLabel">
+			<input type="checkbox" class="fn-left " id="selectedAlla" ng-click="selectAll()"/>全选
+		</label>
+		<button class="whiteGroundBlueBtn" ng-click="downLoadPic()">下载</button>
+	</div> -->
+	<div class="col-md-12 fodderMainRow paddingleft20 fodderMainRow6">
+		<div class="fodderMain" foldtype="proimg" index="{{$index}}" ng-repeat="x in imgListZ" onmouseover="mOver(this)" onmouseout="mOut(this)" id="material{{x.proAttrId}}" ng-click="doSelect(this)">
+			<div class="fodderMainImg ">
+				<img ng-src="{{x.proAttrValue}}" />
+				<div class="cover" ng-if="userInfo.orgType == '1'">
+					<a href="javascript:;" class="scan am-ft-white a-dis">预览</a>
+					<a href="javascript:;" class="am-ft-white a-dis" ng-click="downloadone(this.x)">下载</a>
+				</div>
+				<div class="cover" ng-if="userInfo.orgType == '6'">
+					<a href="javascript:;" class="scan am-ft-white mgr20">预览</a>
+					<a href="javascript:;" class="am-ft-white mgr20" ng-click="downloadone(this.x)">下载</a>
+					<a href="javascript:;" class="delete am-ft-white" ng-click="delPic(x.proAttrId)">删除</a>
+				</div>
+			</div>
+			<div class="fodderMainInfo formalFodderMainInfo">
+				<input name="{{x.proAttrId}}" type="text" class="fodderMainTitle fodderPubEdit" placeholder="{{x.proAttrFilePath}}" ng-blur="updateFileName(x.proAttrId)" />
+			</div>
+		</div>
+	</div>
+	<div class="fn-right priv-pagelist">
+		<div id="productListPage"></div>
+	</div>
+</div>
+<!--缺省-->
+<div class="col-md-12" ng-if="imgListCountZs ==0 && userInfo.orgType == '6'">
+	<div class="loadingFormal">
+		<img src="../static/base/images/icon_wait.png" />
+		<span style="font-size: 16px;">您还没有上传图片</span>
+		<div class="col-md-12 mgt20">
+			<input style="left:216px" type="file" ngf-select="addImageB($files)" ngf-multiple="true" class="fn-left loadImgFolder"  />
+			<button class="blueGroundWhiteBtn mgr5">立即上传</button>	
+		</div>
+	</div>
+</div>
+<div class="col-md-12" ng-if="imgListCountZs ==0 && userInfo.orgType == '1'">
+	<div class="loadingFormal">
+		<img src="../static/base/images/icon_wait.png" />
+		<span style="font-size: 16px;">代运营未上传图片</span>
+	</div>
+</div>
+<script>
+	function mOver(obj) {
+		$(obj).css({
+			"border": "1px solid #00afd4"
+		});
+		$(obj).find("div.fodderMainInfo").css({
+			"background": "#00afd4",
+			"border": "1px solid #00afd4"
+		});
+		$(obj).find("input").css({
+			"background": "#00afd4",
+			"border": "1px solid #00afd4",
+			"color": "#ffffff"
+		})
+	}
+
+	function mOut(obj) {
+		$(obj).css({
+			"border": "1px solid #dfdfdf"
+		});
+		$(obj).find("div.fodderMainInfo").css({
+			"background": "#ffffff",
+			"border": "1px solid #ffffff"
+		});
+		$(obj).find("input").css({
+			"background": "#ffffff",
+			"border": "1px solid #ffffff",
+			"color": "#888"
+		});
+	}
+</script>

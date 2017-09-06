@@ -1,0 +1,307 @@
+qyApp.controller("orderMgtController", function($scope, $http, Upload, $compile, $route, $state, $stateParams) {
+	var userInfo = JSON.parse(localStorage.userInfo);
+	$scope.orgId = userInfo.orgId;
+	$scope.showDialog=false;//同步弹框
+	$scope.orderTbListDia=true;//订单列表
+	$scope.showOrderDetil=false;//订单详情
+	$scope.orderSource="";
+	$scope.orderStatus="";
+	$scope.outOrderId="";
+	$scope.memberName="";
+	$scope.shopOrgId="";
+	$scope.queryStartTime="";
+	$scope.queryEndTime="";
+	$scope.downShopOrgId="11546";
+	$scope.downOrderStatus="";
+	$scope.nub = "0";
+	$scope.size = "5";
+	$(".orderTbLoadingInner").css("width",0).addClass("progressing");
+	$scope.getOrderInfoTB = function() {
+		//获取商户信息
+		var jsonObject1 = {
+				orgId: $scope.orgId,
+				orderSource:"0",
+				shopOrgId:$scope.shopOrgId,
+				memberName:$scope.memberName,
+				orderStatus:$scope.orderStatus,
+				orderId:$scope.outOrderId,
+				startTime:$scope.queryStartTime,
+				endTime:$scope.queryEndTime,
+				nub: $scope.nub,
+				size: $scope.size
+			};
+		jsonObject1 = JSON.stringify(jsonObject1);
+		$http({
+			method: 'post',
+			url: pos +
+				'alibabaOrder/getAlibabaOrder',
+			params: {
+				keyParams: getKeyParams(
+						jsonObject1, keyParams),
+				jsonObject: getJsonObject(jsonObject1)
+			}
+
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				$scope.orderList = data.data.orderList;
+				$scope.orderStatusCount = data.data.orderStatusCount;
+				$scope.shopList = data.data.shopList;
+				
+				$scope.orderCount = data.data.count;
+				if($scope.orderCount > 5) {
+					$scope.createPagePlugin($scope.orderCount, $scope.size, "paging");
+				} else {
+					$("#paging").empty();
+				}
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		})
+	}
+
+	$scope.getOrderInfoTB();
+	
+	$scope.search = function() {
+		$scope.queryStartTime = $("#start").val();
+		$scope.queryEndTime = $("#end").val();
+		$scope.getOrderInfoTB();
+	}
+	
+	/*分页代码*/
+	$scope.createPagePlugin = function(total, pageSize, pageId) {
+		$("#" + pageId + "").empty();
+		paging = pagePlugin.createPaging({
+			renderTo: pageId,
+			total: total,
+			pageSize: pageSize
+		});
+		paging.goPage = function(from, to) {
+			$scope.page(from - 1, pageSize);
+		}
+	};
+	$scope.page = function(from, pageSize) {
+		var jsonObject1 = {
+			orgId: $scope.orgId,
+			orderSource:"0",
+			shopOrgId:$scope.shopOrgId,
+			memberName:$scope.memberName,
+			orderStatus:$scope.orderStatus,
+			orderId:$scope.outOrderId,
+			startTime:$scope.queryStartTime,
+			endTime:$scope.queryEndTime,
+			nub: from,
+			size: pageSize
+		};
+		jsonObject1 = JSON.stringify(jsonObject1);
+		$http({
+			method: 'post',
+			url: pos + 'alibabaOrder/getAlibabaOrder',
+			params: {
+				keyParams: getKeyParams(jsonObject1, keyParams),
+				jsonObject: getJsonObject(jsonObject1)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				$scope.orderList = data.data.orderList;
+				$scope.orderStatusCount = data.data.orderStatusCount;
+				$scope.shopList = data.data.shopList;
+				
+				$scope.orderCount = data.data.count;
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		});
+	}
+	
+	//显示弹框
+	$scope.synchronizationOrder=function(){
+		$scope.showDialog=true;
+		$(".synchronizationBox").center();
+		$(".maskBg,.synchronizationBox").show();
+	}
+	//关闭弹框
+	$scope.closeDialog=function(){
+		$scope.showDialog=false;
+		$(".maskBg").hide();
+	}
+	//订单选项卡
+	$scope.type='1';
+	$scope.orderClassify=function(type){
+		if(type=='1'){
+			$scope.type='1';
+			$scope.orderStatus="";
+		}
+		if(type=='2'){
+			$scope.type='2';
+			$scope.orderStatus="11";
+		}
+		if(type=='3'){
+			$scope.type='3';
+			$scope.orderStatus="12";
+		}
+		if(type=='4'){
+			$scope.type='4';
+			$scope.orderStatus="13";
+		}
+		if(type=='5'){
+			$scope.type='5';
+			$scope.orderStatus="14";
+		}
+		$scope.getOrderInfoTB();
+	}
+	//跳转到订单详情
+	$scope.showOrderDetil=false;
+	$scope.orderDetil=function(order){
+		$scope.orderDetail = order;
+		$scope.orderTbListDia=false;
+		$scope.showOrderDetil=true;
+		
+		var jsonObject1 = {
+			orgId: order.orgId,
+			orderSource:"0",
+			outOrderId: order.outOrderId,
+			outlogiticsId:order.logiticNum,
+		};
+		jsonObject1 = JSON.stringify(jsonObject1);
+		$http({
+			method: 'post',
+			url: pos + 'alibabaOrder/getLogiticTraceInfo',
+			params: {
+				keyParams: getKeyParams(jsonObject1, keyParams),
+				jsonObject: getJsonObject(jsonObject1)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				$scope.logiticTraceList = data.data.logiticTraceList;
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		});
+	}
+	$scope.progressVal = 0;
+	$scope.downloadOrder = function(){
+		$scope.progressVal = 0;
+		$scope.createStartTime = $("#start1").val();
+		$scope.createEndTime = $("#end1").val();
+		var jsonObject1 = {
+			orgId:$scope.orgId,
+			createStartTime: $scope.createStartTime,
+			createEndTime: $scope.createEndTime,
+			shopOrgId: $scope.downShopOrgId,
+			orderStatusEnum:$scope.downOrderStatus,
+		};
+		jsonObject1 = JSON.stringify(jsonObject1);
+		$http({
+			method: 'post',
+			url: pos + 'alibabaOrder/downloadAlibabaOrder',
+			async:true,
+			params: {
+				keyParams: getKeyParams(jsonObject1, keyParams),
+				jsonObject: getJsonObject(jsonObject1)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				$scope.showDialog=false;
+				$(".maskBg").hide();
+				$(".orderTbLoadingInner").css("width",0).addClass("progressing");
+				$scope.progressVal = 0;
+				alertmsg("同步完成");
+			} else {
+				alertmsg(data.msg, "error");
+			}
+		});
+		var timer = setInterval(function(){ 
+			var jsonObject2 = {
+				orgId:$scope.orgId,
+			};
+			jsonObject2 = JSON.stringify(jsonObject2);
+			$http({
+				method: 'post',
+				url: pos + 'alibabaOrder/getDownloadStatus',
+				params: {
+					keyParams: getKeyParams(jsonObject2, keyParams),
+					jsonObject: getJsonObject(jsonObject2)
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == "1") {
+					var task = data.data.task;
+					if(task == "finish"){
+						clearInterval(timer); 
+					}else{
+						//进度条加载
+						var taskAry = task.split(",");
+						var width_p=376;
+						var width_s=width_p*(taskAry[0]/taskAry[1]);
+						$(".orderTbLoadingInner").css("width",width_s).addClass("progressing");
+						$scope.progressVal = (taskAry[0]/taskAry[1]*100).toFixed(2);
+					}
+				} else {
+					alertmsg(data.msg, "error");
+				}
+			});
+		}, 1000); 
+	}
+	//返回到订单列表
+	$scope.goBack=function(){
+		$scope.showOrderDetil=false;
+		$scope.orderTbListDia=true;
+	}
+	
+	var start = {
+		elem: '#start',
+		format: 'YYYY-MM-DD ',
+		max: '2099-06-16', //最大日期
+		//		istime: true,
+		istoday: false,
+		choose: function(datas) {
+			$scope.activeTime=datas;
+			end.min = datas; //开始日选好后，重置结束日的最小日期
+			end.start = datas //将结束日的初始值设定为开始日
+		}
+	};
+	var end = {
+		elem: '#end',
+		format: 'YYYY-MM-DD',
+		max: '2099-06-16',
+		//		istime: true,
+		istoday: false,
+		choose: function(datas) {
+			console.log(datas)
+			$scope.lapsedTime=datas;
+			start.max = datas; //结束日选好后，重置开始日的最大日期
+		}
+	};
+	setTimeout(function() {
+		laydate(start);
+		laydate(end);
+	}, 1000)
+	
+	var start1 = {
+		elem: '#start1',
+		format: 'YYYY-MM-DD ',
+		max: '2099-06-16', //最大日期
+		//		istime: true,
+		istoday: false,
+		choose: function(datas) {
+			$scope.activeTime=datas;
+			end1.min = datas; //开始日选好后，重置结束日的最小日期
+			end1.start = datas //将结束日的初始值设定为开始日
+		}
+	};
+	var end1 = {
+		elem: '#end1',
+		format: 'YYYY-MM-DD',
+		max: '2099-06-16',
+		//		istime: true,
+		istoday: false,
+		choose: function(datas) {
+			$scope.lapsedTime=datas;
+			start1.max = datas; //结束日选好后，重置开始日的最大日期
+		}
+	};
+	setTimeout(function() {
+		laydate(start1);
+		laydate(end1);
+	}, 1000)
+	
+});

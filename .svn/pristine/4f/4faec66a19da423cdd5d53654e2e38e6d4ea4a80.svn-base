@@ -1,0 +1,34 @@
+[  
+{  
+    "name":"cas",  
+    "url":"http://omsm.qineasy.com/"
+},  
+{  
+    "name":"pos",  
+    "url":"http://omsm.qineasy.com/"
+},  
+{  
+    "name":"ss",  
+    "url":"http://omsm.qineasy.com/"
+},  
+{  
+    "name":"msg",  
+    "url":"http://omsm.qineasy.com/"
+},
+{  
+    "name":"qineasy",
+    "url":"http://omsm.qineasy.com/"
+},  
+{  
+    "name":"vm",  
+    "url":"http://omsm.qineasy.com/"
+},  
+{  
+    "name":"vip",  
+    "url":"http://omsm.qineasy.com/"
+},
+{  
+    "name":"stat",  
+    "url":"http://omsm.qineasy.com/"
+}
+]

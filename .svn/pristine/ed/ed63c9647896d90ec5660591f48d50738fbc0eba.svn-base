@@ -1,0 +1,111 @@
+qyApp.controller("contractInfoController",  function($scope, $http, Upload, $compile,$route, $state, $stateParams) {
+	if($stateParams.uiParams.type=="1"){
+		$stateParams.uiParams.source.push({
+			level:1,
+			name: "contractInfo"
+		})
+	}else if($stateParams.uiParams.type=="2"){
+		$stateParams.uiParams.source.splice($stateParams.uiParams.source.length-1,1)
+	}
+	$scope.contractInfo=$stateParams.uiParams.orgInfo;
+//	$scope.timeArr=$scope.contractInfo.begindate.split("-");
+	$scope.goback=function(){
+		$stateParams.uiParams.type="2";
+		$stateParams.uiParams.source.splice($stateParams.uiParams.source.length-1,1);
+		$state.go($stateParams.uiParams.source[$stateParams.uiParams.source.length-1].name,{
+			uiParams:$stateParams.uiParams
+		})
+	}
+	$scope.roleId=JSON.parse(localStorage.userInfo).roleId;
+		
+	//获取部门区域
+	$scope.getDepartArea=function(){
+		var jsonObject = {};
+		jsonObject = angular.toJson(jsonObject);
+		$http({
+			method: 'post',
+			url: cas + 'depart/getDepartArea',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.departAreaList = data.data.departAreaList;
+			} else {
+				alertmsg("获取失败", "error");
+			}
+		});
+	}
+	$scope.getDepartArea();
+	
+	$scope.parts1=[];
+	$scope.parts2=[];
+	$scope.parts3=[];
+	//查询区域下的部门列表
+ 	$scope.getDepartList = function(depart){
+ 		var jsonObject = "{\"pDepartId\":\""+0+"\",\"departArea\":\""+depart+"\"}";
+ 		$http({
+            method: 'post',
+            url: cas + 'depart/getDepartList',
+            params: {
+	            keyParams: getKeyParams(jsonObject, keyParams),
+	            jsonObject: getJsonObject(jsonObject)
+	        }
+       }).success(function(data, stauts, headers, config) {
+            if (data.code == 1) {
+                $scope.parts1 = data.data.departList;     
+                $scope.parts2 = [];
+			    $scope.parts3 = [];
+			    $scope.parts4 = [];
+			    $scope.parts5 = [];
+		    	$scope.selectDepartId2='';
+				$scope.selectDepartId3='';
+				$scope.selectDepartId4='';	
+				$scope.selectDepartId5='';	
+            } else {
+                alertmsg("获取部门分组失败", "error");
+            }
+       })
+ 	};
+  	
+  	//查询部门分组
+	$scope.sortIdChange = function(id, type){
+		var jsonObject = "{\"pDepartId\":\""+id+"\"}";
+		
+ 		$http({
+            method: 'post',
+            url: cas + 'depart/getDepartList',
+            params: {
+	            keyParams: getKeyParams(jsonObject, keyParams),
+	            jsonObject: getJsonObject(jsonObject)
+	        }
+       }).success(function(data, stauts, headers, config) {
+            if (data.code == 1) {              	
+				if(type == "1") {
+				    $scope.parts2 = data.data.departList; 
+					$scope.parts3 = [];
+				    $scope.parts4 = [];
+				    $scope.parts5 = [];
+					$scope.selectDepartId3='';
+					$scope.selectDepartId4='';
+					$scope.selectDepartId5='';
+				}else if(type == "2"){
+					$scope.parts3 = data.data.departList; 
+				    $scope.parts4 = [];
+				    $scope.parts5 = [];
+					$scope.selectDepartId4='';
+					$scope.selectDepartId5='';
+				}else if(type == "3"){
+					$scope.parts4 = data.data.departList; 
+				    $scope.parts5 = [];
+					$scope.selectDepartId5='';
+				}else if(type == "4"){
+					$scope.parts5 = data.data.departList; 
+				}
+            } else {
+                alertmsg("获取部门列表信息失败", "error");
+            }
+       })
+	}
+});

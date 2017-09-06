@@ -1,0 +1,451 @@
+qyApp.controller('disCountCardController', ['$scope','$timeout', '$state', '$http', '$compile', 'Upload', '$sce', function($scope,$timeout, $state, $http, $compile, Upload, $sce) {
+	//列表数组
+	$scope.couponMsgList = '';
+	//查看详情的临时变量
+	$scope.detailObj = '';
+	//分页
+	var from = 0;
+	var pageSize = 5;
+	var total = 0;
+	$scope.jsonPage = {
+		"nub": "" + from + "",
+		"size": "" + pageSize + ""
+	};
+	$scope.orgId = JSON.parse(localStorage.keyParams).orgId;
+	$scope.trueName=JSON.parse(localStorage.userInfo).trueName;
+	$scope.getAllMemberInfo = function (){
+		//获取会员卡类型
+		var jsonObject = "{\"orgId\":\"" + $scope.orgId + "\"}";
+		$http({
+			method: 'post',
+			url: pos + 'membergrade/getMemberGrades',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				$scope.memberGradeList = data.data.memberGradeList;
+			} else {
+				alertmsg(data.msg, "error");
+			}
+		});
+	}
+	$scope.getAllMemberInfo();
+	//切换状态 待审核/已审核/历史
+	$scope.stausValue = '1';
+	$scope.changeStaus = function(type) {
+			$scope.jsonPage = '';
+			$scope.jsonPage = {
+				"nub": "" + 0 + "",
+				"size": "" + pageSize + ""
+			};
+			from = 0;
+			total = 0;
+			if(type == '1') {
+				$scope.stausValue = type;
+				$scope.showCouponList = $scope.couponNeedCheckList;
+				$scope.getCouponsList(0, '0,1,-1');
+				$scope.getCouponsList(1, '0,1,-1');
+			}
+			if(type == '2') {
+				$scope.stausValue = type;
+				$scope.showCouponList = $scope.couponIsUseingList;
+				$scope.getCouponsList(0, '2,4')
+				$scope.getCouponsList(1, '2,4')
+			}
+			if(type == '3') {
+				$scope.stausValue = type;
+				$scope.showCouponList = $scope.couponHistoryList;
+				$scope.getCouponsList(0, '3')
+				$scope.getCouponsList(1, '3')
+			}
+			return $scope.stausValue;
+		}
+		//查看详情
+	$scope.couponType = '';
+	$scope.couponCount = ""; /*限量  -1不限量*/
+//	$("#xjbxl").center();
+	$scope.checkDteils = function(obj, type) {
+		$('.creatDiscountCardCover ').show();
+			$scope.detailObj = obj;
+			$scope.colorValue=$scope.detailObj.colorValue;
+			//$scope.couponType=obj.couponType;/*0.虚拟券 1.实体券*/
+			//$scope.couponCount=obj.couponCount;/*限量  -1不限量*/
+			//待审核  
+			if(type == '1') {
+				if(obj.couponType == '0') {
+					$scope.couponType = "0";
+				} else {
+					$scope.couponType = "1";
+				}
+			}
+			//已使用
+			if(type == '2') {
+				if(obj.couponType == '0') {
+					$scope.couponType = "0";
+
+				} else {
+					$scope.couponType = "1";
+
+				}
+				if(obj.couponCount == '-1') {
+					$scope.couponCount = '-1';
+				} else {
+					$scope.couponCount = '1000';
+				}
+			}
+			//历史卡券 
+			if(type == '3') {
+				if(obj.couponType == '0') {
+					$scope.couponType = "0";
+				} else {
+					$scope.couponType = "1";
+				}
+			}
+			$scope.getMemberInfo(obj);
+			setTimeout(function(){
+				$("#xjbxl").center();
+			},5);
+			$scope.queryPro();
+			$scope.queryShop();
+		}
+	//查询商品
+	$scope.queryPro=function(){
+			var reg=/,$/gi;//去掉最后一位结尾的逗号
+			$scope.detailObj.productScope = $scope.detailObj.productScope.replace(reg,"");
+			var jsonObject = {
+			    "proModelids":$scope.detailObj.productScope,
+//				"proModelids":"311001,304002,304001,299001,3001",
+				"orgId": $scope.orgId,
+				"proGrandparentSortId": '',
+				"proParentSortId": '',
+				"proSortId": '',
+				"proModelid": '',
+				"brandId": '',
+				"proYear": '',
+				"proSeason": '',
+				"startStock": "",
+				"endStock": "",
+				"nub": "0",
+				"size": "0"
+			};
+			jsonObject = JSON.stringify(jsonObject);
+			$http({
+				method: 'post',
+				url: pos + 'product/getAllProduct',
+				params: {
+					keyParams: getKeyParams(jsonObject, keyParams),
+					jsonObject: getJsonObject(jsonObject)
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == "1") {
+					$scope.products = data.data.productList;
+					$scope.countPro=$scope.products.length;
+				} else {
+					alertmsg("获取商品信息失败", "error");
+				}
+			});
+	}
+	//查询门店
+	$scope.queryShop=function(){
+		var reg=/,$/gi;//去掉最后一位结尾的逗号
+		var orgIds=$scope.detailObj.orgScope.replace(reg,"");
+		var jsonObject = {
+			orgIds:orgIds,
+			shopId: '',
+			shopName: ''
+		};
+		jsonObject = JSON.stringify(jsonObject);
+		$http({
+			method: 'post',
+			url: pos + 'shop/getShopByOrgId',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+					$scope.orgList = data.data.orgList;
+					$scope.countShop=data.data.orgList.length
+			} else {
+				alertmsg("获取门店信息失败", "error");
+			}
+		})
+
+	}
+	
+	//查看商品和门店
+	$scope.showtype='';/*1 显示商品 2 显示门店*/
+	$scope.showFrame=function(type){
+		if(type=="1"){
+			$scope.showtype='1';
+		}else{
+			$scope.showtype='2';
+		}
+	}
+	//关闭查看门店或者商品弹框
+	$scope.closeProOrShop=function(){
+		$scope.showtype='';
+	}
+	//获取限定会员信息
+	$scope.getMemberInfo = function(obj){
+		for (var i = 0; i < $scope.memberGradeList.length; i ++) {
+			var model = $scope.memberGradeList[i];
+			if (model.gradeId == obj.memberScope) {
+				obj.memberScopeName = model.memberUnionName + model.gradeName +'会员';
+			}
+		}
+	}
+		//获取优惠券列表
+	$scope.getCouponsList = function(type, couponState) {
+		if(type == 1) {
+			$scope.jsonPage = {
+				"nub": "" + from + "",
+				"size": "" + pageSize + ""
+			};
+		}
+		var jsonObject = {
+			"couponState": couponState
+		};
+		jsonObject = $.extend($scope.jsonPage, jsonObject); //--合并json
+		jsonObject = JSON.stringify(jsonObject);
+		$http({
+			method: "post",
+			url: pos + "couponMsg/getCpMsgList",
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				if(data.data.couponMsgList.count <= 0) { //判断数组里面是否有对象，没有对象提示没有导购员
+					return;
+				} else {
+					//当前显示的数组
+					$scope.showCouponList = '';
+					$scope.couponMsgList = data.data.couponMsgList;
+					if(type == 1) {
+						total = data.data.count;
+						$("#paging").hide();
+						if(total>pageSize){
+							$("#paging").show();
+							$scope.createPagePlugin(total, pageSize, couponState);
+						}
+					} else {
+						for(var i = 0; i < $scope.couponMsgList.length; i++) {
+							var obj = $scope.couponMsgList[i];
+							//优惠券金额
+							var amount = obj.amount;
+							obj.amountList = amount.split(',');
+//							if(amount.indexOf(',')) {
+//							} else {
+//								obj.amountList.push(obj.amount);
+//							}
+
+							//使用商品范围
+							var productScope = obj.productScope;
+							if(productScope !='AllProduct') {
+								obj.productScopeList = productScope.split(',');
+							}
+							//门店列表
+							var orgScope = obj.orgScope;
+							obj.orgScopeList = orgScope.split(',');
+
+							//起始和结束时间
+							obj.activeTime = obj.activeTime.split(' ')[0];
+							obj.lapsedTime = obj.lapsedTime.split(' ')[0];
+						}
+						//判断状态 初始化三个数组 对应待审核(0,1) 使用中(2,4) 历史卡券(3)
+						if(couponState == '0,1,-1') {
+							var totalCount = data.data.count;
+							$scope.couponNeedCheckList = [];
+							$scope.couponNeedCheckList = $scope.couponMsgList;
+							//showLength 是选项卡上显示的总数 属性
+							$scope.couponNeedCheckList.showLength = totalCount;
+
+						} else if(couponState == '2,4') {
+							var totalCount = data.data.count;
+							$scope.couponIsUseingList = [];
+							$scope.couponIsUseingList = $scope.couponMsgList;
+							$scope.couponIsUseingList.showLength = totalCount;
+						} else if(couponState == '3'){
+							var totalCount = data.data.count;
+							$scope.couponHistoryList = [];
+							$scope.couponHistoryList = $scope.couponMsgList;
+							$scope.couponHistoryList.showLength = totalCount;
+						}
+					}
+				}
+			} else {
+				alertmsg(data.msg, "error");
+				return;
+			}
+		});
+
+	}
+
+	$scope.refash = function(couponState) {
+		//初始化分页的数据
+		$scope.jsonPage = '';
+		$scope.jsonPage = {
+			"nub": "" + 0 + "",
+			"size": "" + pageSize + ""
+		};
+		total = 0;
+		from = 0;
+
+		$scope.getCouponsList(0, '3');
+		$scope.getCouponsList(0, '2,4');
+		$scope.getCouponsList(0, '0,1,-1');
+
+		//根据状态来初始化分页
+		if(couponState == '0' || couponState == '1' || couponState == '-1') {
+			$scope.getCouponsList(1, '0,1,-1');
+			return;
+		}
+		if(couponState == '2' || couponState == '4') {
+			$scope.getCouponsList(1, '2,4');
+			return;
+		}
+
+		//三个之间的切换还没做
+		//		if (couponState == '3') {
+		//			$scope.getCouponsList(1, '3');
+		//			return;
+		//		}
+	}
+
+	$scope.refash('0');
+	//提交审核、撤销审核、暂停发放、允许发放 核准 不核准-1
+	$scope.commitVerify = function(obj, couponState) {		
+		if(couponState == '-1') {
+			$('#zzy1,.maskBg').show();
+			$('#zzy1DelBtn').delegate('.SavEdit', 'click', function() {
+				$scope.changeState(obj, couponState);
+				$('#zzy1,.maskBg').hide();
+			})
+		} else if (couponState == '4') {
+			$('#zzy2,.maskBg').show();
+			$('#zzy2DelBtn').delegate('.SavEdit', 'click', function() {
+				$scope.changeState(obj, couponState);
+				$('#zzy2,.maskBg').hide();
+			})
+		} else {
+			$scope.changeState(obj, couponState);
+		}
+		
+	}
+	$scope.ms='0';
+	$scope.msBox='0';
+	$scope.changeState = function (obj, couponState){
+		var jsonObject = {
+			"couponMsgId": obj.couponMsgId,
+			"couponState": couponState
+		};
+		jsonObject = JSON.stringify(jsonObject);
+		$http({
+				method: 'post',
+				url: pos + 'couponMsg/updateCpMsg',
+				params: {
+					keyParams: getKeyParams(jsonObject, keyParams),
+					jsonObject: getJsonObject(jsonObject)
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == "1") {
+					$scope.msBox='1';
+					if(couponState == '1') {
+						$scope.ms='1';
+//						alertmsg('优惠券已成功提交,请等待审核');
+					} else if(couponState == '2') {
+						$scope.ms='2';
+//						alertmsg('该优惠券已通过审核,可以使用');
+					} 
+					$scope.refash(couponState);
+					$timeout(function(){
+						$scope.msBox='0';
+						$scope.ms='0';
+						},3000);
+				} else {
+					alertmsg(data.msg, "error");
+				}
+			})
+			
+	}
+		//删除优惠券
+	$scope.deleteCoupon = function(obj) {
+		$('#DelDialog,.maskBg').show();
+		$('#dialogBtn').delegate('.SavEdit', 'click', function() {
+			var jsonObject = {
+				"couponMsgId": obj.couponMsgId
+			};
+			jsonObject = JSON.stringify(jsonObject);
+			$http({
+				method: "post",
+				url: pos + "couponMsg/delCoupon",
+				params: {
+					keyParams: getKeyParams(jsonObject, keyParams),
+					jsonObject: getJsonObject(jsonObject)
+				}
+
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == 1) {
+					$('#DelDialog,.maskBg').hide();
+					$scope.refash('0');
+				} else {
+					alertmsg(data.msg, "error");
+					return;
+				}
+			});
+		});
+	}
+
+	//关闭弹框
+	$scope.closeDia = function() {
+			$scope.couponType = '';
+			$scope.detailObj = '';
+		}
+		//弹框居中
+	$(".xjbxl").center();
+	//新增优惠券
+	$scope.addDiscount = function() {
+		$state.go("addDiscountCardstep1", {
+			uiParams: ""
+		});
+	}
+
+	//编辑卡券
+	$scope.editDiscountCard = function(obj, type) {
+		obj.editOrNew = type; //区分编辑页面 和历史卡券中 新建卡券
+		$state.go("editDiscountCard", {
+			uiParams: obj
+		});
+	}
+
+	//初始化分页
+	$scope.createPagePlugin = function(total, pageSize, couponState) {
+		$("#paging").empty();
+		paging = pagePlugin.createPaging({
+			renderTo: 'paging',
+			total: total,
+			pageSize: pageSize
+		});
+		paging.goPage = function(from, to) {
+			$scope.page(from - 1, pageSize, couponState);
+		}
+	};
+
+	$scope.page = function(from, pageSize, couponState) {
+		$scope.jsonPage = {
+			"nub": "" + from + "",
+			"size": "" + pageSize + ""
+		};
+		$.extend($scope.jsonPage, $scope.param);
+		$scope.jsonObject = JSON.stringify($scope.jsonPage);
+		$("#myTable").empty();
+		$scope.getCouponsList(0, couponState);
+
+	}
+
+}]);

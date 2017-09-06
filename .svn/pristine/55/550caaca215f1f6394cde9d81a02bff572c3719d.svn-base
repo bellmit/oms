@@ -1,0 +1,3 @@
+qyApp.controller('cashierController', ['$scope','$http',function($scope, $http) {
+	
+}]);

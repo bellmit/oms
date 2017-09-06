@@ -1,0 +1,286 @@
+qyApp.controller("voucherListController", function($scope, $http, Upload, $compile, $route, $state, $stateParams) {
+	
+	/*查询条件*/
+	$scope.search={
+		cardNum:"",
+		status:"",
+		dateType:"1",
+		beginDate:"",
+		endDate:""
+	}
+	$scope.showResult="0";
+	
+	/*
+	 * updateCardOne:单卡编辑
+	 * updateCardBatch:批量编辑
+	 * setCheck:勾选列表记录
+	 * setCheckAll:全选
+	 * */
+	$scope.updateCardOne=function(){
+		if($scope.editCard.amount==""){
+			$scope.warn="金额不能为空";
+			return;
+		}
+		updateChargeCard($scope.editCard);
+	}
+	
+	$scope.updateCardBatch=function(){
+		if($scope.editCardBatch.amount==""){
+			$scope.warn="金额不能为空";
+			return;
+		}
+		$scope.editCardBatch.chargeCardId=$scope.checkChargeCardArr.join(",");
+		updateChargeCard($scope.editCardBatch);
+	}
+	
+	$scope.checkChargeCardArr=[];
+	
+	$scope.setCheck=function(obj){
+		for(var i=0;i<$scope.checkChargeCardArr.length;i++){
+			if($scope.checkChargeCardArr[i]==obj.chargeCard.chargeCardId){
+				$scope.checkChargeCardArr.splice(i,1);
+				return;
+			}
+		}
+		$scope.checkChargeCardArr.push(obj.chargeCard.chargeCardId);
+	}
+	
+	$scope.setCheckAll=function(){
+		var checkElements = $(".code_checkbox");
+		var checkedFlag = $("#selectAll")[0].checked;
+		for(var i = 0; i < checkElements.length; i++) {
+			checkElements[i].checked = false;
+		}
+		$scope.checkChargeCardArr=[];
+		if(checkedFlag){
+			for(var i=0;i<$scope.chargeCardList.length;i++){
+				if($scope.chargeCardList[i].status=="0"){
+					checkElements[i].checked = true;
+					$scope.checkChargeCardArr.push($scope.chargeCardList[i].chargeCardId);
+				}
+			}
+		}
+	}
+	
+	/*
+	 * 接口调用
+	 * getChargeCard:查询充值卡列表
+	 * addChargeCard:添加充值卡
+	 * updateChargeCard:更新充值卡状态
+	 * deleteChargeCard:删除充值卡
+	 */
+	var from=0;
+	var pageSize=10;
+	$scope.count="0";
+	$scope.getChargeCard=function(){
+		$scope.search.beginDate=$('#beginDate').val();
+		$scope.search.endDate=$('#endDate').val();
+		$scope.jsonPage={"nub":""+from+"","size":""+pageSize+""};
+		$.extend($scope.search,$scope.jsonPage);
+		var jsonObject=JSON.stringify($scope.search);
+		$http({
+			method: 'post',
+			url: pos + 'chargeCard/getChargeCard',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.count=data.data.count;
+				$scope.chargeCardList=data.data.chargeCardList;
+				$scope.createPagePlugin($scope.count,pageSize);
+			} else {
+				alertmsg("获取充值卡列表失败", "error");
+			}
+		})
+	}
+	
+	$scope.createPagePlugin = function(total, pageSize) {
+		$("#paging").empty();
+		paging = pagePlugin.createPaging({
+			renderTo: 'paging',
+			total: total,
+			pageSize: pageSize
+		});
+		paging.goPage = function(from, to) {
+			$scope.page(from - 1, pageSize);
+		}
+	};
+	
+	$scope.page = function(from, pageSize) {
+		$scope.search.beginDate=$('#beginDate').val();
+		$scope.search.endDate=$('#endDate').val();
+		$scope.jsonPage={"nub":""+from+"","size":""+pageSize+""};
+		$.extend($scope.search,$scope.jsonPage);
+		var jsonObject=JSON.stringify($scope.search);
+		$http({
+			method: 'post',
+			url: pos + 'chargeCard/getChargeCard',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.chargeCardList=data.data.chargeCardList;
+			} else {
+				alertmsg("获取充值卡列表失败", "error");
+			}
+		})
+	}
+	
+	
+	$scope.addChargeCard=function(){
+		if($scope.addCard.cardNum==""){
+			$scope.warn="卡号不能为空";
+			return;
+		}
+		if($scope.addCard.password==""){
+			$scope.warn="密码不能为空";
+			return;
+		}
+		var jsonObject=JSON.stringify($scope.addCard);
+		$http({
+			method: 'post',
+			url: pos + 'chargeCard/addChargeCard',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.closedialog();
+				$scope.getChargeCard();
+				$scope.showResult="1";
+//				$timeout(function(){
+//					$scope.showResult="0";
+//				},500);
+			} else {
+				if(data.code < 0) {
+					$scope.warn="添加充值卡失败";
+				}else{
+					$scope.warn=data.msg;
+				}
+			}
+		})
+	}
+	
+	updateChargeCard=function(jsonObject){
+		var jsonObject=JSON.stringify(jsonObject);
+		$http({
+			method: 'post',
+			url: pos + 'chargeCard/updateChargeCard',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.closedialog();
+				$scope.getChargeCard();
+				$scope.showResult="2";
+//				$timeout(function(){
+//					$scope.showResult="0";
+//				},500);
+			} else {
+				if(data.code < 0) {
+					$scope.warn="添加充值卡失败";
+				}else{
+					$scope.warn=data.msg;
+				}
+			}
+		})
+	}
+	
+	$scope.deleteChargeCard=function(){
+		var jsonObject=JSON.stringify($scope.deleteCard);
+		$http({
+			method: 'post',
+			url: pos + 'chargeCard/deleteChargeCard',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.closedialog();
+				$scope.getChargeCard();
+				$scope.showResult="3";
+//				$timeout(function(){
+//					$scope.showResult="0";
+//				},500);
+			} 
+		})
+	}
+	
+	function loadInit(){
+		$scope.getChargeCard();
+	}
+	loadInit();
+	
+	/*初始化*/
+	$scope.model={
+		'isShowFrame':'0',/*1激活  2作废  3添加充值卡  4批量激活  5导入充值卡 6删除*/
+		'isTips':'0',/*1 激活成功 2 充值成功 3删除成功 */
+		'isUpload':'1'/*1 添加  2上传成功*/
+	}
+	/*添加充值*/
+	$scope.showFrametype=function(type,obj){
+		if(type=="1"){
+			//编辑充值卡状态
+			$scope.editCard={
+				cardNum:obj.chargeCard.cardNum,
+				chargeCardId:obj.chargeCard.chargeCardId,
+				memo:obj.chargeCard.memo,
+				amount:obj.chargeCard.amount,
+				status:"1"
+			}
+		}else if(type=="2"){
+			//添加充值卡
+			$scope.editCard={
+				cardNum:obj.chargeCard.cardNum,
+				amount:obj.chargeCard.amount,
+				chargeCardId:obj.chargeCard.chargeCardId,
+				status:"3"
+			}
+		}else if(type=="3"){
+			//添加充值卡
+			$scope.addCard={
+				cardNum:"",
+				password:"",
+				amount:""
+			}
+		}else if(type=="4"){
+			if($scope.checkChargeCardArr.length==0){
+				alertmsg("请选择要激活的卡", "error");
+				return;
+			}
+			//批量编辑充值卡
+			$scope.editCardBatch={
+				amount:"",
+				memo:"",
+				status:"1"
+			}
+		}else if(type=="6"){
+			//添加充值卡
+			$scope.deleteCard={
+				cardNum:obj.chargeCard.cardNum,
+				chargeCardId:obj.chargeCard.chargeCardId
+			}
+		}
+		$scope.model.isShowFrame=type;
+	}
+	/*关闭弹框*/
+	$scope.warn="";
+	$scope.closedialog=function(){
+		$scope.model.isShowFrame='0';
+		$scope.warn="";
+		$scope.addCard=undefined;
+		$scope.editCard=undefined;
+		$scope.deleteCard=undefined;
+		$scope.editCardBatch=undefined;
+		$scope.checkChargeCardArr=[];
+	}
+	
+})

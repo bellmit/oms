@@ -1,0 +1,541 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--------------- Content start ----------------->
+<div class="content-wrapper content-member-wrapper" ng-show="membera=='show'">
+	<div class="col-md-11 pageTitl">
+		<h2 class="am-ft-16 fn-left">会员列表<span class="mgl5">({{size}})</span></h2>
+		<a href="javascript:;" class="btn fn-right btn-primary addOderBtn fn-hide" ng-click="toaddMember(memberQuery.cloudId)">添加会员</a>
+	</div>
+	<div class="fn-clear"></div>
+	<!-- search -->
+	<div class="listSearch OderlistSearch">
+		<div class="row">
+			<div class="col-md-4 mgt10 searchBox">
+				<input type="text" class="col-sm-10 mgt-8" ng-model="memberNoa" ng-value="memberNoa" placeholder="会员卡号/手机号" />
+				<a href="javascript:;" class="fn-left search-icon" ng-click="queryMember()">查询</a>
+			</div>
+			<a href="javascript:;" class="searchFilter fn-hide">精简筛选条件</a>
+			<div class="fn-clear"></div>
+		</div>
+	</div>
+
+	<div class="productSearch fn-hide">
+		<form class="form-horizontal">
+			<div class="row">
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">会员联盟：</label>
+						<div class="col-sm-7 pro-search">
+							<select class="form-control" ng-model="memberQuery.cloudId" name="cloudId">
+								<option>1</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="col-sm-3 control-label">卡类型：</label>
+						<div class="col-sm-7 pro-search">
+							<select class="col-md-12 form-control" ng-model="memberQuery.gradeId" name="gradeId" ng-options="grade.gradeId as grade.gradeName for grade in gradeTypes">
+								<option value="0">请选择</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="col-sm-5 control-label">发卡商户/门店：</label>
+						<div class="col-sm-7 pro-search">
+							<select class="form-control" ng-model="memberQuery.orgId" name="orgId">
+								<option>1</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2 am-ft-left searchBox">
+					<button type="button" class="col-md-8 btn btn-white" ng-click="queryMember()">查询</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- /search -->
+
+	<!-- Main content -->
+	<div class="ManColTable col-lg-12">
+		<form>
+			<div class="table-responsive PrivTable mgt0">
+				<table class="table table-hover table-striped table-bordered">
+					<tr>
+						<th scope="col">手机号</th>
+						<th scope="col">姓名</th>
+						<th scope="col">会员卡数</th>
+						<th scope="col">性别</th>
+						<th scope="col">生日</th>
+						<th scope="col">账户余额</th>
+						<th scope="col">通讯地址</th>
+						<th scope="col" >操作</th>
+					</tr>
+					<tr ng-repeat="member in members" ng-model="member" id="member{{member.memberId}}">
+						<td>{{member.telphone}}</td>
+						<td>{{member.name}}</td>
+						<td>
+							<a href="javascript:;" class="detPanel" ng-click="getMemberDetail(this)">{{member.cardNum}}张<i class="fa fa-angle-down"></i></a>
+						</td>
+						<td>{{member.sex=='M'?'男':'女'}}</td>
+						<td>{{member.birthday}}</td>
+						<td>{{member.accountAmount}}</td>
+						<td>{{member.province}}{{member.city}}{{member.district}}{{member.address}}</td>
+						<td class="td_edit">
+							<!-- <a href="javascript:;" ng-click="vipOrderList(this)">会员订单</a>
+							<a href="javascript:;" ng-click="transactCard(member)">发卡</a> -->
+							<a href="javascript:;" ng-click="toupdateMember(this)">编辑</a>
+							<a href="javascript:;" ng-click="recharge(this)">充值</a>
+							<a href="javascript:;" ng-click="checkrecharge(this)">查看</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</form>
+		<div class="fn-clear"></div>
+	</div>
+	<!--分页 start-->
+	<div class="pagelist priv-pagelist">
+		<div id="paging"></div>
+	</div>
+	<!--分页 end-->
+</div>
+<!--会员的添加修改-->
+<div class="default" ng-show="newAddmember=='show'">
+	<jsp:include page="newAddmember.jsp" />
+</div>
+<div class="default" ng-show="newMemberEdit=='show'">
+	<jsp:include page="newMemberEdit.jsp" />
+</div>
+<!--会员订单-->
+<div class="default" ng-show="newMemberOrder=='show'">
+	<jsp:include page="newMemberOrder.jsp" />
+</div>
+<!--会员查看-->
+<div class="default" ng-show="vipInfo=='show'">
+	<jsp:include page="vipInfo.jsp" />
+</div>
+<!--会员的添加修改-->
+
+<!--发卡弹窗-->
+<div class="maskBgw" ng-show="transactCardMask=='show'">
+	<div class="mask-container">
+		<div class="mask-top fn-clear">
+			<p class="fn-left">发卡</p>
+			<a href="javascript:;">
+				<img ng-click="closedialog()" src="http://static.qineasy.com/base/images/closelogo.png" class="fn-right" alt="" />
+			</a>
+		</div>
+		<div class="mask-content" style="padding-right: 150px;">
+			<form action="" class="info-form fn-clear" id="cardInfoa">
+				<div class="infotitle fn-left">
+					<p>姓名/昵称:</p>
+					<p>手机号:</p>
+					<p><span>*</span>会员卡类型:</p>
+					<p><span>*</span>会员卡号:</p>
+					<p id="conquer" style="line-height: 30px;">&nbsp;</p>
+					<p>导购:</p>
+				</div>
+				<div class="infodesc fn-left info">
+					<p><input type="text" name="name" class="name" ng-value="name" disabled/></p>
+					<p><input type="text" name="phonenum" class="phonenum" ng-value="telphone" disabled/></p>
+					<p>
+						<select name="memberUnio" ng-model="gradeIda">
+							<option value="{{gradeType.gradeId}},{{gradeType.memberUnionId}}" ng-repeat="gradeType in gradeTypes">{{gradeType.memberUnionName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{gradeType.gradeName}}</option>
+						</select>
+					</p>
+					<p style="line-height:18px;margin-top: 10px;">
+						<input type="radio" num="1" class="searchtp" style="height:12px;margin-right:3px;" name="cardtype" id="autoget" checked/><label for="autoget" style="display: inline;vertical-align: top;">自动获取卡号</label>
+						<input type="radio" num="2" class="searchtp" style="height:12px;margin-right:3px" name="cardtype" id="usephone" /><label for="usephone" style="display: inline;vertical-align: top;">手机号</label>
+						<input type="radio" num="3" class="searchtp" style="height:12px;margin-right:3px" name="cardtype" id="cardnum" /><label for="cardnum" style="display: inline;vertical-align: top;">实物卡卡号</label>
+					</p>
+					<p class="col-md-12 am-ft-red mgt5" id="typeNamea">自动获取的会员卡号为：<span>{{autoMemberNo}}</span></p>
+					<!--					<p><input type="text" value="" id="typeNamea" placeholder="请输入实物卡卡号" name="cardNum" /></p>-->
+					<div class="mgt5 form-group fn-hide" id="typeNamec">
+						<input type="text" class="col-md-12" name="memberNo" placeholder="请输入实物卡卡号" ng-blur="checkMember()" ng-value="memberNoa" ng-model="memberNoa" />
+						<small class="error col-md-5" ng-show="memberNoWarn">该会员已存在！</small>
+					</div>
+					<p>
+						<select name="guide" ng-model="guideId">
+							<option ng-value="guide.userId" ng-repeat="guide in guides">{{guide.trueName}}</option>
+						</select>
+					</p>
+				</div>
+			</form>
+		</div>
+		<div class="mask-bottom fn-clear">
+			<button class="commit fn-left" ng-click="sureToCreateCard()">确认</button>
+			<button class="cancel fn-left" ng-click="closedialog()">取消</button>
+		</div>
+	</div>
+</div>
+<!--/发卡弹窗-->
+<!--充值弹框-->
+<div class="maskBgw" ng-show="isRecharge=='1'">
+	<div class="mask-container mask-containera">
+		<div class="mask-top fn-clear">
+			<p class="fn-left">充值余额</p>
+			<a href="javascript:;">
+				<img ng-click="closedialog()" src="http://static.qineasy.com/base/images/closelogo.png" class="fn-right" alt="" />
+			</a>
+		</div>
+		<div class="mask-content mask-contenta" style="padding-right: 150px;">
+			<form action="" class="info-form fn-clear" id="cardInfoa">
+				<div class="infotitle fn-left">
+					<p>卡号:</p>
+					<p>密码:</p>
+				</div>
+				<div class="infodesc fn-left info">
+					<p><input type="text" name="name" class="" ng-model="editCard.cardNum"/></p>
+					<p><input type="text" name="phonenum" class="" ng-model="editCard.password" /></p>
+				</div>
+			</form>
+		</div>
+		<div class="mask-bottom fn-clear">
+			<span class="am-ft-red">{{warn}}</span>
+			<button class="commit fn-left" ng-click="updateChargeCard()">确认</button>
+			<button class="cancel fn-left" ng-click="closedialog()">取消</button>
+		</div>
+	</div>
+</div>
+<!--/充值弹框-->
+
+<!--换卡弹窗-->
+<div class="maskBgw" ng-show="changeCardDialog=='show'">
+	<div class="mask-container" id="changeCardDialog">
+		<div class="mask-top fn-clear">
+			<p class="fn-left">换卡</p>
+			<a href="jsvascript:;" ng-click="closedialog()">
+				<img src="http://static.qineasy.com/base/images/closelogo.png" class="fn-right" alt="" />
+			</a>
+		</div>
+		<div class="mask-content" style="padding-right: 150px;">
+			<form action="" class="info-form fn-clear" id="cardInfo">
+				<div class="infotitle fn-left">
+					<p>姓名/昵称:</p>
+					<p>手机号:</p>
+					<p>会员卡类型:</p>
+					<p>原会员卡号:</p>
+					<p>新会员卡号:</p>
+				</div>
+				<div class="infodesc info fn-left">
+					<p><input type="text" name="name" class="name" ng-value="updateUser" disabled/></p>
+					<p><input type="text" name="phonenum" class="phonenum" ng-value="updatetelPhone" disabled/></p>
+					<p><input type="text" data-memberCardId="{{memberCardId}}" name="cardType" class="cardType" value="{{memberUnionName}}&nbsp;&nbsp;&nbsp;&nbsp;{{gradeName}}" disabled/></p>
+					<p><input type="text" ng-value="memberNo" class="oldCardNum" name="oldCardNum" /></p>
+					<p><input type="text" ng-model="newMemberNo" name="newCardNum" /></p>
+				</div>
+			</form>
+		</div>
+		<div class="mask-bottom fn-clear">
+			<button class="commit fn-left" ng-click="sureToChangeCard(memberCardId,newMemberNo)">确认</button>
+			<button class="cancel fn-left" ng-click="closedialog()">取消</button>
+		</div>
+	</div>
+</div>
+<!--/换卡弹窗-->
+
+<!--升级弹窗-->
+<div class="maskBgw" ng-show="updateDialog=='show'">
+	<div class="mask-container">
+		<div class="mask-top fn-clear">
+			<p class="fn-left">升级</p>
+			<a href="javascript:;" ng-click="closedialog()">
+				<img src="http://static.qineasy.com/base/images/closelogo.png" class="fn-right" alt="" />
+			</a>
+		</div>
+		<div class="mask-contentupdate">
+			<div class="userInfo infoma fn-clear" style="padding-bottom:0px;">
+				<div class="fn-left"><span>姓名/昵称:</span><span>{{updateUser}}</span></div>
+				<div class="fn-left"><span>手机号:</span><span>{{updatetelPhone}}</span></div>
+			</div>
+			<div class="cardupdata-info fn-clear">
+				<div class="oldcard-box fn-left">
+					<div class="carddesc">
+						<span class="cardsort">{{gradeName}}</span>
+						<span class="cardunion">{{memberUnionName}}</span>
+						<p class="cardNum">{{memberNo}}</p>
+					</div>
+					<div class="updateline"></div>
+					<div class="costInfo fn-clear">
+						<div class="fn-right">
+							<div>
+								<span>可用积分：</span>
+								<span>{{points}}分</span>
+							</div>
+							<div>
+								<span>累计消费：</span>
+								<span>{{totalconsumption}}元</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="middlepard-box fn-left">
+					<img src="../static/base/images/upgrade_icon.png" alt="" />
+					<div class="fn-clear">
+						<input type="checkbox" ng-click="changeCard()" ng-model="tochangeCard" id="changeCard" class="fn-left" />
+						<label for="changeCard" class="fn-left">需要换卡</label>
+					</div>
+				</div>
+				<div class="newcard-box fn-left">
+					<div class="carddesc">
+						<span class="cardsort" data-nextGradeId="{{memberGrade.nextGradeId}}">{{memberGrade.nextGradeName}}</span>
+						<span class="cardunion">{{memberUnionName}}</span>
+						<div ng-show="changeCarda=='show'"><input type="text" placeholder="请输入新的会员卡号" ng-model="newMemberNo" /></div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		<div class="mask-bottom fn-clear">
+			<button class="commit fn-left" ng-click="sureToUpdateCard(memberGrade.nextGradeId)">确认</button>
+			<button class="cancel fn-left" ng-click="closedialog()">取消</button>
+		</div>
+	</div>
+</div>
+<!--/升级弹窗-->
+
+<!--注销会员弹窗-->
+<div class="maskBgw" ng-show='cancelCardDialog=="show"'>
+	<div class="mask-container" id='cancelCardDialog'>
+		<div class="mask-top fn-clear">
+			<p class="fn-left">注销会员</p>
+			<a href="javascript:;" ng-click="closedialog()"><img src="http://static.qineasy.com/base/images/closelogo.png" class="fn-right" alt="" /></a>
+		</div>
+		<div class="mask-contentupdate mask-contentdestroy">
+			<div class="fn-clear">
+				<div class="warm-icon fn-left">
+					!
+				</div>
+				<div class="desuser-info fn-left">
+					<p class="warm-text">请确认是否注销会员卡？</p>
+					<div class="userInfo infoma fn-clear" style="padding-bottom:0px;">
+						<div class="fn-left"><span>姓名/昵称:</span><span>{{updateUser}}</span></div>
+						<div class="fn-left"><span>手机号:</span><span>{{updatetelPhone}}</span></div>
+					</div>
+				</div>
+			</div>
+			<div class="contentdestroyline"></div>
+			<div class="cardupdata-info fn-clear">
+				<div class="oldcard-box fn-left">
+					<div class="carddesc">
+						<span data-memberCardId="{{memberCardId}}" class="cardsort">{{gradeName}}</span>
+						<span class="cardunion">{{memberUnionName}}</span>
+						<p class="cardNum">{{memberNo}}</p>
+					</div>
+					<div class="updateline"></div>
+					<div class="costInfo fn-clear">
+						<div class="fn-right">
+							<div>
+								<span>可用积分：</span>
+								<span>{{points}}分</span>
+							</div>
+							<div>
+								<span>累计消费：</span>
+								<span>{{totalconsumption}}元</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="warm-text2 fn-left">
+					<p>提示:</p>
+					<p>注销会员卡后不能恢复，请谨慎操作！</p>
+				</div>
+			</div>
+		</div>
+		<div class="mask-bottom fn-clear">
+			<button class="cancel fn-right" style="margin-right: 30px;" ng-click="closedialog()">取消</button>
+			<button class="commit fn-right" ng-click="sureToCancelCard(memberCardId)">确认</button>
+		</div>
+	</div>
+</div>
+<!--/注销会员-->
+
+<!--挂失弹窗-->
+<div class="maskBgw" ng-show='reportLossDialog=="show"'>
+	<div class="mask-container" id='cancelCardDialog'>
+		<div class="mask-top fn-clear">
+			<p class="fn-left">挂失会员卡</p>
+			<a href="javascript:;" ng-click="closedialog()"><img src="http://static.qineasy.com/base/images/closelogo.png" class="fn-right" alt="" /></a>
+		</div>
+		<div class="mask-contentupdate mask-contentdestroy">
+			<div class="fn-clear">
+				<div class="warm-icon fn-left">
+					!
+				</div>
+				<div class="desuser-info fn-left">
+					<p class="warm-text">请确认是否挂失会员卡？</p>
+					<div class="userInfo infoma fn-clear" style="padding-bottom:0px;">
+						<div class="fn-left"><span>姓名/昵称:</span><span>{{updateUser}}</span></div>
+						<div class="fn-left"><span>手机号:</span><span>{{updatetelPhone}}</span></div>
+					</div>
+				</div>
+			</div>
+			<div class="contentdestroyline"></div>
+			<div class="cardupdata-info fn-clear">
+				<div class="oldcard-box fn-left">
+					<div class="carddesc">
+						<span data-memberCardId="{{memberCardId}}" class="cardsort">{{gradeName}}</span>
+						<span class="cardunion">{{memberUnionName}}</span>
+						<p class="cardNum">{{memberNo}}</p>
+					</div>
+					<div class="updateline"></div>
+					<div class="costInfo fn-clear">
+						<div class="fn-right">
+							<div>
+								<span>可用积分：</span>
+								<span>{{points}}分</span>
+							</div>
+							<div>
+								<span>累计消费：</span>
+								<span>{{totalconsumption}}元</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="warm-text2 fn-left">
+					<p>提示:</p>
+					<p>挂失会员卡后，会员卡将不能使用！</p>
+				</div>
+			</div>
+		</div>
+		<div class="mask-bottom fn-clear">
+			<button class="cancel fn-right" style="margin-right: 30px;" ng-click="closedialog()">取消</button>
+			<button class="commit fn-right" ng-click="sureToreportLost(memberCardId)">确认</button>
+		</div>
+	</div>
+</div>
+<!--/挂失弹窗-->
+
+<!--恢复会员卡弹窗-->
+<div class="maskBgw" ng-show='recoverCardDialog=="show"'>
+	<div class="mask-container" id='cancelCardDialog'>
+		<div class="mask-top fn-clear">
+			<p class="fn-left">恢复会员卡</p>
+			<a href="javascript:;" ng-click="closedialog()"><img src="http://static.qineasy.com/base/images/closelogo.png" class="fn-right" alt="" /></a>
+		</div>
+		<div class="mask-contentupdate mask-contentdestroy">
+			<div class="fn-clear">
+				<div class="warm-icon fn-left">
+					!
+				</div>
+				<div class="desuser-info fn-left">
+					<p class="warm-text">请确认是否恢复会员卡？</p>
+					<div class="userInfo infoma fn-clear" style="padding-bottom:0px;">
+						<div class="fn-left"><span>姓名/昵称:</span><span>{{updateUser}}</span></div>
+						<div class="fn-left"><span>手机号:</span><span>{{updatetelPhone}}</span></div>
+					</div>
+				</div>
+			</div>
+			<div class="contentdestroyline"></div>
+			<div class="cardupdata-info fn-clear">
+				<div class="oldcard-box fn-left">
+					<div class="carddesc">
+						<span data-memberCardId="{{memberCardId}}" class="cardsort">{{gradeName}}</span>
+						<span class="cardunion">{{memberUnionName}}</span>
+						<p class="cardNum">{{memberNo}}</p>
+					</div>
+					<div class="updateline"></div>
+					<div class="costInfo fn-clear">
+						<div class="fn-right">
+							<div>
+								<span>可用积分：</span>
+								<span>{{points}}分</span>
+							</div>
+							<div>
+								<span>累计消费：</span>
+								<span>{{totalconsumption}}元</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="warm-text2 fn-left">
+					<p>提示:</p>
+					<p>恢复会员卡后，会员卡将继续使用！</p>
+				</div>
+			</div>
+		</div>
+		<div class="mask-bottom fn-clear">
+			<button class="cancel fn-right" style="margin-right: 30px;" ng-click="closedialog()">取消</button>
+			<button class="commit fn-right" ng-click="sureToRecoverCard(memberCardId)">确认</button>
+		</div>
+	</div>
+</div>
+<!--/恢复会员卡弹窗-->
+<!--充值成功/激活成功-->
+   <div class="tips-success" ng-if="showResult!='0'">
+  		<span ng-if="showResult=='1'">充值成功</span>
+  		<span ng-if="showResult=='2'">激活成功</span>
+  		<span ng-if="showResult=='3'">删除成功</span>
+  		<span ng-if="showResult=='4'">已作废</span>
+  	</div>
+ <!--/充值成功/激活成功-->
+<jsp:include page="../../public/footstyle.jsp" />
+<script>
+	$(".tips-success").center();
+
+	//弹窗居中
+	//	$('.EditDialog').center();
+	//
+	//	//删除
+	//	function delete_btn(a) {
+	//		$('.DelDialog,.maskBg').dialogShow();
+	//	}
+	//
+	//	function addMember() {
+	//		window.location.href = "#/addmember";
+	//	}
+	//	//弹窗居中及隐藏
+	//	$('.DelDialog').center();
+	//	$('.SavEdit,#closeDialog').click(function() {
+	//		$('.DelDialog,.maskBg').dialogHide();
+	//	});
+	$(function() {
+		//精简筛选条件
+		//	$('.searchFilter').click(function() {
+		//		$('.productSearch').toggle()
+		//	});
+		//		//库存详情面板
+		//		$('.detPanel').click(function(){
+		//			var thisIcon = $(this).children('.fa');
+		//			var thisPanel = $(this).parents('tr').next('.detPanel-info');
+		//			 $('.detPanel').toggle(function(){
+		//			 	thisPanel.show();
+		//			 },function(){
+		//			 	thisPanel.hide();
+		//			 });
+		//			thisPanel.siblings('.detPanel-info').hide();
+		//			thisIcon.toggleClass('fa-angle-down fa-angle-up');
+		//			$(this).parents('tr').siblings().find('.fa').removeClass('fa-angle-up').addClass('fa-angle-down');
+		//		});
+		$('.searchtp').click(function() {
+			if($(this).prop('checked') && $(this).attr('num') == 1) {
+				$('#typeNamea').show();
+				$('#typeNamec').hide();
+				$("#conquer").show();
+				$("select[name=guide]").css({
+					"margin-top": "0px"
+				})
+			} else if($(this).prop('checked') && $(this).attr('num') == 3) {
+				$('#typeNamea').hide();
+				$('#typeNamec').show();
+				$("#conquer").show();
+				$("select[name=guide]").css({
+					"margin-top": "0px"
+				})
+			} else {
+				$('#typeNamec').hide();
+				$('#typeNamea').hide();
+				$("#conquer").hide();
+				$("select[name=guide]").css({
+					"margin-top": "15px"
+				})
+			}
+		});
+
+	})
+</script>

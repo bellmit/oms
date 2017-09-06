@@ -1,0 +1,34 @@
+[  
+{  
+    "name":"cas",  
+    "url":"//test.qineasy.com/"
+},  
+{  
+    "name":"pos",  
+    "url":"//test.qineasy.com/"
+},  
+{  
+    "name":"ss",  
+    "url":"//test.qineasy.com/"
+},  
+{  
+    "name":"msg",  
+    "url":"//test.qineasy.com/"
+},
+{  
+    "name":"qineasy",
+    "url":"//test.qineasy.com/"
+},  
+{  
+    "name":"vm",  
+    "url":"//test.qineasy.com/"
+},
+{  
+    "name":"vip",  
+    "url":"//test.qineasy.com/"
+},
+{  
+    "name":"stat",  
+    "url":"//test.qineasy.com/"
+}
+]

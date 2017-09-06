@@ -1,0 +1,137 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+
+<!-- 头部 -->
+<jsp:include page="public/headpage.jsp" />
+
+<!-- 主要 -->
+<body class="loginBody">
+
+<!---- Content start ---->
+
+    <div class="loginBox clearfix">
+        <div class="loginForm">
+            <div class="logoImg clearfix">
+                <img src="static/base/images/login-logo.png" alt="勤易零售分销管理平台" title="勤易零售分销管理平台" />
+            </div>
+            <form id="loginform" method="post">
+                <div class="loginNav">
+                    <div class="input-group clearfix">
+                        <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                        <input type="text" id="userName" name="userName" class="form-control" placeholder="请输入手机号" maxLength="11" pattern='[\+]\d{2}[\(]\d{2}[\)]\d{4}[\-]\d{4}'  onKeypress="if (event.keyCode < 48 || event.keyCode > 57) event.returnValue = false;">
+                    </div>
+                    <div class="input-group clearfix">
+                        <div class="input-group-addon"><i class="fa fa-lock"></i></div>
+                        <input type="password" name="passWord" class="form-control" placeholder=" 请输入密码" />
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary btn-lg btn-block" onClick="save()">登&nbsp;&nbsp;录</button>
+                <a class="registerTip" href="register.jsp">新用户注册</a>
+            </form>
+        </div>
+    </div>
+
+<!---- Content end ---->
+
+<!---- Foot start ---->
+<div class="loginfooter">Copyright 2016, 杭州勤易科技有限公司，浙ICP备16003578号</div>
+<!---- Foot end ---->
+
+<script type="text/javascript">	
+	$(function(){
+		var cas=localStorage.cas;
+		var pos=localStorage.pos;
+		var ss=localStorage.ss;
+		//关闭websocket
+		wsCloseConnect();
+		//清理localStorage
+		localStorage.clear();
+		localStorage.cas=cas;
+		localStorage.pos=pos;
+		localStorage.ss=ss;
+		localStorage.keyParams="{}";
+		
+		
+	})
+	function loadMenuRoute(keyParams) {
+			$.ajax({
+				async: false,
+				type: "post",
+				url: cas + "/priv/getRoute",
+				data: {
+					keyParams: getKeyParams("{}", keyParams),
+					jsonObject: getJsonObject("{}")
+				},
+				success: function(data) {
+					var jsonObj = JSON.parse(data);
+					var routeList = JSON.stringify(jsonObj.data.routeList);
+					sessionStorage.routeList = routeList;
+					sessionStorage.routeList1 = routeList;
+				}
+			})
+		}
+	
+    function save(){
+    	var userName = $('#userName').val();
+   		var tel = /^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$/;
+   		if(!tel.test(userName)){
+   			alertmsg("请输入正确的手机号!","error");
+   		}else{
+   			var keyParams='{"timestamp":"","duid":"duid","token":"","userId":"","appKey":"aZ23dA4S4I","orgId":"","brandId":""}'; 		
+	        var url=cas+"user/userlogin";
+	        var jsonObject = $("#loginform").serializeJson();
+			$.ajax({
+				async:true,
+				type:"post",
+				url:url,
+				data : {keyParams:getKeyParams(jsonObject,keyParams),
+						jsonObject:getJsonObject(jsonObject)},
+				success : function(data) {
+					var json = $.parseJSON(data);	
+					if(json.code=='1'){
+						var object=json.data.user;
+						var keyParams={"timestamp":object.timestamp,"duid":"duid","token":object.token,"userId":object.userId,"appKey":object.appKey,"orgId":object.orgId,"brandId":object.brandId};
+		    			localStorage.keyParams=JSON.stringify(keyParams);
+		    			loadMenuRoute(localStorage.keyParams);
+						localStorage.userInfo=JSON.stringify(object);
+						loadMenuRoute(localStorage.keyParams)
+						window.location.href="index.jsp";
+					}else{
+						alertmsg("手机号或密码错误","error");
+					}
+				},
+				error:function(XMLHttpRequest, textStatus, errorThrown){
+					 alert("系统异常!","error");
+			    }
+			})
+   		}
+    }
+	function loadMenuRoute(keyParams) {
+			$.ajax({
+				async: false,
+				type: "post",
+				url: cas + "/priv/getRoute",
+				data: {
+					keyParams: getKeyParams("{}",keyParams),
+					jsonObject: getJsonObject("{}")
+				},
+				success: function(data) {
+					var jsonObj = JSON.parse(data);
+					var routeList = JSON.stringify(jsonObj.data.routeList);
+					sessionStorage.routeList1 = routeList;
+//					sessionStorage.routeList1 = routeList;
+				}
+			})
+		}
+	$(function(){    
+	  	$("body").keydown(function() {
+	        if (event.keyCode == "13") {
+	            save();
+	        }
+	    });
+	})
+	
+
+</script>
+
+</body>
+</html>

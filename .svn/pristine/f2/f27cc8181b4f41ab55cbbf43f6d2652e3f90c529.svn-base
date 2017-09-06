@@ -1,0 +1,9 @@
+qyApp.controller('trainController', ['$scope', '$http', '$compile', '$state', '$stateParams', function($scope, $http, $compile, $state, $stateParams) {
+//	$scope.addActivity=function(){
+//		$state.go("addActivityMinus", {
+//			uiParams: ""
+//		});
+//	}
+
+	
+}]);

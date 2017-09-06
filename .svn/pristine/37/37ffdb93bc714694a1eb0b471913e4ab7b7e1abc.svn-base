@@ -1,0 +1,345 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--------------- Content start ----------------->
+<div class="content-wrapper contractInfo-wrapper content-wrapper-itemshow content-wrapper-itemshow2">
+	<div class="col-md-11 contractTitle pageTitl">
+		<p class="fn-left contractCode mgr20">
+			<span>合同编号：</span>
+			<span>HT0001</span>
+			<!--<span>{{contractInfo.contractNum}}</span>-->
+		</p>
+		<p class="fn-left contractSeller mgr20">
+			<em>*</em>
+			<span>客户名称：</span>
+			<span>西西小可 潮品女装</span>
+			<!--<span>{{contractInfo.userName}}</span>-->
+		</p>
+		<p class="fn-left contractSeller">
+			<em >*</em>
+			<span>产品类型：</span>
+			<span>客服</span>
+			<!--<span>{{contractInfo.userName}}</span>-->
+		</p>
+		<!--<a href="javascript:;" class="line-btn fn-right" ng-click="goback()">返回</a>-->
+		<a href="javascript:;" class="line-btn fn-right" ng-click="goback()">返回</a>
+	</div>
+	<div class="col-md-11 contractDetailBox" >
+		<div class="col-md-12 contractDetailTitle">
+			<div>基础信息</div>
+			<div>所属区域</div>
+		</div>
+		<div class="col-md-12 contractDetailContent">
+			<div class="contractDetailLeftBox">
+				<div class="infoLine infoLinea fn-clear">
+					<div class="fn-left infoTitile">
+						<em class="am-ft-black mgr5">*</em>合同类型：
+					</div>
+					<span>新签</span>
+				</div>
+				<div class="infoLine infoLineb fn-clear">
+					<div class="fn-left infoTitile">
+						<em class="am-ft-black mgr5">*</em>席位数/店铺数：
+					</div>
+					<span>1家</span>
+			</div>
+			<div class="infoLine infoLinec fn-clear">
+				<div class="fn-left infoTitile">
+					<em class="am-ft-black mgr5">*</em>合同费用：
+				</div>
+				<span>9000</span>
+			</div>
+			<div class="infoLine infoLined fn-clear">
+				<div class="fn-left infoTitile">
+					<em class="am-ft-black mgr5">*</em>服务类型：
+				</div>
+				<span>值守</span>
+			</div>
+			<div class="infoLine infoLinee fn-clear">
+				<div class="fn-left infoTitile">
+					<em class="am-ft-black mgr5">*</em>产品类型：
+				</div>
+				<span>客服；运营</span>
+			</div>
+			<div class="infoLine infoLineg fn-clear">
+				<div class="fn-left infoTitile">
+					<!--<em class="am-ft-black mgr5">*</em>-->产品备注：
+				</div>
+				<span>晚上10:30—第二天早9:00</span>
+			</div>
+			<div class="infoLine infoLinef fn-clear">
+				<div class="fn-left infoTitile">
+					<em class="am-ft-black mgr5">*</em>合同周期：
+				</div>
+				<span>2017-01-01至2017-03-31</span>
+			</div>
+		</div>
+		<div class="contractDetailLeftBox contractDetailRightBox">
+			<div class="infoLine infoLinef fn-clear">
+				<div class="fn-left infoTitile">
+					<em class="am-ft-black mgr5">*</em>计划上线时间：
+				</div>
+				<span>2017-01-01</span>
+			</div>
+			<div class="infoLine infoLinee fn-clear">
+				<div class="fn-left infoTitile">
+					<em class="am-ft-black mgr5">*</em>服务区域：
+				</div>
+				<span>杭州</span>
+			</div>
+			<div class="infoLine infoLinec fn-clear">
+				<div class="fn-left infoTitile">
+					<em class="am-ft-black mgr5">*</em>服务部门：
+				</div>
+				<span>客服部；运营部</span>
+			</div>
+			<div class="infoLine infoLinec fn-clear">
+				<div class="fn-left infoTitile">
+					<!--<em class="am-ft-black mgr5">*</em>-->
+					服务业务组/人：
+				</div>
+				<span>客服部主管；运营部主管</span>
+			</div>
+			<div class="infoLine infoLinei fn-clear">
+				<div class="fn-left infoTitile">
+					<!--<em class="am-ft-black mgr5">*</em>-->
+					合同备注：
+				</div>
+				<span>备注备注备注备注</span>
+			</div>
+			<div class="infoLine infoLinei fn-clear">
+				<div class="fn-left infoTitile">
+					<!--<em class="am-ft-black mgr5">*</em>-->
+					提交人：
+				</div>
+				<span >商务部</span>
+				<span >哒哒</span>
+				<span >提交时间</span>
+				<span >2017/2/20 17:54</span>
+			</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-11 fn-clear addContractBox">
+		<div class="fn-clear col-md-12 contractBaseInfoBox">
+			<div class="contractBaseInfo">财务审核</div>
+	    </div>
+	    <div class="contractInfo col-md-9">
+				<div class="infoLineBox mgt15 fn-clear">
+					<div class="infoTitile">
+						负责部门：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<div class="infoLineInfo">
+							<select name="">
+								<option>杭州</option>
+								<option>武汉</option>
+								<option>合肥</option>
+							</select>
+							<select name="">
+								<option>美工组</option>
+								<option>客服组</option>
+								<option>运营组</option>
+								<option>培训组</option>
+							</select>
+							<select name="">
+								<option>美工一部</option>
+								<option>美工一部</option>
+								<option>美工一部</option>
+							</select>
+						</div>
+						<button>添加负责部门</button>
+					</div>
+				</div>
+				<div class="infoLineBox mgt0 fn-clear">
+					<div class="infoTitile">
+						收款状态：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<label class="fn-left mgr5">
+							<input type="radio" />已到账
+						</label>
+						<input type="text" class="fn-left mgr15"/>
+						<label>
+							<input type="radio" />未到账
+						</label>
+					</div>
+				</div>
+				<div class="infoLineBox mgt0 fn-clear">
+					<div class="infoTitile">
+						到账时间：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<input type="text" />
+					</div>
+				</div>
+				<div class="infoLineBox  fn-clear">
+					<div class="infoTitile">
+						备注：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<input type="text" />
+					</div>
+				</div>
+				<div class="infoLineBox mgb15 mgt0 fn-clear">
+					<div class="infoTitile">
+						确认人：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<span class="am-ft-gray">财务部</span>
+						<span class="am-ft-gray">小丽</span>
+					</div>
+				</div>
+		</div>
+	</div>
+		<div class="col-md-11 fn-clear addContractBox"  style="border:1px solid #D7D7D7;">
+		<div class="fn-clear col-md-12 contractBaseInfoBox" >
+			<div class="contractBaseInfo" style="background: #D7D7D7;">业务流转</div>
+	    </div>
+	    <div class="contractInfo col-md-9">
+				<div class="infoLineBox mgt15 fn-clear">
+					<div class="infoTitile col-md-3">
+						合同新签
+					</div>
+					<div class="checkContractInfo col-md-9 fn-clear">
+						<div class="hasContractInfo fn-clear">
+							<div class="hasContractNo">1</div>
+							<div class="infoLineInfo">
+								<div>
+									<span>财务审核</span>
+									<span>财务部 小丽</span>
+									<span>2017/2/20 17:54</span>
+								</div>
+								<div class="passContractInfo">
+									<p>
+										<span>部门负责：客服部</span>&nbsp;&nbsp;&nbsp;&nbsp;
+										<span>部门主管：客服主管</span>
+									</p>
+									<p>
+										<span>&nbsp;&nbsp;&nbsp;&nbsp;已到账：9000元</span>
+									</p>
+									<p>
+										<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;备注：确认到账</span>
+									</p>
+								</div>
+							</div>
+					</div>
+					<div class="hasContractInfo fn-clear">
+							<div class="hasContractNo">2</div>
+							<div class="infoLineInfo">
+								<div>
+									<span>部门分配</span>
+									<span>客服部 客服部主管</span>
+									<span>2017/2/20 17:54</span>
+								</div>
+								<div class="passContractInfo">
+									<p>
+										<span>执行人：客服部小王</span>&nbsp;&nbsp;&nbsp;&nbsp;
+									</p>
+									<p>
+										<span>&nbsp;&nbsp;&nbsp;&nbsp;工作安排：<a href="javascript:;">工作安排.doc</a></span>
+									</p>
+									<p>
+										<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;备注：参见文档内容</span>
+									</p>
+								</div>
+							</div>
+					</div>
+					</div>
+				</div>
+		</div>
+	</div>
+		<div class="col-md-11 fn-clear addContractBox">
+		<div class="fn-clear col-md-12 contractBaseInfoBox">
+			<div class="contractBaseInfo">部门主管</div>
+	    </div>
+	    <div class="contractInfo col-md-9">
+				<div class="infoLineBox mgt15 mgb10 fn-clear">
+					<div class="infoTitile">
+						执行人：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<div class="infoLineInfo">
+							<select name="">
+								<option>客服部</option>
+								<option>美工部</option>
+							</select>
+							<select name="">
+								<option>小王</option>
+								<option>小丽</option>
+								<option>小瓦</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="infoLineBox mgt0 mgb10 fn-clear">
+					<div class="infoTitile">
+						工作安排：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<input type="file" />
+						<button class="addFileBtn">添加文件</button>	
+					</div>
+				</div>
+				<div class="infoLineBox mgt0 mgb10 fn-clear">
+					<div class="infoTitile">
+						备注：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<input type="text" />
+					</div>
+				</div>
+				<div class="infoLineBox mgb15 mgt0 fn-clear">
+					<div class="infoTitile">
+						确认人：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<span class="am-ft-gray">客服部</span>
+						<span class="am-ft-gray">主管</span>
+					</div>
+				</div>
+		</div>
+	</div>
+	<div class="col-md-11 fn-clear addContractBox">
+		<div class="fn-clear col-md-12 contractBaseInfoBox">
+			<div class="contractBaseInfo">接收人</div>
+	    </div>
+	    <div class="contractInfo col-md-9">
+				<div class="infoLineBox mgt15 mgb10 fn-clear">
+					<div class="infoTitile">
+						接收人意见：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<div class="infoLineInfo">
+							<label class="fn-left mgr10 ">
+								<input type="radio" />同意
+							</label>
+							<label>
+								<input type="radio" />不同意
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="infoLineBox mgt0 mgb10 fn-clear">
+					<div class="infoTitile">
+						实际上线时间：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<input type="text" />
+					</div>
+				</div>
+				<div class="infoLineBox mgb15 mgt0 fn-clear">
+					<div class="infoTitile">
+						确认人：
+					</div>
+					<div class="checkContractInfo fn-left">
+						<span class="am-ft-gray">客服部</span>
+						<span class="am-ft-gray">主管</span>
+					</div>
+				</div>
+		</div>
+	</div>
+<div class="fn-clear"></div>
+<div>
+	<button type="button" class="btn btn-primary addBrandBtn" ng-click="goback()">确认</button>
+	<button type="button" class="btn btn-default mgl10" >取消</button>
+</div>
+</div>

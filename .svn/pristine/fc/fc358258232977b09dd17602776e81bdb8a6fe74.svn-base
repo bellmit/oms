@@ -1,0 +1,19 @@
+qyApp.controller('wdOrderDetailController', ['$scope', '$http', '$compile', 'Upload', function($scope, $http, $compile, Upload) {
+	//请求省文件
+	$http.get('/oms/static/base/json/province.json').success(function (data) {
+        $scope.provinces = data;
+        console.log('dasds')
+    });
+    //请求市文件
+    $http.get('/oms/static/base/json/city.json').success(function (data) {
+        $scope.citys = data;
+    });
+    //请求区文件
+    $http.get('/oms/static/base/json/district.json').success(function (data) {
+        $scope.districts = data;
+    });
+
+
+
+
+}])

@@ -1,0 +1,102 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<a href="javascript:;" class="line-btn forwardTop-goBack ng-scope" ng-click="gobackByRoute()" >返回</a>
+<div class="content-wrapper content-wrapper-itemshow content-wrapper-itemshow2">
+	<div class="col-lg-11 pl0 pr0 mgl20">
+		<div class="forwardTop-content " style="background: transparent;margin-left: 0px;">
+		<div class="forwardTop-left ">
+			<img src="http://static.qineasy.com/base/images/img_default_company.png"/>
+		</div>
+		<div class="forwardTop-right fn-clear" >
+			<div class="fn-left">
+				<div class="forwardTop-righttop">
+					<p href="javascript:;" class="forwardTop-rightTitl">西西小可 潮品女装</p>
+					<div class="fn-clear"></div>
+				</div>
+				<p>
+					<span>联系电话：西西小可&nbsp;&nbsp;15058109791</span>
+				</p>
+				<p>
+					<span class="fn-left">详细地址：浙江省&nbsp;&nbsp; 杭州市&nbsp;&nbsp; 拱墅区莫干山路</span>
+				</p>
+			</div>
+			<div class="fn-right info-right" style="margin-right: 0px;">
+				<p>
+					<span class="am-ft-gray">销售人员：大大 </span>
+				</p>
+				<p>
+					<span class="am-ft-gray">添加时间：2017/2/20 17:54</span>
+				</p>
+			</div>
+		</div>
+	</div>
+	</div>
+	
+	<!--<div class="contractSummmary fn-clear col-lg-11 pl0 pr0 mgl20 mgb10">
+		<div class="fn-left contractCount">
+			合同列表(5)
+		</div>
+		<div class="fn-right fn-clear">
+			<p class="fn-left  mgr5">
+				<span>总金额：</span>
+				<span class="moneyAmount"> {{contractAmount}}元</span>
+			</p>
+			<a href="javascript:;" class="btn fn-right btn-primary" ng-click="goRoute('orgInfo','contractAdd',{},'1')">添加合同</a>
+		</div>
+	</div>-->
+	<div class="col-lg-11 pl0 pr0 mgl20">
+		<table class="table contractTable">
+			<tr >
+				<th>合同编号</th>
+				<th>客户名称</th>
+				<th>服务类型</th>
+				<th>服务区域</th>
+				<th>产品类型</th>
+				<th>服务费用</th>
+				<th>服务期限</th>
+				<th>提交人</th>
+				<th>状态</th>
+				<th>操作</th>
+			</tr>
+			<!--<tr class="inServer" ng-repeat="contractList in contractLists track by $index">
+				<td ><a href="javascript:;" ng-click="goRoute('orgInfo','contractInfo',this.contractList,'1')">{{contractList.contractNum}}</a></td>
+				<td>{{contractList.totalprice}}元</td>
+				<td>{{contractList.serviceType}}</td>
+				<td>{{contractList.months}}个月</td>
+				<td>{{contractList.begindate}}至{{contractList.enddate}}</td>
+				<td class="deepColor">{{contractList.payTypeName}}</td>
+				<td class="deepColor">{{contractList.monthPay | number : 2}}</td>
+				<td class="deepColor">{{contractList.notPaidAmount}}</td>
+				<td class="deepColor">{{contractList.userName}}</td>
+				<td class="status">{{contractList.status}}</td>
+			</tr>-->
+			<tr class="inServer">
+				<td>HT0001</td>
+				<td>西西小可 潮品女装</td>
+				<td>值守</td>
+				<td>杭州</td>
+				<td>客服</td>
+				<td >9000</td>
+				<td >2017-01-01至2017-03-31</td>
+				<td >哒哒</td>
+				<td class="status1">待审核</td>
+				<td >
+					<span ng-click='contractInfo(obj)'>查看详情</span>
+				</td>
+			</tr>
+			<tr class="inServer">
+				<td>HT0002</td>
+				<td>西西小可 潮品女装</td>
+				<td>值守</td>
+				<td>杭州</td>
+				<td>客服</td>
+				<td >9000</td>
+				<td >2017-01-01至2017-03-31</td>
+				<td >哒哒</td>
+				<td class="status2">待审核</td>
+				<td >
+					<span ng-click='contractInfo(obj)'>查看详情</span>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>

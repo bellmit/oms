@@ -1,0 +1,173 @@
+qyApp.controller("departAddController", function($scope, $http, Upload, $compile, $route, $state, $stateParams) {	
+	//初始model	
+	$scope.mgType='';
+	$scope.departArea='';
+	$scope.departName='';
+	$scope.trueName='';
+	$scope.mgType='';
+	$scope.userName='';
+	$scope.passWord='';
+	$scope.parts1=[];
+	$scope.parts2=[];
+	$scope.parts3=[];
+	$scope.parts4=[];
+	$scope.selectDepartId1='';
+	$scope.selectDepartId2='';
+	$scope.selectDepartId3='';
+	$scope.selectDepartId4='';
+	
+	//主管类型
+	$scope.departType = [
+		{'id' : 13, 'name' : '商务主管'},
+		{'id' : 15, 'name' : '美工主管'},
+		{'id' : 17, 'name' : '运营主管'}
+	];
+	//部门所属区域
+	$scope.getDepartArea = function(){
+		$http({
+            method: 'post',
+            url: cas + 'depart/getDepartArea',
+            params: {
+	            keyParams: getKeyParams('{}', keyParams),
+	            jsonObject: getJsonObject('{}')
+	        }
+        }).success(function(data, stauts, headers, config) {
+            if (data.code == 1) {
+                $scope.departAreas  = data.data.departAreaList;
+                $scope.len = $scope.departAreas.length;
+            } else {
+                alertmsg("获取部门所属区域", "error");
+            }
+        })
+	};
+	$scope.getDepartArea();
+	
+	//判断有无部门区域
+	if($scope.len == 0){
+		$scope.showAreaSelect = false;
+		$scope.showAreaInput = true;
+	}else{
+		$scope.showAreaSelect = true;
+		$scope.showAreaInput = false;
+	}
+	
+	//查询部门列表
+ 	$scope.getDepartList = function(){
+ 		var jsonObject = "{\"pDepartId\":\""+0+"\"}";
+ 		$http({
+            method: 'post',
+            url: cas + 'depart/getDepartList',
+            params: {
+	            keyParams: getKeyParams(jsonObject, keyParams),
+	            jsonObject: getJsonObject(jsonObject)
+	        }
+       }).success(function(data, stauts, headers, config) {
+            if (data.code == 1) {
+                $scope.parts1 = data.data.departList;               
+            } else {
+                alertmsg("获取部门分组失败", "error");
+            }
+       })
+ 	};
+  	$scope.getDepartList();
+	
+	//查询部门分组
+	$scope.sortIdChange = function(id, type){
+		var jsonObject = "{\"pDepartId\":\""+id+"\"}";
+ 		$http({
+            method: 'post',
+            url: cas + 'depart/getDepartList',
+            params: {
+	            keyParams: getKeyParams(jsonObject, keyParams),
+	            jsonObject: getJsonObject(jsonObject)
+	        }
+       }).success(function(data, stauts, headers, config) {
+            if (data.code == 1) {
+				if(type == "1") {
+				    $scope.parts2 = [];
+				    $scope.parts3 = [];
+				    $scope.parts4 = [];
+			    	$scope.selectDepartId2='';
+					$scope.selectDepartId3='';
+					$scope.selectDepartId4='';
+				}else if(type == "2"){
+					$scope.parts2 = data.data.departList; 
+					$scope.parts3 = [];
+				    $scope.parts4 = [];
+					$scope.selectDepartId3='';
+					$scope.selectDepartId4='';
+				}else if(type == "3"){
+					$scope.parts3 = data.data.departList; 
+				    $scope.parts4 = [];
+					$scope.selectDepartId4='';
+				}
+            } else {
+                alertmsg("获取部门列表信息失败", "error");
+            }
+       })
+	}
+			
+	//添加部门
+	$scope.addDepart = function(){			
+		var jsonObject = $("#addDpartForm").serializeJson();
+		jsonObject = JSON.parse(jsonObject);
+		jsonObject.roleId = $scope.mgType;
+		if($scope.len!=0){
+			jsonObject.departArea = $scope.departArea.areaName;
+		}else{
+			jsonObject.departArea = $('#departArea2').val();
+		}
+		if($scope.departName==''){
+			alertmsg("请填写部门名称", "error");
+		}else if($scope.trueName==''){
+			alertmsg("请填写主管昵称", "error");
+		}else if($scope.mgType==''){
+			alertmsg("请选择部门主管类型", "error");
+		}else if($scope.userName==''){
+			alertmsg("请填写主管手机号", "error");
+		}else if($scope.passWord==''){
+			alertmsg("请设置初始密码", "error");
+		}else if($scope.selectDepartId1==''){
+			alertmsg("请选择部门分组", "error");		
+		}else{
+			if($scope.selectDepartId2==''){
+				jsonObject.pDepartId = $scope.selectDepartId1;
+			}else{
+				if($scope.selectDepartId3==''){
+					jsonObject.pDepartId = $scope.selectDepartId2;
+				}else{
+					if($scope.selectDepartId4==''){
+						jsonObject.pDepartId = $scope.selectDepartId3;
+					}else{
+						jsonObject.pDepartId = $scope.selectDepartId4;
+					}
+				}
+			}
+			jsonObject = JSON.stringify(jsonObject);
+			//console.info(jsonObject);
+			$http({
+	            method: 'post',
+	            url: cas + 'depart/addDepart',
+	            params: {
+		            keyParams: getKeyParams(jsonObject, keyParams),
+		            jsonObject: getJsonObject(jsonObject)
+		        }
+	        }).success(function(data, stauts, headers, config) {
+	            if (data.code == 1) {
+	                alertmsg("添加部门成功");
+	                $("#addDpartForm").reset();
+	            } else {
+	                alertmsg("添加部门失败", "error");
+	            }
+	        })
+		}		
+	};
+				
+	//返回
+	$scope.goBack = function(){
+		$state.go("departMgt", {
+ 			uiParams: ''
+ 		});
+	};
+	
+})

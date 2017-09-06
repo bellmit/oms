@@ -1,0 +1,78 @@
+qyApp.controller("rechargeRecordController", function($scope, $http, Upload, $compile, $route, $state, $stateParams) {
+	
+	/*查询条件*/
+	$scope.search={
+		memberId:"",
+		cardNum:"",
+		status:"2",
+		dateType:"2",
+		beginDate:"",
+		endDate:""
+	}
+	
+	
+	var from=0;
+	var pageSize=10;
+	$scope.count="0";
+	$scope.getChargeCard=function(){
+		$scope.search.beginDate=$('#beginDate').val();
+		$scope.search.endDate=$('#endDate').val();
+		$scope.jsonPage={"nub":""+from+"","size":""+pageSize+""};
+		$.extend($scope.search,$scope.jsonPage);
+		var jsonObject=JSON.stringify($scope.search);
+		$http({
+			method: 'post',
+			url: pos + 'chargeCard/getChargeCard',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.count=data.data.count;
+				$scope.chargeCardList=data.data.chargeCardList;
+				$scope.createPagePlugin($scope.count,pageSize);
+			} else {
+				alertmsg("获取充值卡列表失败", "error");
+			}
+		})
+	}
+	
+	$scope.createPagePlugin = function(total, pageSize) {
+		$("#paging").empty();
+		paging = pagePlugin.createPaging({
+			renderTo: 'paging',
+			total: total,
+			pageSize: pageSize
+		});
+		paging.goPage = function(from, to) {
+			$scope.page(from - 1, pageSize);
+		}
+	};
+	
+	$scope.page = function(from, pageSize) {
+		$scope.search.beginDate=$('#beginDate').val();
+		$scope.search.endDate=$('#endDate').val();
+		$scope.jsonPage={"nub":""+from+"","size":""+pageSize+""};
+		$.extend($scope.search,$scope.jsonPage);
+		var jsonObject=JSON.stringify($scope.search);
+		$http({
+			method: 'post',
+			url: pos + 'chargeCard/getChargeCard',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.chargeCardList=data.data.chargeCardList;
+			} else {
+				alertmsg("获取充值卡列表失败", "error");
+			}
+		})
+	}
+	
+	$scope.getChargeCard();
+	
+
+})

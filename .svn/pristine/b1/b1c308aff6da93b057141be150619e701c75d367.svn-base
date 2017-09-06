@@ -1,0 +1,8 @@
+qyApp.controller('addWdProController', ['$scope', '$http', '$compile', '$state', '$stateParams', function($scope, $http, $compile, $state, $stateParams) {
+	//规格切换
+	$scope.tabType='1';//初始化
+	$scope.shiftStandardTab=function(type){
+		$scope.tabType=type;
+	}
+}]);
+

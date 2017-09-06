@@ -1,0 +1,212 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!-- 主要 -->
+<div class="wrapper" style="position: inherit;">
+<!--------------- Content start ----------------->
+    <div class="content-wrapper" >
+        <div class="col-md-11 pageTitl">
+            <h2 class="am-ft-16 fn-left">充值记录</h2>
+        </div>
+        <div class="fn-clear"></div>
+        <!-- content info start -->
+        <section class="container-fluid">
+            <div class="row">
+                <!-- search start -->
+                <form class="form-horizontal" id="">
+                <div class="productSearch productSearch-type2 voucherList-search">
+                        <div class="row">
+                        	<div class="fn-left">
+                                    <span class="">会员ID：</span>
+                                    <input type="text" class="" name="" style="width: 145px;height: 30px;"/>
+                            </div>
+                        	<div class="fn-left  mgl20">
+                                    <span class="">卡号：</span>
+                                    <input type="text" class="" name="" style="width: 150px;height: 30px;"/>
+                            </div>
+                             <div class="fn-left mgl20">
+                                    <span class="fn-left">充值时间：</span>
+                                    <input class="laydate-icon " type="text" id="data" onclick="laydate({max: laydate.now()})" name="createDate" value="" readonly="readonly" placeholder="" style="height: 30px;width: 110px;" />
+									<span class="mgl5 mgr5">至</span>
+									<input class="laydate-icon " type="text" id="data1" onclick="laydate({max: laydate.now()})" name="endDate" value="" readonly="readonly" placeholder="" style="height: 30px;width: 110px;" />
+                            </div>
+                            <div class="fn-left mgl20">
+                                <button type="button" class="grey-btn mgr20" ng-click="">查询</button>
+                            </div>
+                        </div>
+                </div>
+                </form>
+                <!-- List start -->
+           <div class="proList-nav proList-nav-wd" style="border: none;">
+            <div class="proTop" style="border: 1px solid #dcdce7;"> 
+                <span class="fn-left">查询结果（共4条记录）</span>
+                <button  type="button" class="line-btn fn-right" ng-click="">导出excel</button>
+                <div class="fn-clear"></div>
+            </div>
+            <form id="wdProductListForm">
+                     <table class="table table-hover table-striped unoinListTable voucherListTable" >
+                    <tr class="">
+                        <th scope="col" style="width: 9%;">卡号</th>
+                        <th scope="col" style="width: 17%;">充值时间</th>
+                        <th scope="col" style="width: 8%;">金额</th>
+                        <th scope="col" style="width: 13%;">会员ID</th>
+                        <th scope="col" style="width: 9%;">密码</th>
+                        <th scope="col" style="width: 17%;">录入时间</th>
+                        <th scope="col" style="width: 17%;">激活时间</th>
+                        <th scope="col" >充值方式</th>
+                    </tr>
+                       <tr>
+                    	<td>3534456546</td>
+                    	<td>2017-03-28  19:30:00</td>
+                    	<td>0.00</td>
+                    	<td>会员ID</td>
+                    	<td>23143531</td>
+                    	<td>2017-03-21  18:30:00</td>
+                    	<td>2017-03-28  17:30:00</td>
+                    	<td>
+                    		<span class="fn-hide">前台</span>
+                    		<span class="">后台</span>
+                    	</td>
+                    </tr>
+                  <tr>
+                    	<td>3534456546</td>
+                    	<td>2017-03-28  19:30:00</td>
+                    	<td>0.00</td>
+                    	<td>会员ID</td>
+                    	<td>23143531</td>
+                    	<td>2017-03-21  18:30:00</td>
+                    	<td>2017-03-28  17:30:00</td>
+                    	<td>
+                    		<span class="fn-hide">前台</span>
+                    		<span class="">后台</span>
+                    	</td>
+                    </tr>
+                </table>
+              <!-- List end -->
+            </form>
+            <div class="fn-clear"></div>
+            </div>
+          <div class="soldOut-batch fn-left" style="width: 33%;">
+          		<label class="label-input am-ft-d4">
+                    <input type="checkbox" id="all" name="" value=""  ng-click="selProAll()"/>全选
+          		</label>
+                    <button type="button" class="btn btn-default  white-blue-btn" ng-click="batchAdd()">批量激活</button>
+                    <button type="button" class="btn btn-default white-blue-btn" ng-click="batchDown()">导出excel</button>
+                <div class="fn-clear"></div>
+            </div>
+        </div>
+        </section>
+	    <!--分页 start-->
+	    <div class="pagelist priv-pagelist" style="width: 92.5% !important;">
+	    	<div id="paging"></div>    
+	    </div>
+	    <!--分页 end-->
+   </div>
+    <!--下架弹框-->
+    <div class="maskbgCover  fn-hide" id="downProduct">
+	<div class="isTipsFrame ">
+		<div class="isTipsFrameTitle">
+			<span class="am-ft-14 am-ft-black">提示</span>
+			<img class="fn-right closeDia" ng-click="closeDia()" src="../static/base/images/closelogo.png" />
+		</div>
+		<div class="isTipsFrameContent am-ft-14 fn-clear">
+			<div class="fn-left wdpro-frameL">
+				<img src="../static/base/images/icon_cue.png" />
+			</div>
+			<div class="fn-left wdpro-frameR">
+				<p class="am-ft-black am-ft-14">确认下架</p>
+				<p class="am-ft-black am-ft-12">下架后，商品不对用户可见，是否确认下架？ </p>
+			</div>
+		</div>
+		<div class="isTipsFrameFooter">
+			<button class="closeDia whiteGroundBlueBtn" ng-click="">取消</button>
+			<button class="blueGroundWhiteBtn" ng-click="">下架</button>
+		</div>
+	</div>
+</div>
+    <!--/下架弹框-->
+    <!--激活-->
+<div class="maskBgw fn-hide">
+<div class="mask-container mask-containera">
+	<div class="mask-top fn-clear">
+		<p class="fn-left">激活</p>
+		<a href="javascript:;">
+			<img ng-click="closedialog()" src="http://static.qineasy.com/base/images/closelogo.png" class="fn-right" alt="" />
+		</a>
+	</div>
+	<div class="mask-content mask-contenta" style="padding-right: 100px;">
+		<form action="" class="info-form fn-clear" id="">
+			<div class="continue-frame">
+				<div class="continue-frame-content">
+					<span class="am-ft-14 color666">卡号：</span>
+					<span>1234567</span>
+				</div>
+				<div>
+					<span class="am-ft-14 color666">金额：</span>
+					<input type="text" class="mgr5 w70 h30" />
+					<span>元</span>
+				</div>
+				<div>
+					<span class="am-ft-14 color666">备注：</span>
+					<input type="text" class="w200 h30" />
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="mask-bottom fn-clear">
+		<button class="commit fn-left" ng-click="">确认</button>
+		<button class="cancel fn-left" ng-click="">取消</button>
+	</div>
+</div>
+</div>
+    <!--/激活-->
+    <!--作废-->
+<div class="maskBgw">
+<div class="mask-container mask-containera">
+	<div class="mask-top fn-clear">
+		<p class="fn-left">确认作废</p>
+		<a href="javascript:;">
+			<img ng-click="closedialog()" src="http://static.qineasy.com/base/images/closelogo.png" class="fn-right" alt="" />
+		</a>
+	</div>
+	<div class="mask-content mask-contenta" style="padding-right: 100px;padding-bottom: 45px;">
+		<form action="" class="info-form fn-clear" id="">
+			<div class="continue-frame">
+				<div class="continue-frame-content">
+					<span class="am-ft-14 color666">卡号：</span>
+					<span>1234567</span>
+				</div>
+				<div>
+					<span class="am-ft-14 color666">金额：</span>
+					<span>200元</span>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="mask-bottom fn-clear">
+		<button class="commit fn-left" ng-click="">确认</button>
+		<button class="cancel fn-left" ng-click="">取消</button>
+	</div>
+</div>
+</div>
+    <!--/作废-->
+<script type="text/javascript">
+    //搜索方式
+    $(".isTipsFrame").center();
+    $(".mask-container").center();
+  //二维码尺寸滑块选择
+    $('.set-codeSize').click(function(){
+        $('.codeSize-dialog').toggle();
+    });
+    function DoSaveAsIMG(proModelid) {  
+        if (document.getElementById("IframeReportImg"+proModelid).src != "about:blank")  
+            document.frames["IframeReportImg"+proModelid].document.execCommand("SaveAs",true,"C://Users//时爽//Downloads//123.png");          
+    }
+	/* $('.searchtp').change(function(){
+	        if($(this).prop('checked') && $(this).attr('num')==1){
+	            $('.productSearch-type1').show();
+	            $('.productSearch-type2').hide();
+	        }else if($(this).prop('checked') && $(this).attr('num')==2 ){
+	            $('.productSearch-type2').show();
+	            $('.productSearch-type1').hide();
+	        }
+	 }); */
+</script>

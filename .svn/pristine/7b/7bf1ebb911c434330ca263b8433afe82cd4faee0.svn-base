@@ -1,0 +1,212 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+    <!--------------- Content start ----------------->
+    <div class="content-wrapper fn-clear">
+        <div class="col-md-11 pageTitl no-border">
+        	<a href="javascript:;" class="btn btn-default fn-right mgl20" ng-show="showBack" ng-click="gobackDpart()">返回</a> 
+            <a href="javascript:;" class="btn btn-primary fn-right" ng-click="goToAddMember()">添加人员</a>                
+        </div>
+        <div class="fn-clear"></div>
+
+        <div class="ManColTable col-lg-12">
+        	<div class="saleSearch saleSearch2">
+        		<form class="form-horizontal">
+				  <div class="form-group col-sm-10 mgb0">				  	
+				    <label class="nowraps-text control-label">用户名</label>
+				    <div class="col-sm-4 pl0">
+				      <input type="text" class="form-control mgt5" placeholder="请输入手机号" ng-model="username" />
+				    </div>
+				    <div class="form-group col-sm-3">
+				  	 <button type="submit" class="btn btn-primary" ng-click="getUserListTB()">查询</button>
+				    </div>
+				  </div>
+				  <!--<div class="form-group col-sm-3">				  	
+				    <label class="nowraps-text control-label">区域</label>
+				    <div class="col-sm-10">
+				      <select class="form-control">
+				      	<option>杭州</option>
+				      	<option>武汉</option>
+				      	<option>安徽</option>
+				      </select>
+				    </div>
+				  </div>
+				  <div class="form-group col-sm-3">				  	
+				    <label class="nowraps-text control-label">部门</label>
+				    <div class="col-sm-10">
+				      <select class="form-control">
+				      	<option>客服部</option>
+				      	<option>美工部</option>
+				      	<option>运营部</option>
+				      	<option>培训部</option>
+				      </select>
+				    </div>
+				  </div>-->				  
+				</form>  
+        	</div>
+            <div class="table-responsive PrivTable storesMgt-Table">
+                <table class="table table-hover table-striped table-bordered">
+                    <tr ng-if="orgTye==6">
+                        <th scope="col">手机号</th>
+                        <th scope="col">昵称</th>
+                        <th scope="col">邮箱</th>
+                        <th scope="col">部门</th>
+                        <th scope="col">区域</th>
+                        <th scope="col">职位</th>                       
+                        <!--<th scope="col">负责商户</th>
+                        <th scope="col">已发布商品</th>
+                        <th scope="col">未发布商品</th>-->
+                        <th scope="col">操作</th>
+                    </tr>
+                    <tr ng-if="orgTye==1">
+                        <th scope="col">手机号</th>
+                        <th scope="col">昵称</th>
+                        <th scope="col">邮箱</th>
+                        <th scope="col">部门</th>
+                        <th scope="col">区域</th>
+                        <th scope="col">职位</th>
+                        <th scope="col">操作</th>
+                    </tr>
+                    <tr ng-repeat="userlist in userList" ng-if="userlist.roleId==1">
+                        <td><a href="javascript:;">{{userlist.userName}}</a></td>
+                        <td>{{userlist.trueName}}</td>
+                        <td>{{userlist.email}}</td>
+                        <td>{{userlist.departName}}</td>
+                        <td>{{userlist.departArea}}</td>
+                        <td roleid="{{userlist.roleId}}">{{userlist.roleName}}</td>
+                        <!--<td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>-->
+                        <td>———</td>
+                    </tr>
+                    <tr ng-repeat="userlist in userList" ng-class="{true:'logout'}[userlist.status==2]" ng-if="orgTye==6&&userlist.roleId!=1">
+                        <td>{{userlist.userName}}</td>
+                        <td>{{userlist.trueName}}</td>
+                        <td>{{userlist.email}}</td>
+                        <td>{{userlist.departName}}</td>
+                        <td>{{userlist.departArea}}</td>
+                        <td roleid="{{userlist.roleId}}">{{userlist.roleName}}</td>
+                        <!--<td ng-if="userlist.status==1"><a href="javascript:;" ng-click="goToMemberDet(this)">{{userlist.orgNum}}个</a></td>
+                        <td ng-if="userlist.status==2"></td>
+                        <td ng-if="userlist.status==1"><a href="javascript:;" ng-click="goToMemberDet(this)">{{userlist.doneProNum}}个</a></td>
+                        <td ng-if="userlist.status==2"></td>
+                        <td ng-if="userlist.status==1"><a href="javascript:;" ng-click="goToMemberDet(this)">{{userlist.unDoProNum}}个</a></td>
+                        <td ng-if="userlist.status==2"></td>-->
+                        <td ng-if="userlist.status==1">
+                        	<a href="javascript:;" class="mgr5" ng-click="resetPswd(userlist)">重置密码</a>
+                            <a href="javascript:;" class="mgr5" ng-click="goToEditMember(userlist)">编辑</a>
+                            <a href="javascript:;" class="am-ft-red logoutBtn" ng-click="logOut(userlist)">注销</a>
+                        </td>
+                        <td ng-if="userlist.status==2">
+                           	 已注销
+                        </td>
+                    </tr>
+                    <!--<tr ng-repeat="userlist in userList" ng-if="userlist.roleId==3 && orgTye==6">
+                        <td>{{userlist.userName}}</td>
+                        <td>{{userlist.trueName}}</td>
+                        <td>{{userlist.email}}</td>
+                        <td>{{userlist.departName}}</td>
+                        <td>{{userlist.departArea}}</td>
+                        <td roleid="{{userlist.roleId}}">{{userlist.roleName}}</td>
+                        <!--<td>{{userlist.orgName}}</td>
+                        <td>———</td>
+                        <td>———</td>
+                        <td><a href="javascript:;" ng-click="resetPswd(userlist)">重置密码</a></td>
+                    </tr>
+                    <tr ng-repeat="userlist in userList" ng-class="{true:'logout'}[userlist.status==2]" ng-if="userlist.roleId==4 && orgTye==6">
+                        <td>{{userlist.userName}}</td>
+                        <td>{{userlist.trueName}}</td>
+                        <td>{{userlist.email}}</td>
+                        <td>{{userlist.departName}}</td>
+                        <td>{{userlist.departArea}}</td>
+                        <td roleid="{{userlist.roleId}}">{{userlist.roleName}}</td>
+                        <!--<td>{{userlist.orgName}}</td>
+                        <td>———</td>
+                        <td>———</td>
+                        <td ng-if="userlist.status==1">
+                        	<a href="javascript:;" class="mgr5" ng-click="resetPswd(userlist)">重置密码</a>
+                        	<a href="javascript:;" class="am-ft-red logoutBtn" ng-click="logOut(userlist)">注销</a>
+                        </td>
+                        <td ng-if="userlist.status==2">
+                           	 已注销
+                        </td>
+                    </tr>-->
+                    <tr ng-repeat="userlist in userList" ng-if="userlist.roleId==3 && orgTye==1">
+                        <td>{{userlist.userName}}</td>
+                        <td>{{userlist.trueName}}</td>
+                        <td>{{userlist.email}}</td>
+                        <td>{{userlist.departName}}</td>
+                        <td>{{userlist.departArea}}</td>
+                        <td roleid="{{userlist.roleId}}">{{userlist.roleName}}</td>
+                        <td>———</td>
+                    </tr>
+                    <tr ng-repeat="userlist in userList" ng-class="{true:'logout'}[userlist.status==2]" ng-if="userlist.roleId==4 && orgTye==1">
+                        <td>{{userlist.userName}}</td>
+                        <td>{{userlist.trueName}}</td>
+                        <td>{{userlist.email}}</td>
+                        <td>{{userlist.departName}}</td>
+                        <td>{{userlist.departArea}}</td>
+                        <td roleid="{{userlist.roleId}}">{{userlist.roleName}}</td>
+                        <td ng-if="userlist.status==1">
+                        	<a href="javascript:;" class="mgr5" ng-click="resetPswd(userlist)">重置密码</a>
+                        	<a href="javascript:;" class="mgr5" ng-click="goToEditMember(userlist)">编辑</a>
+                        	<a href="javascript:;" class="am-ft-red logoutBtn" ng-click="logOut(userlist)">注销</a>
+                        </td>
+                        <td ng-if="userlist.status==2">
+                           	 已注销
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="fn-clear"></div>
+             <!--分页 start-->
+		     <div class="pagelist priv-pagelist">
+		    	 <div id="pagingMem"></div>    
+		     </div>
+	     	 <!--分页 end-->
+        </div>
+       
+    </div>
+
+    <div class="fn-clear"></div>
+
+<!--删除弹窗-->
+<div class="am-dialog DelDialog fn-hide" id="logOutDialog2">
+    <div class="am-dialog-wrap">
+        <div class="am-dialog-body">
+            <h2 class="am-dialog-brief">是否确定注销</h2>
+        </div>
+        <div class="dialogBtn am-flexbox">
+            <button type="button" class="am-flexbox-item btn am-button confirmExecute" am-bg="blue" ng-click="cancellation()">确认</button>
+            <button type="button" class="am-flexbox-item btn am-button closedialog" am-bg="white">取消</button>
+            <div class="fn-clear"></div>
+        </div>
+    </div>
+</div>
+<!--/删除弹窗-->
+
+<!--重置密码弹窗-->
+<div class="am-dialog DelDialog fn-hide" id="resetPwDialog">
+    <div class="am-dialog-wrap">
+        <div class="am-dialog-body">
+            <h2 class="am-dialog-brief">是否确定重置密码？</h2>
+        </div>
+        <div class="dialogBtn am-flexbox">
+            <button type="button" class="am-flexbox-item btn am-button confirmExecute" am-bg="blue" ng-click="resetPswdCnf()">确认</button>
+            <button type="button" class="am-flexbox-item btn am-button closedialog" am-bg="white">取消</button>
+            <div class="fn-clear"></div>
+        </div>
+    </div>
+</div>
+<!--/重置密码弹窗-->
+
+<script type="text/javascript">
+	$('#logOutDialog2').center();
+	$('#resetPwDialog').center();
+    $(function(){
+        //关闭弹窗
+        $('.closedialog').click(function(){
+            $('#logOutDialog2,.maskBg').hide();
+            $('#resetPwDialog').hide();
+        })
+    })
+
+</script>

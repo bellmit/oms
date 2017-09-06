@@ -1,0 +1,252 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--------------- Content start ----------------->
+<!-- <a href="javascript:;" class="line-btn forwardTop-goBack" ng-if="type=='1'" ng-click="gobWorkBench()" >返回</a> -->
+<div class="content-wrapper	saleSumary-wrapper fn-clear">
+	<div class="firstTab col-lg-10 mgl20">
+		<ul class="fn-clear">
+			<li class="fn-left" ng-class="{true:'tabactive'}[productTab=='1']" ng-click="shiftProductTab('1','thisMonth')">本月</li>
+			<li class="fn-left" ng-class="{true:'tabactive'}[productTab=='2']" ng-click="shiftProductTab('2','thisYear')">本年</li>
+			<li class="fn-left" ng-class="{true:'tabactive'}[productTab=='3']" ng-click="shiftProductTab('3','random')">其他时间查询</li>
+			<li class="fn-left" ng-class="{true:'tabactive'}[productTab=='4']" ng-click="shiftProductTab('4','other')">总计</li>
+		</ul>
+	</div>
+	<div class="col-lg-10  pl0 mgl5 mgt20 saleDetail">
+		<div class="col-lg-8" ng-show="productTab=='3'">
+			<div class="searchByTime pdl20 pt10 pb10">
+				<div class="fn-left mgr15 ">
+					<input type="text" id="start" placeholder="开始日期" class="mgr5 laydate-icon"> 至
+					<input type="text" id="end" placeholder="结束日期" class="mgl5  laydate-icon" />
+				</div>
+				<button ng-click="searchData()">查询</button>
+			</div>
+		</div>
+		<div class="col-lg-10 saleSummary" ng-show="productTab!='3'||isRandom">
+			<ul class="fn-clear">
+				<li class="fn-left constractCount" ng-if="productTab!='4'">
+					<p>新增客户总数</p>
+					<p ng-bind='salesList.addShopCount'></p>
+				</li>
+				<li class="fn-left newclient " ng-if="productTab=='4'">
+					<p>客户总数</p>
+					<p ng-bind='salesList.addShopCount'></p>
+				</li>
+				<li class="fn-left moneyAmount" ng-if="productTab!='4'">
+					<p>新增合同总数</p>
+					<p ng-bind='salesList.contractCount'></p>
+				</li>
+				<li class="fn-left moneyAmount " ng-if="productTab=='4'">
+					<p>合同总数</p>
+					<p ng-bind='salesList.contractCount'></p>
+				</li>
+				<li class="fn-left notDeadCon">
+					<p>销售总金额</p>
+					<p ng-bind='salesList.allTotalprice'></p>
+				</li>
+				<li class="fn-left moneyCome">
+					<p>待收金额</p>
+					<p ng-bind='salesList.notPaidAmount'></p>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="col-lg-12 saleSummary" ng-if='productTab!="3" || isRandom'>
+			<div class="bread_path" >
+				<a href="javascript:;" class="bread_nav" ng-click="getNextDeparta('',departId1)" onclick="removNext(this)">总部</a>
+			</div>
+			<table class="table saleSummaryDetail">
+				<tr >
+					<th scope="col" width="11%">部门</th>
+					<th ng-if="productTab!='4'" scope="col" width="9%">新增合同数</th>
+					<th ng-if="productTab=='4'" scope="col" width="9%">合同数</th>
+					<th scope="col" width="10%">合同店铺数</th>
+					<th scope="col" width="10%">未到期合同数</th>
+					<th scope="col" width="10%">销售金额</th>
+					<th scope="col" width="10%">待收金额</th>
+					<th scope="col" width="10%">操作</th>
+				</tr>
+				<tr ng-repeat="group in groupLists">
+					<td>{{group.groupName}}</td>
+					<td>{{group.contractCount}}</td>
+					<td>{{group.shopNum}}</td>
+					<td>{{group.contractInService}}</td>
+					<td>{{group.allTotalprice}}</td>
+					<td>{{group.notPaidAmount}}</td>
+					<td>
+						<span ng-if="group.childFlag=='true'" class="am-ft-blue"  ng-click='queryContractDetil(group)'>查看详情</span>
+						<span ng-if="group.childFlag!='true'" class="hasChildFlag" >查看详情</span>
+					</td>
+				</tr>
+				<!--<tr>
+					<td>武汉商务部</td>
+					<td>1</td>
+					<td>5</td>
+					<td>1</td>
+					<td>2</td>
+					<td>10000</td>
+					<td>
+						<span class="am-ft-blue">查看详情</span>
+					</td>
+				</tr>
+				<tr>
+					<td>合肥商务部</td>
+					<td>4</td>
+					<td>5</td>
+					<td>1</td>
+					<td>2</td>
+					<td>10000</td>
+					<td>
+						<span class="am-ft-blue">查看详情</span>
+					</td>
+				</tr>-->
+			</table>
+		</div>	
+		<!--<div class="col-lg-12 saleSummary">
+			<table class="table saleSummaryDetail">
+				<tr >
+					<th scope="col" width="12%">地区</th>
+					<th scope="col" width="8%">部门</th>
+					<th scope="col" width="8%">客户总数</th>
+					<th scope="col" width="10%">合同总数</th>
+					<th scope="col" width="10%">合同店铺数</th>
+					<th scope="col" width="10%">未到期合同数</th>
+					<th scope="col" width="10%">销售金额</th>
+					<th scope="col" width="10%">待收金额</th>
+					<th scope="col" width="10%">操作</th>
+				</tr>
+				<tr>
+					<td>杭州商务部</td>
+					<td>新签1部</td>
+					<td>4</td>
+					<td>1</td>
+					<td>5</td>
+					<td>1</td>
+					<td>2</td>
+					<td>10000</td>
+					<td>10000</td>
+					<td>
+						<span class="am-ft-blue">查看详情</span>
+					</td>
+				</tr>
+				<tr>
+					<td>杭州商务部</td>
+					<td>新签2部</td>
+					<td>4</td>
+					<td>1</td>
+					<td>5</td>
+					<td>1</td>
+					<td>2</td>
+					<td>10000</td>
+					<td>10000</td>
+					<td>
+						<span class="am-ft-blue">查看详情</span>
+					</td>
+				</tr>
+			</table>
+		</div>	
+		<div class="col-lg-12 saleSummary">
+			<table class="table saleSummaryDetail">
+				<tr >
+					<th scope="col" width="10%">地区</th>
+					<th scope="col" width="8%">部门</th>
+					<th scope="col" width="8%">业务组</th>
+					<th scope="col" width="8%">客户数</th>
+					<th scope="col" width="9%">新增客户数</th>
+					<th scope="col" width="8%">合同数</th>
+					<th scope="col" width="8%">新增合同数</th>
+					<th scope="col" width="10%">未到期合同数</th>
+					<th scope="col" width="10%">销售金额</th>
+					<th scope="col" width="10%">待收金额</th>
+					<th scope="col" width="10%">操作</th>
+				</tr>
+				<tr>
+					<td>杭州商务部</td>
+					<td>新签2部</td>
+					<td>商务1部</td>
+					<td>4</td>
+					<td>1</td>
+					<td>5</td>
+					<td>1</td>
+					<td>2</td>
+					<td>10000</td>
+					<td>10000</td>
+					<td>
+						<span class="am-ft-blue">查看详情</span>
+					</td>
+				</tr>
+				<tr>
+					<td>杭州商务部</td>
+					<td>新签2部</td>
+					<td>商务1部</td>
+					<td>4</td>
+					<td>1</td>
+					<td>5</td>
+					<td>1</td>
+					<td>2</td>
+					<td>10000</td>
+					<td>10000</td>
+					<td>
+						<span class="am-ft-blue">查看详情</span>
+					</td>
+				</tr>
+			</table>
+		</div>	
+		<div class="col-lg-12 saleSummary">
+			<table class="table saleSummaryDetail">
+				<tr >
+					<th scope="col" width="10%">地区</th>
+					<th scope="col" width="8%">部门</th>
+					<th scope="col" width="8%">业务组</th>
+					<th scope="col" width="8%">销售人员</th>
+					<th scope="col" width="7%">客户数</th>
+					<th scope="col" width="8%">新增客户数</th>
+					<th scope="col" width="8%">合同数</th>
+					<th scope="col" width="8%">新增合同数</th>
+					<th scope="col" width="9%">未到期合同数</th>
+					<th scope="col" width="9%">销售金额</th>
+					<th scope="col" width="10%">待收金额</th>
+					<th scope="col" width="10%">操作</th>
+				</tr>
+				<tr>
+					<td>杭州商务部</td>
+					<td>新签2部</td>
+					<td>商务1部</td>
+					<td>哒哒</td>
+					<td>4</td>
+					<td>1</td>
+					<td>5</td>
+					<td>1</td>
+					<td>2</td>
+					<td>10000</td>
+					<td>10000</td>
+					<td>
+						<span class="am-ft-blue">查看详情</span>
+					</td>
+				</tr>
+				<tr>
+					<td>杭州商务部</td>
+					<td>新签2部</td>
+					<td>商务1部</td>
+					<td>哒哒</td>
+					<td>4</td>
+					<td>1</td>
+					<td>5</td>
+					<td>1</td>
+					<td>2</td>
+					<td>10000</td>
+					<td>10000</td>
+					<td>
+						<span class="am-ft-blue">查看详情</span>
+					</td>
+				</tr>
+			</table>
+		</div>	-->
+		<div class="col-md-10">
+			<div id="paging2"></div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	function removNext(a){
+		$(a).nextAll().remove();
+	}
+</script>

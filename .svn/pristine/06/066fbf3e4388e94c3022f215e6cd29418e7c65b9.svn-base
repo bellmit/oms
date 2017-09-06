@@ -1,0 +1,143 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--<div class="saleSearch">
+	<div class="clientName">
+		<span>客户名称：</span><input type="text" placeholder="请输入客户名称" />
+	</div>
+	<div class="clientInfo fn-clear">
+		<p class="fn-left pdr20 mgt20">
+			<span>地区：</span>
+			<select name="" id="">
+				<option value="">全部</option>
+				<option value="">地区</option>
+			</select>
+		</p>
+		<p class="fn-left pdr20 mgt20">
+			<span>部门：</span>
+			<select name="" id="">
+				<option value="">全部</option>
+				<option value="">部门1</option>
+			</select>
+		</p>
+		<p class="fn-left pdr20 mgt20">
+			<span>销售人员：</span>
+			<select name="" id="">
+				<option value="">全部</option>
+				<option value="">销售人员12</option>
+			</select>
+		</p>
+		<p class="fn-left mgt20">
+			<span>状态：</span>
+			<select name="" id="">
+				<option value="">全部</option>
+				<option value="">状态1</option>
+			</select>
+		</p>
+		<p class="fn-left pdl15 mgt20">
+			<button>查询</button>
+		</p>
+	</div>
+</div>-->
+
+<table class="table clientTable">
+	<tr>
+		<th scope="col" width="10%">客户名称</th>
+		<th scope="col" width="8%">店铺总数</th>
+		<th scope="col" width="8%">合同总数</th>
+		<th scope="col" width="10%">合同总金额</th>
+		<th scope="col" width="15%">服务期限</th>
+		<th scope="col" width="12%">销售人</th>
+		<th scope="col" width="10%">状态</th>
+		<th scope="col" width="10%">操作</th>
+	</tr>
+	<!--<tr ng-repeat="shopList in shopLists track by $index" ng-class="{'服务中':'inServer','已到期':'notinServer'}[shopList.status]">
+		<td class="fn-clear pl0 pr0 pt0 pb0">
+			<div class="fn-left shopLoge">
+				<img ng-src="{{shopList.shopLogo}}" alt="" />
+			</div>
+			<div class="fn-left shopInfo">
+				<p class="shopNamea"><a href="javascript:;" ng-click="addData('saleManage','orgInfo',this.shopList,'1')">{{shopList.shopName}}</a></p>
+				<p class="shopPhone">
+					<span>联系电话：</span>
+					<span>{{shopList.shopTel}}</span>
+				</p>
+				<p class="shopAddr">
+					<span>{{shopList.province}}</span> &nbsp;&nbsp;
+					<span>{{shopList.city}}</span>
+				</p>
+			</div>
+		</td>
+		<td class="deepColor">{{shopList.contractCount}}份</td>
+		<td class="deepColor">{{shopList.totalprice}}元</td>
+		<!--<td>客服托管（无字段）</td>-->
+		<!--<td>
+			<span ng-if="shopList.enddate != ''">{{shopList.enddate}}</span>
+			<span ng-if="shopList.enddate == ''">——</span>
+		</td>
+		<td>
+			<span ng-if="shopList.businessUserName != ''">{{shopList.businessUserName}}</span>	
+			<span ng-if="shopList.businessUserName == ''">——</span>	
+		</td>
+		<td >{{shopList.status}}</td>-->
+		<!--<td><a href="javascript:;" ng-click="addData('saleManage','orgInfo',this.shopList,'1')">查看详情</a></td>
+	</tr>-->
+	<tr class="inServer">
+		<td  class="fn-clear pl0 pr0 pt0 pb0">
+			西溪小可 潮品女装
+		</td>
+		<td>
+			<span>2个</span>
+		</td>
+		<td>2份</td>
+		<td>9000</td>
+		<td>2016-12-22至2017-03-31</td>
+		<td>李雪江</td>
+		<td>服务中</td>
+		<td >
+			<span ng-click="clientInfo()">查看详情</span>
+		</td>
+	</tr>
+	<tr class="inServer">
+		<td >
+			彼岸猫专柜
+		</td>
+		<td>
+			<span>2个</span>
+		</td>
+		<td>2份</td>
+		<td>9000</td>
+		<td>2016-12-22至2017-03-31</td>
+		<td>李雪江</td>
+		<td>服务中</td>
+		<td>
+			<span ng-click="clientInfo()">查看详情</span>
+		</td>
+	</tr>
+<!--<tr class="inServer">
+		<td  class="fn-clear pl0 pr0 pt0 pb0">
+			<div class="fn-left shopLoge">
+				<img src="http://qineasyimg.oss.aliyuncs.com/shop-img/Logo/11629/Logo/20161025080903986.jpg" alt="" />
+			</div>
+			<div class="fn-left shopInfo">
+				<p class="shopNamea">宁波枚晓服饰有限公司</p>
+				<p class="shopPhone">
+					<span>联系电话：</span>
+					<span>13577554455</span>
+				</p>
+				<p class="shopAddr">
+					<span>浙江</span> &nbsp;&nbsp;
+					<span>杭州</span>
+				</p>
+			</div>
+		</td>
+		<td>4份</td>
+		<td>8000.00元</td>
+		<td>客服托管</td>
+		<td>2016-12-22</td>
+		<td>李雪江</td>
+		<td>服务中</td>
+		<td>查看详情</td>
+	</tr>-->
+</table>
+<div class="pagelist priv-pagelist">
+	<div id="paging2"></div>
+</div>

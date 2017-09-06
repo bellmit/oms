@@ -1,0 +1,184 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<a href="javascript:;" class="line-btn forwardTop-goBack ng-scope" ng-click="gobackByRoute()" >返回</a>
+<div class="content-wrapper content-wrapper-itemshow content-wrapper-itemshow2 fn-clear">
+<div class="col-lg-11 col-lg-11 pl0 pr0 mgl20 mgb10">
+	<div class="forwardTop-content fn-left">
+		<div class="forwardTop-left">
+			<img ng-src="{{pageInfo.shopLogo}}" />
+			<!--<img src="http://static.qineasy.com/base/images/img_default_company.png"/>-->
+		</div>
+		<div class="forwardTop-right fn-clear" style="width:80%">
+			<div class="fn-left">
+				<div class="forwardTop-righttop">
+					<p href="javascript:;" class="forwardTop-rightTitl">{{pageInfo.shopName}}</p>
+					<div class="fn-clear"></div>
+				</div>
+				<p>
+					<span>联系电话：{{pageInfo.contacts}}&nbsp;&nbsp;{{pageInfo.shopTel}}</span>
+				</p>
+				<p>
+					<span class="fn-left">详细地址：{{pageInfo.province}}  {{pageInfo.city}}  {{pageInfo.district}}{{pageInfo.shopAddr}}</span>
+				</p>
+			</div>
+			<div class="fn-right info-right" style="margin-right: 0px;">
+				<p>
+					<span class="am-ft-gray">销售人员：{{pageInfo.businessUserName}} </span>
+				</p>
+				<p>
+					<span class="am-ft-gray">添加时间：{{pageInfo.createTime}}</span>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+	<div class="contractSummmary fn-clear col-lg-11 pl0 pr0 mgl20 mgb10">
+		<div class="fn-left contractCount">
+			合同列表({{count}})
+		</div>
+		<div class="fn-right fn-clear">
+			<p class="fn-left  mgr5">
+				<span>总金额：</span>
+				<span class="moneyAmount"> {{contractAmount}}元</span>
+			</p>
+			<a href="javascript:;" class="btn fn-right btn-primary" ng-click="goRoute('orgInfo','contractAdd',{},'1')">添加合同</a>
+		</div>
+	</div>
+
+	<div class="col-lg-11 pl0 pr0 mgl20">
+		<table class="table contractTable">
+			<tr >
+				<th>合同编号</th>
+				<th>总金额</th>
+				<th>服务类型</th>
+				<th>服务周期</th>
+				<th>到期时间</th>
+				<th>付费方式</th>
+				<th>当月应付金额</th>
+				<th>待收金额</th>
+				<th>销售人员</th>
+				<th>状态</th>
+			</tr>
+			<tr class="inServer" ng-repeat="contractList in contractLists track by $index">
+				<td ><a href="javascript:;" ng-click="goRoute('orgInfo','contractInfo',this.contractList,'1')">{{contractList.contractNum}}</a></td>
+				<td>{{contractList.totalprice}}元</td>
+				<td>{{contractList.serviceType}}</td>
+				<td>{{contractList.months}}个月</td>
+				<td>{{contractList.begindate}}至{{contractList.enddate}}</td>
+				<td class="deepColor">{{contractList.payTypeName}}</td>
+				<td class="deepColor">{{contractList.monthPay | number : 2}}</td>
+				<td class="deepColor">{{contractList.notPaidAmount}}</td>
+				<td class="deepColor">{{contractList.userName}}</td>
+				<td class="status">{{contractList.status}}</td>
+			</tr>
+			<!--<tr class="inServer">
+				<td>201601200539</td>
+				<td>5000.00元</td>
+				<td>客服托管</td>
+				<td>3个月</td>
+				<td>2016-02-15至2016-05-14</td>
+				<td class="deepColor">按月</td>
+				<td class="deepColor">1500.00元</td>
+				<td class="deepColor">3000.00元</td>
+				<td class="deepColor">赵小冬</td>
+				<td class="status">服务中</td>
+			</tr>
+			<tr class="inServer">
+				<td>201601200539</td>
+				<td>5000.00元</td>
+				<td>客服托管</td>
+				<td>3个月</td>
+				<td>2016-02-15至2016-05-14</td>
+				<td class="deepColor">按月</td>
+				<td class="deepColor">1500.00元</td>
+				<td class="deepColor">3000.00元</td>
+				<td class="deepColor">赵小冬</td>
+				<td class="status">服务中</td>
+			</tr>
+			<tr class="inServer">
+				<td>201601200539</td>
+				<td>5000.00元</td>
+				<td>客服托管</td>
+				<td>3个月</td>
+				<td>2016-02-15至2016-05-14</td>
+				<td class="deepColor">按月</td>
+				<td class="deepColor">1500.00元</td>
+				<td class="deepColor">3000.00元</td>
+				<td class="deepColor">赵小冬</td>
+				<td class="status">服务中</td>
+			</tr>
+			<tr class="inServer">
+				<td>201601200539</td>
+				<td>5000.00元</td>
+				<td>客服托管</td>
+				<td>3个月</td>
+				<td>2016-02-15至2016-05-14</td>
+				<td class="deepColor">按月</td>
+				<td class="deepColor">1500.00元</td>
+				<td class="deepColor">3000.00元</td>
+				<td class="deepColor">赵小冬</td>
+				<td class="status">服务中</td>
+			</tr>
+			<tr class="notinServer">
+				<td>201601200539</td>
+				<td>5000.00元</td>
+				<td>客服托管</td>
+				<td>3个月</td>
+				<td>2016-02-15至2016-05-14</td>
+				<td class="deepColor">按月</td>
+				<td class="deepColor">1500.00元</td>
+				<td class="deepColor">3000.00元</td>
+				<td class="deepColor">赵小冬</td>
+				<td class="status">服务中</td>
+			</tr>
+			<tr class="notinServer">
+				<td>201601200539</td>
+				<td>5000.00元</td>
+				<td>客服托管</td>
+				<td>3个月</td>
+				<td>2016-02-15至2016-05-14</td>
+				<td class="deepColor">按月</td>
+				<td class="deepColor">1500.00元</td>
+				<td class="deepColor">3000.00元</td>
+				<td class="deepColor">赵小冬</td>
+				<td class="status">服务中</td>
+			</tr>
+			<tr class="notinServer">
+				<td>201601200539</td>
+				<td>5000.00元</td>
+				<td>客服托管</td>
+				<td>3个月</td>
+				<td>2016-02-15至2016-05-14</td>
+				<td class="deepColor">按月</td>
+				<td class="deepColor">1500.00元</td>
+				<td class="deepColor">3000.00元</td>
+				<td class="deepColor">赵小冬</td>
+				<td class="status">服务中</td>
+			</tr>
+			<tr class="notinServer">
+				<td>201601200539</td>
+				<td>5000.00元</td>
+				<td>客服托管</td>
+				<td>3个月</td>
+				<td>2016-02-15至2016-05-14</td>
+				<td class="deepColor">按月</td>
+				<td class="deepColor">1500.00元</td>
+				<td class="deepColor">3000.00元</td>
+				<td class="deepColor">赵小冬</td>
+				<td class="status">服务中</td>
+			</tr>
+			<tr class="notinServer">
+				<td>201601200539</td>
+				<td>5000.00元</td>
+				<td>客服托管</td>
+				<td>3个月</td>
+				<td>2016-02-15至2016-05-14</td>
+				<td class="deepColor">按月</td>
+				<td class="deepColor">1500.00元</td>
+				<td class="deepColor">3000.00元</td>
+				<td class="deepColor">赵小冬</td>
+				<td class="status">服务中</td>
+			</tr>-->
+		</table>
+	</div>
+</div>

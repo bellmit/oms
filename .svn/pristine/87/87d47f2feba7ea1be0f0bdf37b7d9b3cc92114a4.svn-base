@@ -1,0 +1,82 @@
+var qyApp = angular.module("qyApp", ['ngRoute', 'ngFileUpload', 'ui.router']);
+qyApp.config(function($stateProvider, $urlRouterProvider, $routeProvider, $httpProvider) {
+	if(sessionStorage.routeList) {
+		var routes = JSON.parse(sessionStorage.routeList);
+		angular.forEach(routes, function(v) {
+			$stateProvider
+				.state(v.name, {
+					url: "/" + v.name,
+					controller: v.name + "Controller",
+					templateUrl: v.url,
+					params: {
+						uiParams: ''
+					}
+				})
+		})
+		$.getJSON("route.json", function(data) {
+			angular.forEach(data, function(v) {
+				$stateProvider
+					.state(v.name, {
+						url: "/" + v.name + "/:param",
+						controller: v.name + "Controller",
+						templateUrl: v.url,
+						params: {
+							uiParams: ''
+						}
+					})
+			})
+		})
+		$.getJSON("insertRoute.json", function(data) {
+			angular.forEach(data, function(v) {
+				$stateProvider
+					.state(v.insertPage + "." + v.name, {
+						url: "/" + v.name + "/:param",
+						controller: v.name + "Controller",
+						templateUrl: v.url,
+						params: {
+							uiParams: ''
+						}
+					})
+			})
+		})
+		$httpProvider.interceptors.push('timestampMarker');
+	}
+});
+
+qyApp.factory('timestampMarker', ["$rootScope", function($rootScope) {
+	var timestampMarker = {
+		request: function(config) {
+			$rootScope.loading = true;
+			config.requestTimestamp = new Date().getTime();
+			var keyParams = JSON.parse(localStorage.keyParams);
+			keyParams.timestamp = config.requestTimestamp;
+			localStorage.keyParams = JSON.stringify(keyParams);
+			return config;
+		},
+		response: function(response) {
+			$rootScope.loading = false;
+			response.config.responseTimestamp = new Date().getTime();
+			return response;
+		},
+		responseError: function(response) {
+			if(!localStorage.keyParams) {
+				$rootScope.loading = false;
+				$('.re-login-wrapper,.maskBg').show();
+			} else {
+				console.log('response:' + response);
+				alertmsg("系统异常!", 'error');
+			}
+			return response;
+		}
+	};
+	return timestampMarker;
+}]);
+
+if(sessionStorage.routeList) {
+	document.write("<script src='qy_cas.js'></script>");
+	document.write("<script src='qy_pos.js'></script>");
+	document.write("<script src='qy_ss.js'></script>");
+	document.write("<script src='qy_tb.js'></script>");
+} else {
+	window.location.href = "../login.jsp";
+}

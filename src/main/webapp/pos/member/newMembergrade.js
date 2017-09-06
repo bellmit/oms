@@ -1,0 +1,323 @@
+qyApp.controller('newMembergradeController', ['$scope', '$http', '$compile', 'Upload','$timeout', function($scope, $http, $compile, Upload,$timeout) {
+	var i;
+	$scope.orgId = JSON.parse(localStorage.keyParams).orgId;
+	$scope.userInfo = JSON.parse(localStorage.userInfo);
+	//获取会员联盟列表
+	$scope.getMemberCard = function() {
+		$http({
+			method: 'post',
+			url: pos + 'membergrade/getAllMemberGrades',
+			params: {
+				keyParams: getKeyParams("{}", keyParams),
+				jsonObject: getJsonObject("{}")
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				$scope.data = data.data;
+				$scope.directInfos = $scope.data.directInfo;
+				$scope.directInfoLength = $scope.data.directInfo.length;
+				for(var i = 0; i < $scope.directInfoLength; i++) {
+					for(var j = 0; j < $scope.directInfos[i].brandList.length; j++) {
+						if($scope.directInfos[i].brandList[j].discount == "") {
+							$scope.directInfos[i].brandList[j].discount = "未设置";
+						} else {
+							$scope.discountD = $scope.directInfos[i].brandList[j].discount * 10;
+							$scope.directInfos[i].brandList[j].discount = $scope.discountD;
+						}
+					}
+				}
+				$scope.unionInfos = $scope.data.unionInfo;
+				$scope.unionInfosLength = $scope.unionInfos.length;
+				for(var m = 0; m < $scope.unionInfosLength; m++) {
+					for(var n = 0; n < $scope.unionInfos[m].unionList.length; n++) {
+						if($scope.unionInfos[m].unionList[n].discount == "") {
+							$scope.unionInfos[m].unionList[n].discount = "未设置";
+						} else {
+							$scope.discountD = $scope.unionInfos[m].unionList[n].discount * 10;
+							$scope.unionInfos[m].unionList[n].discount = $scope.discountD;
+						}
+					}
+				}
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		})
+	};
+	$scope.getMemberCard();
+	//获取所有品牌
+	$scope.getAllBrand = function() {
+		$http({
+			method: 'post',
+			url: pos + 'brand/getBrand',
+			params: {
+				keyParams: getKeyParams("{}", keyParams),
+				jsonObject: getJsonObject("{}")
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				$scope.brandList = data.data.brandList;
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		})
+	};
+
+	//（自营）修改会员卡类型/折扣
+	$scope.saveEditMemrGrade = function(obj) {
+		var brandDiscounts = [];
+		var brandDiscount;
+		var jsonObject = $("#memberGradeForm").serializeJson();
+		jsonObject = JSON.parse(jsonObject);
+		if(obj.brandList.length == 1) {
+			$scope.brandId = obj.brandList[0].brandId;
+			$scope.discount = (jsonObject.brandDiscount / 10).toFixed(2);
+			brandDiscount = {
+				"brandId": $scope.brandId,
+				"discount": $scope.discount
+			};
+			brandDiscounts.push(brandDiscount);
+		} else if(obj.brandList.length > 1) {
+			for(i = 0; i < obj.brandList.length; i++) {
+				$scope.brandId = obj.brandList[i].brandId;
+				$scope.discount = (jsonObject.brandDiscount[i] / 10).toFixed(2);
+				brandDiscount = {
+					"brandId": $scope.brandId,
+					"discount": $scope.discount
+				};
+				brandDiscounts.push(brandDiscount);
+			}
+		}
+		jsonObject.gradeId = obj.gradeId;
+		jsonObject.brandDiscount = brandDiscounts;
+		jsonObject = JSON.stringify(jsonObject);
+		$http({
+			method: 'post',
+			url: pos + 'membergrade/updateMemberGrade',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				alertmsg(data.msg);
+				$scope.getMemberCard();
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		})
+	};
+
+	//（自营）添加卡类型
+	$scope.addMemberCardType = function(event) {
+		if($(event.target).parents('tr').prev().is('.newCardType')) {
+			alertmsg('请先保存，再继续添加', "error")
+		} else {
+//			$scope.getAllBrand();
+			$http({
+				method: 'post',
+				url: pos + 'brand/getBrand',
+				params: {
+					keyParams: getKeyParams("{}", keyParams),
+					jsonObject: getJsonObject("{}")
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == "1") {
+					$scope.brandList = data.data.brandList;
+					if($scope.brandList.length == 0){
+						alertmsg("您还没有品牌，请先添加品牌", "error")
+					}else{
+						var NewCardType = [];
+						NewCardType.push('<tr class="newCardType">');
+						NewCardType.push('<td><input type="text" placeholder="" name="gradeName" /></td>');
+						NewCardType.push('<td><input type="text" placeholder="" name="level" /></td>');
+						NewCardType.push('<td>0个</td>');
+						NewCardType.push('<td class="nufourtd">');
+						NewCardType.push('<table class="cardTypeSetsmall">');
+						NewCardType.push('<tr ng-repeat="brandList in brandList">');
+						NewCardType.push('<td id="{{brandList.brandId}}">{{brandList.brandName}}</td>');
+						NewCardType.push('</tr></table></td>');
+						NewCardType.push('<td class="nufourtd">');
+						NewCardType.push('<table class="cardTypeSetsmall">');
+						NewCardType.push('<tr ng-repeat="brandList in brandList">');
+						NewCardType.push('<td>');
+						NewCardType.push('<input type="text" name="brandDiscount" />');
+						NewCardType.push('</td></tr></table></td>');
+						NewCardType.push('</td>');
+						NewCardType.push('<td class="td_editing">');
+						NewCardType.push('<a href="javascript:;" class="delTypeBtn am-ft-blue" ng-click="saveAddMemrGrade(brandList,$event)">保存</a><span>|</span><a href="javascript:;" class="delTypeBtn am-ft-red" ng-click="cancelAdd($event)">取消</a>');
+						NewCardType.push('</td>');
+						NewCardType.push('</tr>');
+						var html = NewCardType.join("");
+						var template = angular.element(html);
+						var newHtml = $compile(template)($scope);
+						angular.element($(event.target).parents('tr').before(newHtml));
+					}
+				} else {
+					alertmsg(data.msg, "error")
+				}
+			})
+		}
+	};
+	//取消新增
+	$scope.cancelAdd = function(event) {
+		$(event.target).parents('tr').remove();
+	};
+
+	//保存添加(自营)会员卡类型
+	$scope.saveAddMemrGrade = function(obj, event) {
+		var brandDiscounts = [];
+		var brandDiscount;
+		var jsonObject = $("#memberGradeForm").serializeJson();
+		jsonObject = JSON.parse(jsonObject);
+		if(obj.length == 1) {
+			$scope.brandId = obj[0].brandId;
+			if(jsonObject.brandDiscount != undefined) {
+					$scope.discount = (jsonObject.brandDiscount/ 10).toFixed(2);
+				} else {
+					$scope.discount = 0;
+				}
+			brandDiscount = {
+					"brandId": $scope.brandId,
+					"discount": $scope.discount
+				};
+				brandDiscounts.push(brandDiscount);
+		} else if(obj.length > 1) {
+			for(i = 0; i < obj.length; i++) {
+				$scope.brandId = obj[i].brandId;
+				if(jsonObject.brandDiscount[i] != undefined) {
+					$scope.discount = (jsonObject.brandDiscount[i] / 10).toFixed(2);
+				} else {
+					$scope.discount = 0;
+				}
+				brandDiscount = {
+					"brandId": $scope.brandId,
+					"discount": $scope.discount
+				};
+				brandDiscounts.push(brandDiscount);
+			}
+		}
+		jsonObject.brandDiscount = brandDiscounts;
+		jsonObject = JSON.stringify(jsonObject);
+		$http({
+			method: 'post',
+			url: pos + 'membergrade/addMemberGrade',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				alertmsg(data.msg);
+				$(event.target).parents('tr').remove();
+				$scope.getMemberCard();
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		})
+
+	};
+
+	//删除会员卡
+	$scope.deleteMemrGrade = function(id) {
+		$('.DelDialog,.maskBg').show();
+		$('.dialogBtn').delegate('.SavEdit', 'click', function() {
+			var jsonObject = "{" + "\"gradeId\":\"" + id + "\"}";
+			$http({
+				method: 'post',
+				url: pos + 'membergrade/deleteMemberGrade',
+				params: {
+					keyParams: getKeyParams(jsonObject, keyParams),
+					jsonObject: getJsonObject(jsonObject)
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == "1") {
+					alertmsg(data.msg);
+					$('.DelDialog,.maskBg').hide();
+					$scope.getMemberCard();
+				} else {
+					alertmsg(data.msg, "error")
+				}
+			})
+		});
+	};
+
+	//（联盟）修改联盟会员卡类型
+	$scope.saveEditMemrCloudGrade = function(obj, id) {
+		var memberUnionId = $(event.target).parents('.offsetMargin').attr("memid");
+		var jsonObject = $("#" + "memberCloudGradeForm" + memberUnionId).serializeJson();
+		jsonObject = JSON.parse(jsonObject);
+		$scope.discountA = (jsonObject.discount / 10).toFixed(2);
+		jsonObject.discount = $scope.discountA;
+		jsonObject.gradeId = obj.gradeId;
+		jsonObject.brandId = id;
+		jsonObject = JSON.stringify(jsonObject);
+		$http({
+			method: 'post',
+			url: pos + 'membergrade/updateCloudMemberGrade',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				alertmsg(data.msg);
+				$scope.getMemberCard();
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		})
+	};
+
+	//（联盟）添加联盟卡类型
+	$scope.addCloudMemberCardType = function(event) {
+		if($(event.target).parents('tr').prev().is('.newAddCardType')) {
+			alertmsg('请先保存，再继续添加', "error")
+		} else {
+			var NewCardType = [];
+			NewCardType.push('<tr class="newAddCardType">');
+			NewCardType.push('<td><input type="text" name="gradeName" value="" /></td>');
+			NewCardType.push('<td><input type="text" name="level" value="" /></td>');
+			NewCardType.push('<td>0个</td>');
+			NewCardType.push('<td><input type="text" name="discount" value="" /></td>');
+			NewCardType.push('<td class="td_editing">');
+			NewCardType.push('<a href="javascript:;" class="delTypeBtn am-ft-blue" ng-click="saveAddMemrCloudGrade($event)">保存</a>');
+			NewCardType.push('<span>|</span>');
+			NewCardType.push('<a href="javascript:;" class="delTypeBtn am-ft-red" ng-click="cancelAdd($event)">取消</a>');
+			NewCardType.push('</td>');
+			NewCardType.push('</tr>');
+			var html = NewCardType.join("");
+			var template = angular.element(html);
+			var newHtml = $compile(template)($scope);
+			angular.element($(event.target).parents('tr').before(newHtml));
+		}
+	};
+
+	//（联盟）保存添加联盟卡类型
+	$scope.saveAddMemrCloudGrade = function(event) {
+		var memberUnionId = $(event.target).parents('.offsetMargin').attr("memid");
+		var jsonObject = $("#" + "memberCloudGradeForm" + memberUnionId).serializeJson();
+		jsonObject = JSON.parse(jsonObject);
+		var discountG = (jsonObject.discount / 10).toFixed(2);
+		jsonObject.discount = discountG;
+		jsonObject.memberUnionId = memberUnionId;
+		jsonObject.brandId = $(event.target).parents('.offsetMargin').attr("brandid");
+		jsonObject = JSON.stringify(jsonObject);
+		$http({
+			method: 'post',
+			url: pos + 'membergrade/addCloudMemberGrade',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == "1") {
+				alertmsg(data.msg);
+				$(event.target).parents('tr').remove();
+				$scope.getMemberCard();
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		})
+	};
+
+}]);

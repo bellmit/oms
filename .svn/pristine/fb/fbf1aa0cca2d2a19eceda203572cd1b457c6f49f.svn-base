@@ -1,0 +1,382 @@
+qyApp.controller("saleSurveyController", function($timeout,$scope, $http, Upload, $compile, $route, $state, $stateParams, $timeout) {
+	/*竖向柱状图*/
+	var myChart1 = echarts.init(document.getElementById('charts1'));
+	var myChart2 = echarts.init(document.getElementById('charts2'));
+	var myChart3 = echarts.init(document.getElementById('charts3'));
+	var myChart4 = echarts.init(document.getElementById('charts4'));
+	var myChart5 = echarts.init(document.getElementById('charts5'));
+	var departId = JSON.parse(localStorage.userInfo).departId;
+	$scope.roleId = JSON.parse(localStorage.userInfo).roleId;
+	var keyParams=localStorage.keyParams;
+	var userInfo=eval('('+localStorage.userInfo+')');
+	$scope.userId=JSON.parse(localStorage.userInfo).userId;
+	/*判断登入账号有无下级部门*/
+	$scope.getUserInfoByUserId=function(){
+			var jsonObject={
+			userId:$scope.userId
+		}
+	jsonObject=JSON.stringify(jsonObject);
+		$http({
+			method: 'post',
+			url: cas + 'user/getUserInfoByUserId',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			console.log(data)
+			if(data.code == "1") {
+				$scope.childDepartCount=data.data.childDepartCount;
+				$scope.departName=data.data.departName;
+			} else {
+				alertmsg(data.msg, "error");
+			}
+		});
+	}
+	$scope.getUserInfoByUserId();
+	/*是否显示待处理显示框*/
+	$scope.isShow = '0';
+	$scope.getWorkbenchData = function() {
+		console.log(keyParams);
+		var jsonObject = {
+			departId: departId
+		};
+		jsonObject = JSON.stringify(jsonObject);
+		$http({
+			method: 'post',
+			url: pos + 'contract/getWorkbenchDataNew',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			console.log(data);
+			if(data.code == 1) {
+				$scope.model = data.data;
+				/*roleId 11 CEO 没有代办
+						12 财务人员 待审核
+						13 商务主管 没有代办
+						14 普通商务人员 没有代办
+						15 美工部主管 待分配
+						16 普通美工人员 待确认/服务中都算
+						17 运营主管 待分配
+						18 运营人员 待确认/服务中都算*/
+				if($scope.roleId== 11 || $scope.roleId == 13 || $scope.roleId == 14) {
+					$scope.isShow = '0';
+				} else {
+					$scope.isShow = '1';
+					//					roleId=12;
+					if($scope.roleId == 12) {
+						//						$scope.undeal=15;
+						$scope.undeal = $scope.model.checkContract;
+					} else if($scope.roleId == 15 || $scope.roleId == 17) {
+						$scope.undeal = $scope.model.taskContract;
+					} else if($scope.roleId == 16 || $scope.roleId == 18) {
+						$scope.undeal = Number($scope.model.serverContract) + Number($scope.model.receiveContract);
+					}
+					/*测试权限*/
+					//					else{
+					//						console.log(roleId)
+					//						$scope.undeal=$scope.model.checkContract;
+					//					}
+				}
+			} else {
+				alertmsg(data.msg, "error");
+			}
+		})
+	}
+	$scope.getWorkbenchData();
+	/*获取当前日期*/
+	var myDate = new Date();
+	$scope.year=myDate.getFullYear();
+	$scope.months=myDate.getMonth()+1;
+	$scope.data = myDate.getFullYear() + "-" + (1 + myDate.getMonth());
+	console.log($scope.data)
+	//将标准时间转化成日期格式
+	var formatDate = function (date) {
+	    var y = date.getFullYear();  
+	    var m = date.getMonth() + 1;  
+	    m = m < 10 ? '0' + m : m;  
+	    var d = date.getDate();  
+	    d = d < 10 ? ('0' + d) : d;  
+	    return y + '-' + m + '-' + d;  
+	};  
+	//获取当前月的第一天
+	function getCurrentMonthFirst(){
+	 var date=new Date();
+	 date.setDate(1);
+	 return date;
+	}
+	// 获取当前月的最后一天
+	function getCurrentMonthLast(){
+	 var date=new Date();
+	 var currentMonth=date.getMonth();
+	 var nextMonth=++currentMonth;
+	 var nextMonthFirstDay=new Date(date.getFullYear(),nextMonth,1);
+	 var oneDay=1000*60*60*24;
+	 return new Date(nextMonthFirstDay-oneDay);
+	}
+	$scope.firstDate=formatDate(getCurrentMonthFirst());
+	$scope.lastDate=formatDate(getCurrentMonthLast());
+	/*横向柱状图*/
+//	var myChart2 = echarts.init(document.getElementById('charts2'));
+//	 var builderJson = {
+//				"all": '50000.00',
+//				"charts": {
+//				    "客服": '24365.00',
+//				    "美工": '14365.00',
+//				    "运营": '12165.00',
+//				    "培训": '10043.00',
+//				    "套餐": '7043.00'
+//				}
+//				};
+//	var title2='3月产品销售业绩';
+//	var option2=barGraphCross(builderJson,title2);
+//	myChart2.setOption(option2);
+//	var myChart4 = echarts.init(document.getElementById('charts4'));
+//	 var builderJson = {
+//				"all": '50000.00',
+//				"charts": {
+//				    "张三新签一部": '24365.00',
+//				    "美工": '14365.00',
+//				    "运营": '12165.00',
+//				    "培训": '10043.00',
+//				    "套餐": '7043.00'
+//				}
+//				};
+//	var title4='3月产品销售业绩';
+//	var option4=barGraphCross(builderJson,title4);
+//	myChart4.setOption(option4);
+	
+	/*获取当前月销售情况*/
+	$scope.getSaleMonth=function(){
+		var jsonObject={
+			departId:userInfo.departId
+		}
+		jsonObject=JSON.stringify(jsonObject);
+		$http({
+			method: 'post',
+			url: stat + 'contractStat/getContractSale',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+//			console.log(data)
+			if(data.code == "1") {
+				$scope.contractStat=data.data.contractStat;
+			} else {
+				alertmsg(data.msg, "error");
+			}
+		});
+	}	
+	$scope.getSaleMonth();
+	/*获取当月各类产品销售情况*/
+	$scope.getSaleType=function(){
+		var jsonObject={
+			departId:userInfo.departId
+		}
+		jsonObject=JSON.stringify(jsonObject);
+		$http({
+			method: 'post',
+			url: stat + 'contractStat/getContractProductSaleForMonth',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			console.log(data)
+			if(data.code == "1") {
+			$scope.rsListType=data.data.rsList;
+			/*对数组进行排序*/
+			var boot=$scope.contractStat.totalAmount;
+			angular.forEach($scope.rsListType,function(e){
+				var width1=(e.serviceAmount/boot)*100;
+					width1=width1.toFixed(2);
+				e.width=(e.serviceAmount/boot)*100+'%';
+			});
+			} else {
+				alertmsg(data.msg, "error");
+			}
+		});
+	}
+	/*获取当年每月销售情况*/
+	$scope.getSaleYear=function(){
+		var jsonObject={
+			departId:userInfo.departId
+		}
+		jsonObject=JSON.stringify(jsonObject);
+		$http({
+			method: 'post',
+			url: stat + 'contractStat/getContractSaleForYear',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+//			console.log(data)
+			if(data.code == "1") {
+				$scope.rsList=data.data.rsList;
+				var data=[0,0,0,0,0,0,0,0,0,0,0,0];
+				angular.forEach($scope.rsList,function(e){
+					var tal=e.totalAmount/10000;
+					var mon=e.month;
+					/*去除0*/
+					var index=(~~mon-1);
+					data[index]=tal;
+				});
+			/*chart1*/
+			var dataAxis = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+			var color='#A1DDFA';
+			var title1=$scope.year+'年销售业绩';
+			var option1=barGraphVertical(dataAxis,data,color,title1);
+				myChart1.setOption(option1);
+				myChart2.setOption(option1);
+			} else {
+				alertmsg(data.msg, "error");
+			}
+		});
+	}
+	
+	/*获取当月及当日销售情况*/
+	$scope.getSaleMonthAndDay=function(){
+		var jsonObject={
+			pDepartId:userInfo.departId
+		}
+		jsonObject=JSON.stringify(jsonObject);
+		$http({
+			method: 'post',
+			url: stat + 'contractStat/getContractSaleForMonthAndDay',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			console.log(data)
+			if(data.code == "1") {
+				$scope.rsListPart=data.data.rsList;
+				var dataAxis5=[];
+				var data5=[];
+				var data6=[];
+				angular.forEach($scope.rsListPart,function(e){
+					data5.push(e.dayAmount/10000);
+					data6.push(e.monthAmount/10000);
+					dataAxis5.push(e.departName);
+				});
+				/*chart5  各部门业绩，每日与每月*/
+				var title5=$scope.departName+$scope.months+'月各部门销售业绩';
+				var option5=barGraphContrast(dataAxis5,data5,data6,title5);
+				myChart5.setOption(option5);
+				/*chart3  各部门业绩 每月*/
+				var color3=' #6FE7D0';
+				var title3=$scope.months+'月各部门销售业绩';
+				var option3=barGraphVertical(dataAxis5,data6,color3,title3);
+				myChart3.setOption(option3);
+			} else {
+				alertmsg(data.msg, "error");
+			}
+		});
+	}
+	
+	/*对数组进行排序*/
+	$scope.compare = function (property) {
+	    return function(a,b){
+	        var value1 = a[property];
+	        var value2 = b[property];
+        	return value1 - value2;
+   		 }
+	} 
+	/*人员业绩排行销售情况*/
+	$scope.getSaleSignrUser=function(){
+		var jsonObject={
+			departId:userInfo.departId,
+			taskType:"5",
+			beginTime:$scope.data,
+			endTime:$scope.data,
+			dayFlag:'Y',
+			nub:'0',
+			size:'10'
+		}
+		jsonObject=JSON.stringify(jsonObject);
+		console.log(jsonObject)
+		$http({
+			method: 'post',
+			url: stat + 'contractStat/getContractSaleForSignUser',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			console.log(data)
+			if(data.code == "1") {
+				$scope.rsListSign=data.data.rsList;
+				var boot=$scope.contractStat.totalAmount;
+				angular.forEach($scope.rsListSign,function(e){
+					var width1=(e.serviceAmount/boot)*100;
+					width1=width1.toFixed(2);
+					e.width=width1+'%';
+				});
+				var dataAxis4 = [];
+				var data5 = [];
+				var data4 = [];
+				angular.forEach($scope.rsListSign,function(e){
+					dataAxis4.push(e.trueName);
+					data5.push(e.serviceAmount);
+					data4.push(e.serviceAmountToday);
+				});
+				var title4=$scope.departName+$scope.months+'月个人销售业绩';
+				var option4=barGraphContrast(dataAxis4,data4,data5,title4);
+				myChart4.setOption(option4);
+			} else {
+				alertmsg(data.msg, "error");
+			}
+		});
+	}
+	/*查看部门详情*/
+	$scope.goPart=function(type){
+		if(type=='1'){
+			sessionStorage.productTab='2';
+		}else{
+			sessionStorage.productTab='1';
+		}
+		secMenu(378,"销售管理");
+		$timeout(function() {
+			secNode(455,0);
+		}, 50);
+//		$state.go('newSummary',{
+//			uiParams:productTab
+//		})
+	}
+		$timeout(function(){
+			$scope.getSaleType();
+			$scope.getSaleYear();
+			$scope.getSaleMonthAndDay();
+			$scope.getSaleSignrUser();
+		},300);
+	
+	
+		/*个人当月总业绩  $scope.rsListSign
+		    个人当日业绩 $scope.rsListSign2
+		 */
+	$timeout(function(){
+//		if($scope.rsListSign!=[]&&$scope.rsListSign2!=[]){
+//					var dataAxis4 = [];
+//					var data5 = [];
+//					var data4 = [];
+//					angular.forEach($scope.rsListSign,function(e){
+//						dataAxis4.push(e.trueName);
+//						data5.push(e.serviceAmount);
+//					});
+//					for(var i=0;i<dataAxis4.length;i++){
+//						for(var j=0;j<$scope.rsListSign2.length;j++){
+//							if(dataAxis4[i]==$scope.rsListSign2[j].trueName){
+//								data4.push($scope.rsListSign2[j].serviceAmount);
+//							}
+//						}
+//					}
+//					var title4='杭州续签部'+$scope.months+'月个人销售业绩';
+//					var option4=barGraphContrast(dataAxis4,data4,data5,title4);
+//					myChart4.setOption(option4);
+//				}
+	},300);
+});

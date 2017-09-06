@@ -1,0 +1,476 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--Ztree-->
+
+<!--遮罩 start-->
+
+<!--遮罩 end-->
+
+<!---- Content Wrapper start ---->
+<div class="content-wrapper">
+	<!-- Main content -->
+	<div class="col-md-11 pageTitl">
+		<h2 class="am-ft-16 fn-left">添加商品</h2>
+	</div>
+	<div class="fn-clear"></div>
+	<form id="addproductForm">
+		<section class="container-fluid">
+			<div class="row">
+				<div class="prodet-nav prodet-content">
+					<div class="prodet-box">
+						<!--row1-->
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>商品款号：</div>
+							<div class="col-md-2 form-group">
+								<input type="text" class="text-overflow" name="proModelnum" placeholder=""/>
+							</div>
+						</div>
+						<!----row2---->
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>所属品牌：</div>
+							<div class="col-md-2 form-group">
+								<select class="col-md-12" ng-options="m.brandId as m.brandName for m in queryBrands" ng-model="brandIds">
+									<input type="hidden" name="brandId" value="{{brandIds}}" />
+								</select>
+							</div>
+						</div>
+						<!----row3---->
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>品类：</div>
+							<div class="col-md-2 form-group pr0 mgr5" id="ProSorts">
+								<select class="col-md-12" ng-options="g.sortId as g.sortName for g in item0 | filter:'1660113'" ng-model="selectSortId0" ng-change="sortIdChange(selectSortId0,1)">
+								</select>
+							</div>
+							<div class="col-md-6 form-group pl0" id="ProSorts">
+								<select class="col-md-3 mgr5" ng-options="p.sortId as p.sortName for p in item1" ng-model="selectSortId1" ng-change="sortIdChange(selectSortId1,2)">
+								</select>
+								<select class="col-md-3" ng-show="item2.length != 0" ng-options="s.sortId as s.sortName for s in item2" ng-model="selectSortId2" ng-change="sortIdChange(selectSortId2,'3')">
+								</select>
+								<select class="col-md-3" ng-show="item3.length != 0" ng-options="x.sortId as x.sortName for x in item3" ng-model="selectSortId3">
+								</select>
+							</div>
+						</div>
+						<!--row4-->
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>单位：</div>
+							<div class="col-md-2 form-group">
+								<input type="text" placeholder=""/>
+							</div>
+						</div>
+						<!----row5---->
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14">商品属性：</div>
+							<div class="col-md-10 form-group pro-property">
+								<!--inner row1-->
+								<div class="row">
+									<div class="col-md-2 inprodet-titl am-ft-12"><em class="am-ft-red mgr5">*</em>年份：</div>
+									<div class="col-md-4 form-group">
+										<select name="proYear" class="col-md-8">
+											<option value="" >2017</option>
+											<option value="" >2017</option>
+											<option value="" >2017</option>
+										</select>
+									</div>
+									<div class="col-md-2 inprodet-titl am-ft-12"><em class="am-ft-red mgr5">*</em>季节：</div>
+									<div class="col-md-4 form-group">
+										<select name="proSeason" class="col-md-8">
+											<option value="春">春</option>
+											<option value="夏">夏</option>
+											<option value="秋">秋</option>
+											<option value="冬">冬</option>
+											<option value="四季">四季</option>
+										</select>
+									</div>
+								</div>
+								<!--inner row2-->
+								<div class="row">
+									<div class="col-md-2 inprodet-titl am-ft-12">波段：</div>
+									<div class="col-md-4 form-group">
+										<input type="text" class="col-md-8 text-overflow" name="proStage" placeholder="" />
+									</div>
+									<div class="col-md-2 inprodet-titl am-ft-12">廓形：</div>
+									<div class="col-md-4 form-group">
+										<input type="text" class="col-md-8 text-overflow" name="proStage" placeholder="" />
+									</div>
+								</div>
+								<!--inner row3-->
+								<div class="row">
+									<div class="col-md-2 inprodet-titl am-ft-12"><em class="am-ft-red mgr5">*</em>性别：</div>
+									<div class="col-md-4 form-group">
+										<select name="proSex" class="col-md-8">
+											<option value="F">男</option>
+											<option value="M">女</option>
+											<option value="FM">不限</option>
+										</select>
+									</div>
+									<div class="col-md-2 inprodet-titl am-ft-12">系列：</div>
+									<div class="col-md-4 form-group">
+										<input type="text" class="col-md-8 text-overflow" name="proSeries" placeholder="" />
+									</div>
+								</div>
+								<!--inner row4-->
+								<div class="row">
+									<div class="col-md-2 inprodet-titl am-ft-12">主题：</div>
+									<div class="col-md-4 form-group">
+										<select name="proSex" class="col-md-8">
+											<option value="F">男</option>
+											<option value="M">女</option>
+											<option value="FM">不限</option>
+										</select>
+									</div>
+									<div class="col-md-2 inprodet-titl am-ft-12">花型：</div>
+									<div class="col-md-4 form-group">
+										<select name="proSex" class="col-md-8">
+											<option value="F">男</option>
+											<option value="M">女</option>
+											<option value="FM">不限</option>
+										</select>
+									</div>
+								</div>
+								<!--inner row5-->
+								<div class="row">
+									<div class="col-md-2 inprodet-titl am-ft-12">领型：</div>
+									<div class="col-md-4 form-group">
+										<select name="proSex" class="col-md-8">
+											<option value="F">男</option>
+											<option value="M">女</option>
+											<option value="FM">不限</option>
+										</select>
+									</div>
+									<div class="col-md-2 inprodet-titl am-ft-12">袖型：</div>
+									<div class="col-md-4 form-group">
+										<select name="proSex" class="col-md-8">
+											<option value="F">男</option>
+											<option value="M">女</option>
+											<option value="FM">不限</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--row6-->
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>商品名称：</div>
+							<div class="col-md-8 form-group">
+								<input type="text" class="col-md-8 text-overflow" name="proName" placeholder="" />
+							</div>
+						</div>
+						<!----row7---->
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>价格：</div>
+							<div class="col-md-2 form-group needValInfo">
+								<input type="text" class="col-md-10 text-overflow" name="proPrice" placeholder="" value="" />&nbsp;元
+							</div>
+						</div>
+						<!----row8商品规格---->
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14">商品规格：</div>
+							<!----innerrow7-1 选择颜色---->
+							<div class="col-md-10 form-group pro-property saleSumary-wrapper pt10 pb0">
+								<!--inner row1-->
+								<div class="col-md-8 am-ft-12 am-ft-left paddinglr0 mgb0">
+									<span class="mgl10">请选择本商品规格</span>
+									<button class="addBtnBlue">+添加规格</button>
+								</div>
+								<div class="firstTab col-md-8  pl0 mgl0 addPro_tab" style="background: none;">
+									<ul class="fn-clear pl0">
+										<li class="fn-left">包装</li>
+										<li class="fn-left">口味</li>
+										<li class="fn-left">重量</li>
+									</ul>
+								</div>	
+								<div class="col-md-12 addStandard_wd">
+									<div class="fn-clear mgt10">
+										<label class="label-input">
+											<input type="checkbox"/>六瓶装
+										</label>
+										<label class="label-input">
+											<input type="checkbox"/>粉色
+										</label>
+										<label class="label-input">
+											<input type="checkbox"/>桃红
+										</label>
+										<label class="label-input">
+											<input type="checkbox"/>六瓶装
+										</label>
+										<label class="label-input">
+											<input type="checkbox"/>六瓶装
+										</label>
+										<label class="label-input">
+											<input type="checkbox"/>六瓶装
+										</label>
+										<label class="label-input">
+											<input type="checkbox"/>六瓶装
+										</label>
+										<label class="label-input">
+											<input type="checkbox"/>六瓶装
+										</label>
+										<label class="label-input">
+											<input type="checkbox"/>六瓶装
+										</label>
+										<label class="label-input">
+											<input type="checkbox"/>六瓶装
+										</label>
+										<label class="label-input">
+											<input type="checkbox"/>六瓶装
+										</label>
+										<label class="label-input">
+											<input type="checkbox"/>六瓶装
+										</label>
+										<label class="label-input">
+											<input type="checkbox"/>六瓶装
+										</label>
+										<label class="label-input">
+											<input type="checkbox"/>六瓶装
+										</label>
+										<label class="label-input">
+											<input type="checkbox"/>六瓶装
+										</label>
+										<label class="label-input">
+											<input type="checkbox"/>六瓶装
+										</label>
+									</div>
+									<div class="mgb10">
+										<button class="addBtnBlue mgl10">+添加自定义规格</button>
+										<span class="am-ft-gray">如果您觉得我们提供的规格无法满足您的需求，您可以手动添加自定义规格</span>
+									</div>
+								</div>	
+							</div>	
+							<!--规格-->
+							<div class="col-md-1 inprodet-titl">&nbsp;</div>
+							<div class="col-md-10 form-group table-responsive corlorSizeTable addPro_wd" style="margin-left: 9px;border:none;">
+								<div class="fn-clear">
+									<label class="label-input fn-left">
+										<input type="checkbox" />统一设置价格
+									</label>
+									<input type="text" class="fn-left"/>
+									<label class="label-input mgl10 fn-left">
+										<input type="checkbox" />统一设置库存
+									</label>
+									<input type="text" class="fn-left"/>
+								</div>
+								<div class="mgt10">
+								<table width="100%" class="table table-condensed "  style="border: 1px solid #dcdce7;">
+									<tr>
+										<th scope="col" width="25%">包装</th>
+										<th scope="col" width="25%">口味</th>
+										<th scope="col" width="25%">重量</th>
+										<th scope="col" width="25%">价格</th>
+										<th scope="col" width="25%">库存</th>
+									</tr>
+									<tr >
+										<td>礼盒</td>
+										<td>
+											口味1
+										</td>
+										<td>
+											10g
+										</td>
+										<td>
+											<input type="text" />
+										</td>
+										<td>
+											<input type="text" />
+										</td>
+									</tr>
+									<tr >
+										<td>礼盒</td>
+										<td>
+											口味2
+										</td>
+										<td>
+											10g
+										</td>
+										<td>
+											<input type="text" />
+										</td>
+										<td>
+											<input type="text" />
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="fn-clear"></div>
+						</div>
+						<!----row8商品图片---->
+						<div class="row proPic">
+							<div class="nowraps-text inprodet-titl am-ft-14 mgl15">商品图片：</div>
+							<div class="col-md-10">
+								<p class="am-ft-red">(请上传700*700以上图片，小于3M)</p>
+								<!--row1-->
+								<div class="mainPhot">
+									<div class="row">
+										<p class="am-ft-darkgray mgb15 col-md-12">
+											<span class="col-md-2">商品主图</span>
+											<span class="col-md-9 mgl35">细节图<em class="line"></em></span>
+										</p>
+										<div class="col-md-3" style="width: 20%">
+											<div class="photoBox">
+												<div class="photoBg">
+													<input type="file" name="files"  value="" />
+													<img alt="" src="http://static.qineasy.com/base/images/photobg.jpg" id="main1">
+												</div>
+												<div class="phoboxbt">
+													<a ><i class="fa fa-close"></i></a>
+													<a ><i class="fa fa-chevron-right"></i></a>
+													<a href="javascript:;" class="fn-hide"><i class="fa fa-chevron-left"></i></a>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-9">
+											<div class="photoBox">
+												<div class="photoBg">
+													<input type="file" name="files"  value="" />
+													<img alt="" src="http://static.qineasy.com/base/images/photobg.jpg" id="main2">
+												</div>
+												<div class="phoboxbt">
+													<a ><i class="fa fa-close"></i></a>
+													<a ><i class="fa fa-chevron-right"></i></a>
+													<a ><i class="fa fa-chevron-left"></i></a>
+												</div>
+											</div>
+											<div class="photoBox">
+												<div class="photoBg">
+													<input type="file" name="files"  value="" />
+													<img alt="" src="http://static.qineasy.com/base/images/photobg.jpg" id="main3">
+												</div>
+												<div class="phoboxbt">
+													<a ><i class="fa fa-close"></i></a>
+													<a ><i class="fa fa-chevron-right"></i></a>
+													<a ><i class="fa fa-chevron-left"></i></a>
+												</div>
+											</div>
+											<div class="photoBox">
+												<div class="photoBg">
+													<input type="file" name="files"  value="" />
+													<img alt="" src="http://static.qineasy.com/base/images/photobg.jpg" id="main4">
+												</div>
+												<div class="phoboxbt">
+													<a ><i class="fa fa-close"></i></a>
+													<a ><i class="fa fa-chevron-right"></i></a>
+													<a ><i class="fa fa-chevron-left"></i></a>
+												</div>
+											</div>
+											<div class="photoBox">
+												<div class="photoBg">
+													<input type="file" name="files"  value="" />
+													<img alt="" src="http://static.qineasy.com/base/images/photobg.jpg" id="main5">
+												</div>
+												<div class="phoboxbt">
+													<a ><i class="fa fa-close"></i></a>
+													<a ><i class="fa fa-chevron-right"></i></a>
+													<a ><i class="fa fa-chevron-left"></i></a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--row2-->
+								<div class="mainPhot">
+									<p class="am-ft-darkgray mgb10 col-md-12">
+										<span class="col-md-12">白色<em class="line"></em></span>
+									</p>
+									<div class="row">
+										<div class="col-md-3" style="width: 20%">
+											<div class="photoBox">
+												<div class="photoBg">
+													<input type="file" name=""  value="" />
+													<img alt="" src="http://static.qineasy.com/base/images/photobg.jpg">
+												</div>
+												<div class="phoboxbt">
+													<a ><i class="fa fa-close"></i></a>
+													<a ><i class="fa fa-chevron-right"></i></a>
+													<a href="javascript:;" class="fn-hide"><i class="fa fa-chevron-left"></i></a>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-9">
+											<div class="photoBox">
+												<div class="photoBg">
+													<input type="file" name=""  value="" />
+													<img alt="" src="http://static.qineasy.com/base/images/photobg.jpg">
+												</div>
+												<div class="phoboxbt">
+													<a><i class="fa fa-close"></i></a>
+													<a><i class="fa fa-chevron-right"></i></a>
+													<a><i class="fa fa-chevron-left"></i></a>
+												</div>
+											</div>
+											<div class="photoBox">
+												<div class="photoBg">
+													<input type="file" name="" value="" />
+													<img alt="" src="http://static.qineasy.com/base/images/photobg.jpg">
+												</div>
+												<div class="phoboxbt">
+													<a><i class="fa fa-close"></i></a>
+													<a><i class="fa fa-chevron-right"></i></a>
+													<a><i class="fa fa-chevron-left"></i></a>
+												</div>
+											</div>
+											<div class="photoBox">
+												<div class="photoBg">
+													<input type="file" name="" value="" />
+													<img alt="" src="http://static.qineasy.com/base/images/photobg.jpg">
+												</div>
+
+												<div class="phoboxbt">
+													<a><i class="fa fa-close"></i></a>
+													<a><i class="fa fa-chevron-right"></i></a>
+													<a><i class="fa fa-chevron-left"></i></a>
+												</div>
+											</div>
+											<div class="photoBox">
+												<div class="photoBg">
+													<input type="file" name="" value="" />
+													<img alt="" src="http://static.qineasy.com/base/images/photobg.jpg">
+												</div>
+												<div class="phoboxbt">
+													<a><i class="fa fa-close"></i></a>
+													<a><i class="fa fa-chevron-right"></i></a>
+													<a><i class="fa fa-chevron-left"></i></a>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						<!--/商品图片-->
+						<!--商品描述-->
+						<!-- 加载编辑器的容器 -->
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14">商品详情：</div>
+							<div class="col-md-10">
+								<script type="text/plain" id="editoraa"></script>
+								<!--<div class="errowTipnav">
+								 <small class="errowTip">&Cross;&nbsp;&nbsp;输入不能为空</small> 
+                      		 	</div>-->
+							</div>
+						</div>
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14"><em class="am-ft-red mgr5">*</em>运费模板：</div>
+							<div class="col-md-10">
+								<select style="width: 100px;">
+									<option>包邮</option>
+									<option>包邮</option>
+									<option>包邮</option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="nowraps-text inprodet-titl am-ft-14" style="height: 1px;"></div>
+							<div class="col-md-10">
+								<button type="button" class="btn btn-primary mgr10" ng-click="">确认添加</button>
+								<button type="button" class="btn btn-primary cancel_btna" ng-click="">取消</button>
+							</div>
+						</div>
+						<div class="fn-clear"></div>
+					</div>
+				</div>
+			</div>
+			<!-- /.row -->
+		</section>
+	</form>
+	<!-- /.content -->
+</div>
+<!----------------- Content Wrapper end ------------------->

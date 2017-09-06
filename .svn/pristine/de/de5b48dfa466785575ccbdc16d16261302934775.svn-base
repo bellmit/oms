@@ -1,0 +1,4 @@
+qyApp.controller('editWdProController', ['$scope', '$http', '$compile', '$state', '$stateParams', function($scope, $http, $compile, $state, $stateParams) {
+	
+}]);
+

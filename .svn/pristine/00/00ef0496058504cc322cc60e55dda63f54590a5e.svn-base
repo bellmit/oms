@@ -1,0 +1,48 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--------------- Content start ----------------->
+	<div class="content-wrapper content-wrapper-bossWb">
+		<div class="ManColTable col-lg-12">
+			<div class="workbench-top">
+				<div class="workbench-item">
+					<div class="workbench-item-img">
+						<img src="http://base-static.oss-cn-hangzhou.aliyuncs.com/base/images/workbench-item-img01.png" />
+					</div>
+					<h2>当月新增客户<a href="javascript:;" class="am-ft-blue">{{monthAddShop}}个</a></h2>
+					<p>
+						<span class="fn-left">上月新增<strong>{{lastMonthAddShop}}个</strong></span>
+						<span class="fn-left mgl25">本年新增<strong>{{yearAddShop }}个</strong>						
+					</p>
+					<a href="javascript:;" class="moreinfo" ng-click="goRoute('saleManage','1')">&raquo; 更多客户信息</a>
+				</div>
+				
+				<div class="workbench-item">
+					<div class="workbench-item-img">
+						<img src="http://base-static.oss-cn-hangzhou.aliyuncs.com/base/images/workbench-item-img02.png" />
+					</div>
+					<h2>当月新增合同<a href="javascript:;" class="am-ft-blue">{{monthAddContract}}份</a></h2>
+					<p>
+						<span class="fn-left">上月新增<strong>{{lastMonthAddContract}}份</strong></span>
+						<span class="fn-left mgl25">本年新增<strong>{{yearAddContract}}份</strong>						
+					</p>
+					<a href="javascript:;" class="moreinfo" ng-click="goRoute('saleManage','2')">&raquo; 更多合同信息</a>
+				</div>	
+				
+				<div class="workbench-item workbench-item-full">
+					<div class="workbench-item-img">
+						<img src="http://base-static.oss-cn-hangzhou.aliyuncs.com/base/images/workbench-item-img03.png" />
+					</div>
+					<h2>当月销售金额<a href="javascript:;" class="am-ft-blue">￥{{totalprice}}</a></h2>
+					<p>
+						<span class="fn-left">上月<strong>￥{{lastTotalprice}}</strong></span>
+						<span class="fn-left mgl20">下月<strong>￥{{nextTotalprice}}</strong></span>
+						<span class="fn-left mgl20">本年度<strong>￥{{yearTotalprice}}</strong></span>					
+					</p>
+					<a href="javascript:;" class="moreinfo" ng-click="goRoute('saleSummary','')">&raquo; 更多销售信息</a>
+				</div>					
+				<div class="fn-clear"></div>
+			</div>
+		</div>
+		<div class="fn-clear"></div>
+	</div>
+<!--------------- /Content end ----------------->
+</div>

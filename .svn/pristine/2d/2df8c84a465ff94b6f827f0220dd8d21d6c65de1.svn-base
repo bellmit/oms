@@ -1,0 +1,86 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--------------- Content start ----------------->
+	<div class="content-wrapper content-wrapper-bossWb">
+		<div class="ManColTable ManColTables">
+			<div class="workbench-nav" ng-if="isShow=='1'">
+				<img src="../static/base/images/icon_fire.png" />
+				<p ng-if="undeal==0||undeal==undefined" class="am-ft-black">无待处理合同提示</p>
+				<p class="am-ft-orange"  ng-if="undeal!=0 && undeal!=undefined">待处理：共有<a href="javascript:;" class="am-ft-red" ng-click="goRoute('saleManage','2')">{{undeal}}</a>个合同需处理</p>
+			</div>
+			<div class="workbench-top">
+				<div class="workbench-item">
+					<div class="workbench-item-img">
+						<img src="http://base-static.oss-cn-hangzhou.aliyuncs.com/base/images/workbench-item-img02.png" />
+					</div>
+					<div class="workbench-item-content">
+						<p>
+							<span style="font-size: 18px;">本月</span>
+							<span>新增合同</span>
+							<a  class="am-ft-blue">{{model.monthAddContract}}个</a>
+							<span>服务中</span>
+							<a  class="am-ft-blue">{{model.monthAddContractInservice}}个</a>
+							<span>到期</span>
+							<a  class="am-ft-blue">{{model.monthAddContractComplete}}个</a>
+						</p>
+						<p>
+							<span >本年新增合同<strong>{{model.yearContract}}个</strong></span>
+							<span class="mgl15">完结<strong>{{model.yearContractComplete}}个</strong></span>						
+							<span class="mgl15">终止<strong>{{model.yearContractEnd}}个</strong></span>						
+						</p>
+					<a href="javascript:;" class="moreinfo" ng-click="goRoute('saleManage','2')">&raquo; 更多合同信息</a>
+					</div>
+				</div>	
+				<div class="workbench-item">
+					<div class="workbench-item-img">
+						<img src="http://base-static.oss-cn-hangzhou.aliyuncs.com/base/images/workbench-item-img01.png" />
+					</div>
+					<div class="workbench-item-content">
+						<p>
+							<span  style="font-size: 18px;">本月</span>
+							<span>新增店铺</span>
+							<a  class="am-ft-blue">{{model.monthShop}}个</a>
+						</p>
+						<p>
+							<span class="">上月新增<strong>{{model.lastMonthShop}}个</strong></span>
+							<span class="mgl15">本年新增<strong>{{model.yearShop}}个</strong>						
+						</p>
+						<a href="javascript:;" class="moreinfo" ng-click="goRoute('saleManage','1')">&raquo; 更多客户信息</a>
+					</div>
+				</div>
+				<div class="workbench-item workbench-item-full">
+					<div class="workbench-item-img" style="width: 9%;">
+						<img src="http://base-static.oss-cn-hangzhou.aliyuncs.com/base/images/workbench-item-img03.png" />
+					</div>
+					<div class="workbench-item-content" style="width: 91%;">
+					<p class="workbench-item-content-p">
+						<span style="font-size: 18px;">本月</span>
+						<span>合同金额</span>
+						<a  class="am-ft-blue">￥{{model.monthTotalAmount|number:2}}</a>
+						<span>实收</span>
+						<a  class="am-ft-blue">￥{{model.monthReceiveAmount |number:2}}</a>
+						<span>待收</span>
+						<a  class="am-ft-blue">￥{{model.monthNotAmount |number:2}}</a>
+					</p>
+					<p class="workbench-item-content-p">
+						<span style="font-size: 18px;">总</span>
+						<span>待收金额</span>
+						<a  class="am-ft-blue">￥{{model.totalNotAmount|number:2}}</a>
+					</p>
+					<p>
+						<span class="fn-left am-ft-grayi">上月合同金额<strong>￥{{model.lastMonthTotalAmount |number:2}}</strong>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+						<span class="fn-left am-ft-grayi">实收金额<strong>￥{{model.lastMonthReceiveAmount |number:2}}</strong></span>
+					</p>
+					<p>
+						<span class="fn-left am-ft-grayi">本年合同金额<strong>￥{{model.yearTotalAmount |number:2}}</strong>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+						<span class="fn-left am-ft-grayi">实收金额<strong>￥{{model.yearReceiveAmount |number:2}}</strong></span>
+					</p>
+					<a href="javascript:;" class="moreinfo moreinfoa"  ng-click="goRoute('saleSummary','')">&raquo; 更多销售信息</a>
+					</div>
+				</div>					
+				<div class="fn-clear"></div>
+			</div>
+		</div>
+		<div class="fn-clear"></div>
+	</div>
+<!--------------- /Content end ----------------->
+</div>

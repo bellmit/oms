@@ -1,0 +1,85 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!-- 主要 -->
+<div class="wrapper" style="position: inherit;">
+<!--------------- Content start ----------------->
+    <div class="content-wrapper" >
+        <div class="col-md-11 pageTitl">
+            <h2 class="am-ft-16 fn-left">充值记录</h2>
+        </div>
+        <div class="fn-clear"></div>
+        <!-- content info start -->
+        <section class="container-fluid">
+            <div class="row">
+                <!-- search start -->
+                <form class="form-horizontal" id="">
+                <div class="productSearch productSearch-type2 voucherList-search">
+                        <div class="row">
+                        	<div class="fn-left">
+                                    <span class="">会员ID：</span>
+                                    <input type="text" ng-model="search.memberId" class="" name="" style="width: 145px;height: 30px;"/>
+                            </div>
+                        	<div class="fn-left  mgl20">
+                                    <span class="">卡号：</span>
+                                    <input type="text" ng-model="search.cardNum" class="" name="" style="width: 150px;height: 30px;"/>
+                            </div>
+                             <div class="fn-left mgl20">
+                                   <span class="fn-left">充值时间：</span>
+                                    <input class="laydate-icon " type="text"  onclick="laydate({max: laydate.now()})" name="beginDate" id="beginDate" value="" readonly="readonly" placeholder="" style="height: 30px;width: 110px;" />
+									<span class="mgl5 mgr5">至</span>
+									<input class="laydate-icon " type="text"  onclick="laydate({max: laydate.now()})" name="endDate" id="endDate" value="" readonly="readonly" placeholder="" style="height: 30px;width: 110px;" />
+                           </div>
+                            <div class="fn-left mgl20">
+                                <button type="button" class="grey-btn mgr20" ng-click="getChargeCard()">查询</button>
+                            </div>
+                        </div>
+                </div>
+                </form>
+                <!-- List start -->
+           <div class="proList-nav proList-nav-wd" style="border: none;">
+            <div class="proTop" style="border: 1px solid #dcdce7;"> 
+                <span class="fn-left">查询结果（共{{count}}条记录）</span>
+                <button  type="button" class="line-btn fn-right" ng-click="">导出excel</button>
+                <div class="fn-clear"></div>
+            </div>
+            <form id="wdProductListForm">
+                     <table class="table table-hover table-striped unoinListTable voucherListTable" >
+                    <tr class="">
+                        <th scope="col" style="width: 9%;">卡号</th>
+                        <th scope="col" style="width: 17%;">充值时间</th>
+                        <th scope="col" style="width: 8%;">金额</th>
+                        <th scope="col" style="width: 13%;">会员ID</th>
+                        <th scope="col" style="width: 9%;">密码</th>
+                        <th scope="col" style="width: 17%;">录入时间</th>
+                        <th scope="col" style="width: 17%;">激活时间</th>
+                        <th scope="col" >充值方式</th>
+                    </tr>
+                    <tr ng-repeat="chargeCard in chargeCardList">
+                    	<td>{{chargeCard.cardNum}}</td>
+                    	<td>{{chargeCard.useTime}}</td>
+                    	<td>{{chargeCard.amount}}</td>
+                    	<td>{{chargeCard.memberId}}</td>
+                    	<td>{{chargeCard.password}}</td>
+                    	<td>{{chargeCard.createTime}}</td>
+                    	<td>{{chargeCard.activiteTime}}</td>
+                    	<td>
+                    		<span ng-if="chargeCard.useWay=='0'">前台</span>
+                    		<span ng-if="chargeCard.useWay=='1'">后台</span>
+                    	</td>
+                    </tr>
+                </table>
+              <!-- List end -->
+            </form>
+            <div class="fn-clear"></div>
+            </div>
+          <div class="soldOut-batch fn-left" style="width: 33%;">
+                <button type="button" class="btn btn-default white-blue-btn" ng-click="batchDown()">导出excel</button>
+                <div class="fn-clear"></div>
+            </div>
+        </div>
+        </section>
+	    <!--分页 start-->
+	    <div class="pagelist priv-pagelist" style="width: 92.5% !important;">
+	    	<div id="paging"></div>    
+	    </div>
+	    <!--分页 end-->
+   </div>

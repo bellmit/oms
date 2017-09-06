@@ -1,0 +1,254 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<!--------------- Content start ----------------->
+<div class="contractCreate-wraper contractCreate-wraperaa fn-clear contractCreate-wraper-info">
+	<div class="col-md-11 fn-clear addContractBox">
+		<div class="fn-clear col-md-12 contractBaseInfoBox">
+			<div class="contractInfo col-md-12">
+				<div class="infoLine infoLinea fn-clear">
+					<div class="fn-left infoTitile">
+						合同编号：
+					</div>
+					<span class="color333 fn-left">20160912001231</span>
+					<div class="fn-left infoTitile">
+						合同类型：
+					</div>
+					<span class="color333">新签</span>
+				</div>
+				<div class="infoLine infoLineb fn-clear">
+					<div class="fn-left infoTitile">
+						商戶名称：
+					</div>
+					<span class="color333">西西小可 潮品女装</span>
+				</div>
+				<div class="infoLine infoLinee fn-clear">
+					<div class="fn-left infoTitile">
+						任务分配：
+					</div>
+					<div class="fn-left" style="width: 80%;">
+					<div class="task-Info">
+						<div class="infoLineBox fn-clear">
+							<div class="task-info-nav">
+								<span class="am-ft-black">新签分配－客服</span>
+								<span class="am-ft-gray">（服务部门：合肥客服部>V2部>女装一组   小王）</span>
+							</div>
+							<div class="col-md-12 task-info-content">
+								<div class="checkContractInfo col-md-11 fn-clear">
+									<div class="hasContractInfo fn-clear" id="financeService">
+										<div class="hasContractNo">1</div>
+										<div class="infoLineInfo">
+											<div class="fn-left">
+												<span class="am-ft-14 am-ft-black">分配区域</span>
+											</div>
+											<div class="passContractInfo fn-left fn-clear passContractInfo-task">
+												<div class="passContractInfoBox passContractInfoBoxR fn-clear">
+													<div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">计划上线时间：</div>
+															<div class="color333">2017-03-10 10:00</div>
+														</div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">服务区域：</div>
+															<div class="color333">武汉</div>
+														</div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">服务部门：</div>
+															<div class="color333">女装一组</div>
+														</div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">备注：</div>
+															<div class="color333 memoa">
+																<span>这是一段很长的备注这是一段很长的备注这是一段很长的备注这是一段很长的备注这是一段很长的备注</span>
+															</div>
+														</div>
+														<div class="passContractInfoBoxR1 task-info-footer  fn-clear">
+															<span class="">吴国飞</span>
+															<span class="mgl15 mgr15">客服部</span>
+															<span class="">2016-10-11</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="hasContractInfo fn-clear" id="financeService">
+										<div class="hasContractNo">2</div>
+										<div class="infoLineInfo">
+											<div class="fn-left">
+												<span class="am-ft-14 am-ft-black">部门分配</span>
+											</div>
+											<div class="passContractInfo fn-left fn-clear passContractInfo-task">
+												<div class="passContractInfoBox passContractInfoBoxR fn-clear">
+													<div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">执行人：</div>
+															<div class="color333">女装一组 小王</div>
+														</div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">服务区域：</div>
+															<div class="color333">武汉</div>
+														</div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">备注：</div>
+															<div class="color333 memoa">
+																<span>这是一段很长的备注这是一段很长的备注这是一段很长的备注这是一段很长的备注这是一段很长的备注</span>
+															</div>
+														</div>
+														<div class="passContractInfoBoxR1 task-info-footer  fn-clear">
+															<span class="">主管</span>
+															<span class="mgl15 mgr15">女装一组</span>
+															<span class="">2016-10-11</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="hasContractInfo fn-clear">
+										<div class="hasContractNo">3</div>
+										<div class="infoLineInfo">
+											<div class="fn-left">
+												<span class="am-ft-14 am-ft-black">执行人接收</span>
+											</div>
+											<div class="passContractInfo fn-left fn-clear passContractInfo-task">
+												<div class="passContractInfoBox passContractInfoBoxR fn-clear">
+													<div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">接受人意见：</div>
+															<div class="color333">同意</div>
+														</div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">实际上线时间：</div>
+															<div class="color333">2017－01-09 10:30</div>
+														</div>
+														<div class="passContractInfoBoxR1 task-info-footer  fn-clear">
+															<span class="">小王</span>
+															<span class="mgl15 mgr15">女装一组</span>
+															<span class="">2016-10-11</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="task-Info">
+						<div class="infoLineBox fn-clear">
+							<div class="task-info-nav">
+								<span class="am-ft-black">新签分配－美工</span>
+								<span class="am-ft-gray">（服务部门：合肥客服部>V2部>女装一组   小王）</span>
+							</div>
+							<div class="col-md-12 task-info-content">
+								<div class="checkContractInfo col-md-11 fn-clear">
+									<div class="hasContractInfo fn-clear" id="financeService">
+										<div class="hasContractNo">1</div>
+										<div class="infoLineInfo">
+											<div class="fn-left">
+												<span class="am-ft-14 am-ft-black">分配区域</span>
+											</div>
+											<div class="passContractInfo fn-left fn-clear passContractInfo-task">
+												<div class="passContractInfoBox passContractInfoBoxR fn-clear ">
+													<div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">计划上线时间：</div>
+															<div class="color333">2017-03-10 10:00</div>
+														</div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">服务区域：</div>
+															<div class="color333">武汉</div>
+														</div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">服务部门：</div>
+															<div class="color333">女装一组</div>
+														</div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">备注：</div>
+															<div class="color333 memoa">
+																<span>这是一段很长的备注这是一段很长的备注这是一段很长的备注这是一段很长的备注这是一段很长的备注</span>
+															</div>
+														</div>
+														<div class="passContractInfoBoxR1 task-info-footer  fn-clear">
+															<span class="">吴国飞</span>
+															<span class="mgl15 mgr15">客服部</span>
+															<span class="">2016-10-11</span>
+														</div>
+													</div>
+												</div>
+												<div class="am-ft-14 color999 fn-hide">待执行</div>
+											</div>
+										</div>
+									</div>
+									<div class="hasContractInfo fn-clear" id="financeService">
+										<div class="hasContractNo">2</div>
+										<div class="infoLineInfo">
+											<div class="fn-left">
+												<span class="am-ft-14 am-ft-black">部门分配</span>
+											</div>
+											<div class="passContractInfo fn-left fn-clear passContractInfo-task">
+												<div class="passContractInfoBox passContractInfoBoxR fn-clear ">
+													<div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">执行人：</div>
+															<div class="color333">女装一组 小王</div>
+														</div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">服务区域：</div>
+															<div class="color333">武汉</div>
+														</div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">备注：</div>
+															<div class="color333 memoa">
+																<span>这是一段很长的备注这是一段很长的备注这是一段很长的备注这是一段很长的备注这是一段很长的备注</span>
+															</div>
+														</div>
+														<div class="passContractInfoBoxR1 task-info-footer  fn-clear">
+															<span class="">主管</span>
+															<span class="mgl15 mgr15">女装一组</span>
+															<span class="">2016-10-11</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="hasContractInfo fn-clear">
+										<div class="hasContractNo">3</div>
+										<div class="infoLineInfo">
+											<div class="fn-left">
+												<span class="am-ft-14 am-ft-black">执行人接收</span>
+											</div>
+											<div class="passContractInfo fn-left fn-clear passContractInfo-task">
+												<div class="passContractInfoBox passContractInfoBoxR fn-clear fn-hide">
+													<div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">接受人意见：</div>
+															<div class="color333">同意</div>
+														</div>
+														<div class="passContractInfoBoxR1 fn-clear">
+															<div class="color999">实际上线时间：</div>
+															<div class="color333">2017－01-09 10:30</div>
+														</div>
+														<div class="passContractInfoBoxR1 task-info-footer  fn-clear">
+															<span class="">小王</span>
+															<span class="mgl15 mgr15">女装一组</span>
+															<span class="">2016-10-11</span>
+														</div>
+													</div>
+												</div>
+												<div class="am-ft-14 color999 ">待执行</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--</form>-->
+	</div>
+</div>

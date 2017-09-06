@@ -1,0 +1,339 @@
+/**
+ * Created by Zora Tao on 2016/6/12.
+ *
+ * Please backup before modification
+ * 修改前请备份
+ **/
+
+//编辑按钮
+function edit_btn(a){
+    $('.td_edit').show().next().hide().parent().find('input,select').prop('disabled',true);
+    $(a).parent().hide().next().show().parent().find('input,select').prop('disabled',false);
+};
+//取消按钮
+function cancel_btn(a){
+    $(a).parent().hide().prev().show().parent().find('input,select').prop('disabled',true);
+};
+//删除
+function delete_btn(a){
+    $(a).parents('tr').remove();
+};
+
+//弹窗显示/隐藏
+function Dialshow(){
+    $('.EditDialog,.maskBg').dialogShow();
+};
+
+function Dialhide(){
+    $('.EditDialog,.maskBg').dialogHide();
+};
+
+//进度条显示/隐藏
+function Progressshow(){
+    $('.progress').dialogShow();
+};
+function Progresshide(){
+    $('.progress').dialogHide();
+};
+
+//表头/尾名称编辑、保存、取消
+function editTitl (e){
+    $(e).hide();
+    $(e).parent('.sizeTitl').prev('input[type=text]').prop('disabled',false);
+    $(e).siblings('a[class^=sizeTitl]').show();
+};
+function cancelTitl (e){
+    $(e).parent('.sizeTitl').prev('input[type=text]').prop('disabled',true);
+    $(e).hide();
+    $(e).siblings('a[class^=sizeTitl]').hide();
+    $(e).siblings('.sizeTitl-edit').show();
+};
+
+var todoApp = angular.module("manaSizeApp", []);
+todoApp.controller("ManagSizeContr", function ($scope,$http) {
+
+    //刷新
+    $scope.reload = function(){
+        $http({
+            method:'post',
+            url:'http://127.0.0.1:8080/pos-api/size/getAllSize',
+            params:{
+                keyParams:getKeyParams('{}',keyParams),
+                jsonObject:getJsonObject('{}')
+            }
+        }).success(function(data,stauts,headers,config){
+            var grouplist = data.data.sizeGroup;
+            $scope.grouplist = grouplist;
+        })
+    };
+
+    //查询尺码组
+    $http({
+        method:'post',
+        url:'http://127.0.0.1:8080/pos-api/size/getAllSize',
+        params:{
+            keyParams:getKeyParams('{}',keyParams),
+            jsonObject:getJsonObject('{}')
+        }
+    }).success(function(data,stauts,headers,config) {
+        var grouplist = data.data.sizeGroup;
+        $scope.grouplist = grouplist;
+        //console.info(grouplist);
+    });
+
+    //删除
+//    $scope.remove = function(v) {
+//        var id ='{}';
+//        id = v.sizeId;
+//        console.info(id);
+//        $http({
+//            method:'post',
+//            url:'http://127.0.0.1:8080/pos-api/size/deleteSize',
+//            params:{
+//                keyParams:getKeyParams(id,keyParams),
+//                jsonObject:getJsonObject(id)
+//            }
+//        }).success(function(data,stauts,headers,config) {
+//
+//        });
+//    };
+
+    $scope.sizedex = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+
+});
+
+//尺码组名称编辑--保存
+function editGroupname(a){
+    var input = $(a).parent().prev('input[type=text]');
+    var groupid = input.attr('groupid');
+    var groupname = input.val();
+    var editGroupname;
+    editGroupname ={"groupId":groupid,"groupName":groupname};
+    var data = JSON.stringify(editGroupname);
+    console.info(data);
+    $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:8080/pos-api/sizeGroup/updateSizeGroup",
+        dataType: 'JSON',
+        data: {
+            keyParams: getKeyParams(data, keyParams),
+            jsonObject: getJsonObject(data)
+        },
+        success: function (data) {
+            if (data.code == 1) {
+                $('.alert').show();
+                $('.alert').removeClass('alert-danger').addClass('alert-success').children('h4').text('保存成功！');
+                $('.alert').children('p').text('');
+                //location.reload();
+            } else {
+                //input.addClass('error');
+                $('.alert').show();
+                $('.alert').children('p').text(data.msg);
+            }
+        },
+        error: function (e) {
+            alert("发生错误：" + e.status);
+        }
+    });
+}
+
+//尺码编辑--保存
+function editSize(a){
+    var tr = $(a).parents('tr');
+    var sizeid = tr.attr('sizeid');
+    var sizenum =tr.find('input[type=text].sizenum').val();
+    var index = tr.attr('sizeindex');
+    var sizeindex = tr.find('select.sizeindex').val();
+    var sizename = tr.find('input[type=text].sizename').val();
+    var editSize;
+    editSize ={"sizeId":sizeid,"sizeNum":sizenum,"sizeIndex":sizeindex,"sizeName":sizename};
+    var data = JSON.stringify(editSize);
+    console.info(data);
+    $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:8080/pos-api/size/updateSize",
+        dataType: 'JSON',
+        data: {
+            keyParams: getKeyParams(data, keyParams),
+            jsonObject: getJsonObject(data)
+        },
+        success: function (data) {
+            if (data.code == 1) {
+                $('.alert').show();
+                $('.alert').removeClass('alert-danger').addClass('alert-success').children('h4').text('保存成功！');
+                $('.alert').children('p').text('');
+                index = sizeindex;
+            } else {
+                $('.alert').show();
+                $('.alert').children('p').text(data.msg);
+            }
+        },
+        error: function (e) {
+            alert("发生错误：" + e.status);
+        }
+    });
+}
+//删除尺码
+function deletSize(a){
+    var tr = $(a).parents('tr');
+    var sizeid = tr.attr('sizeid');
+    var editSize;
+    editSize ={"sizeId":sizeid};
+    var data = JSON.stringify(editSize);
+    //console.info(data);
+    Dialshow();
+    $('.SavEdit').click(function(){
+        $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:8080/pos-api/size/deleteSize",
+            dataType: 'JSON',
+            data: {
+                keyParams: getKeyParams(data, keyParams),
+                jsonObject: getJsonObject(data)
+            },
+            success: function (data) {
+                if (data.code == 1) {
+                    $('.alert').show();
+                    $('.alert').removeClass('alert-danger').addClass('alert-success').children('h4').text('删除成功！');
+                    $('.alert').children('p').text('');
+
+                } else {
+                    $('.alert').show();
+                    $('.alert').children('h4').text('删除失败！');
+                    $('.alert').children('p').text(data.msg);
+                }
+            },
+            error: function (e) {
+                alert("发生错误：" + e.status);
+            }
+        });
+    })
+}
+
+//增加尺码
+function addNewSize(a){
+    var sizeDex='';
+    for (var d=1;d<21;d++){
+        sizeDex+='<option>'+d+'</option>';
+    }
+    var addLineColor='';
+    addLineColor+='<tr class="newAdd" sizeindex="">';
+    addLineColor+= '<td><input type="text" class="sizename" name="sizeName" value="" /></td>';
+    addLineColor+= '<td><input type="text" class="sizenum" name="sizeNum" value="" />';
+    addLineColor+= '<td><select class="sizeindex">'+sizeDex+'</select></td>';
+    addLineColor+= '<td class="td_edit" style="display:none"><button type="button" class="line-btn fn-left alterBtn col-lg-6" am-bg="blue" onclick="edit_btn(this)">编辑</button><button type="button" class="fn-left line-btn-delete col-lg-6" am-bg="white" onclick="deletSize(this)">删除</button></td>';
+    addLineColor+='<td class="td_editing" style="display:table-cell"><button type="button" class="line-btn fn-left alterBtn col-lg-6" am-bg="blue">保存</button><button type="button" class="fn-left line-btn-delete col-lg-6" am-bg="white" onclick="delete_btn(this)">取消</button></td>';
+    addLineColor+='</tr>';
+
+    $(a).parents('.addTr').before(addLineColor);
+
+    //保存新增
+    $('.td_editing').delegate('.alterBtn','click',function(){
+        var tr = $(this).parents('tr');
+        var groupid = tr.siblings().find('th input').attr('groupid');
+        var sizenum = tr.find('input[type=text].sizenum').val();
+        var index = tr.attr('sizeindex');
+        var sizeindex = tr.find('select.sizeindex').val();
+        var sizename = tr.find('input[type=text].sizename').val();
+        var editSize;
+        editSize ={"groupId":groupid,"sizeNum":sizenum,"sizeName":sizename,"sizeIndex":sizeindex};
+        var data = JSON.stringify(editSize);
+        console.info(data);
+        $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:8080/pos-api/size/addSize",
+            dataType: 'JSON',
+            data: {
+                keyParams: getKeyParams(data, keyParams),
+                jsonObject: getJsonObject(data)
+            },
+            success: function (data) {
+                if (data.code == 1) {
+                    $('.alert,.maskBg').show();
+                    $('.alert').removeClass('alert-danger').addClass('alert-success').children('h4').text('新增成功！');
+                    $('.alert').children('p').text('');
+                    index = sizeindex;
+                } else {
+                    $('.alert').show();
+                    $('.alert').children('h4').text('新增失败！');
+                    $('.alert').children('p').text(data.msg);
+                }
+            },
+            error: function (e) {
+                alert("发生错误：" + e.status);
+            }
+        });
+    });
+
+};
+
+//增加尺码组
+function addNewGroup(){
+    $('.newAddGroup').clone().removeClass('newAddGroup').appendTo('.manasizeTable');
+};
+
+//保存尺码组
+function saveSizeGroup(a){
+    var groupval = $(a).parent().prev('.groupTitlName').val();
+    var name;
+    name ={"groupName":groupval};
+    var data = JSON.stringify(name);
+    console.info(data);
+    $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:8080/pos-api/sizeGroup/addSizeGroup",
+        dataType: 'JSON',
+        data: {
+            keyParams: getKeyParams(data, keyParams),
+            jsonObject: getJsonObject(data)
+        },
+        success: function (data) {
+            if (data.code == 1) {
+                $('.alert').show();
+                $('.alert').removeClass('alert-danger').addClass('alert-success').children('h4').text('保存成功！');
+                $('.alert').children('p').text('');
+            } else {
+                $('.alert').show();
+                $('.alert').children('p').text(data.msg);
+            }
+        },
+        error: function (e) {
+            alert("发生错误：" + e.status);
+        }
+    });
+}
+
+//删除尺码组
+function deletSizeGroup(a){
+    var groupid = $(a).siblings('input.groupTitlName').attr('groupid');
+    var groupId ={"groupid":groupid};
+    var data = JSON.stringify(groupId);
+    console.info(data);
+    Dialshow();
+    $('.deletGroup').click(function(){
+        $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:8080/pos-api/sizeGroup/deleteSizeGroup",
+            dataType: 'JSON',
+            data: {
+                keyParams: getKeyParams(data, keyParams),
+                jsonObject: getJsonObject(data)
+            },
+            success: function (data) {
+                if (data.code == 1) {
+                    $('.alert').show();
+                    $('.alert').removeClass('alert-danger').addClass('alert-success').children('h4').text('删除成功！');
+                    $('.alert').children('p').text('');
+
+                } else {
+                    $('.alert').show();
+                    $('.alert').children('h4').text('删除失败！');
+                    $('.alert').children('p').text(data.msg);
+                }
+            },
+            error: function (e) {
+                alert("发生错误：" + e.status);
+            }
+        });
+    })
+}

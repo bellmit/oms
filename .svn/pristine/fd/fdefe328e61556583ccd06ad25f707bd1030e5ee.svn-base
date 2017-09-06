@@ -1,0 +1,186 @@
+qyApp.controller("memberMgtController", ["$scope", "$http", "Upload", "$compile", "$route", "$state", "$stateParams",function($scope, $http, Upload, $compile, $route, $state, $stateParams) {
+    var keyParam = JSON.parse(localStorage.keyParams);
+    $scope.orgid = keyParam.orgId;
+    var userInfo = JSON.parse(localStorage.userInfo);
+    $scope.orgTye = userInfo.orgType;
+    $scope.userName = userInfo.userName;
+    //$scope.roleId = userInfo.roleId;
+    $scope.roleId ='3';
+
+    //跳转人员详情页面
+    $scope.goToMemberDet = function(obj){
+    	var sourceArr=[{level:0,name:"memberMgt"}];
+		var params={
+			"source":sourceArr,
+			"type":"1",
+			"memberInfo":obj.userlist
+		};
+		
+		$state.go("memberDet", {
+			uiParams:params
+		});
+    };
+
+    var nubMem = "0";
+    var sizeMem = "10";
+    $scope.totalSum=0;
+    //获取人员管理列表（代运）
+    $scope.getUserListTB = function(){
+        var jsonObject = "{\"orgId\":\"" + $scope.orgid + "\",\"nub\":\"" + nubMem + "\",\"size\":\"" + sizeMem + "\"}";
+      $http({
+            method: 'post',
+            url: stat + 'orgManage/getUserListTB',
+            params: {
+                keyParams: getKeyParams(jsonObject, keyParams),
+                jsonObject: getJsonObject(jsonObject)
+            }
+        }).success(function(data, stauts, headers, config) {
+            if (data.code == 1) {
+                $scope.userList = data.data.userList;
+                $scope.totalSum = data.data.count;
+                if(Number($scope.totalSum) > Number(sizeMem)){
+                	$scope.createPagePluginMem($scope.totalSum,sizeMem);
+                }
+            } else {
+                alertmsg("获取信息失败", "error");
+            }
+        })
+    };
+    $scope.getUserListTB();
+    
+    $scope.createPagePluginMem=function(total,pageSize){
+	 	  $("#pagingMem").empty();
+	      paging = pagePlugin.createPaging({
+			    renderTo : 'pagingMem',
+			    total:total,
+			    pageSize:pageSize
+		  });
+	      paging.goPage = function(from,to){
+		      $scope.pageMem(from-1,pageSize);
+		  }			    	
+	};
+	
+	$scope.pageMem=function(from,pageSize){
+		var jsonObject="{\"orgId\":\""+$scope.orgid+"\",\"nub\":\""+from+"\",\"size\":\""+pageSize+"\"}";
+		 $http({
+			method: 'post',
+	        url: stat
+	        + 'orgManage/getUserListTB',
+	        params: {
+	            keyParams: getKeyParams(
+	            jsonObject, keyParams),
+	            jsonObject: getJsonObject(jsonObject)
+	        }
+	     }).success(function(data,stauts,headers,config){
+	    	 if(data.code=="1"){
+	    		 $scope.userList = data.data.userList;
+		}else{
+			alertmsg(data.msg,"error")
+		}
+	     })
+	 }
+
+    //跳转编辑页面
+    $scope.goToEditMember = function(obj){
+    	var sourceArr=[{level:0,name:"memberMgt"}];
+ 		var params={
+ 			"source":sourceArr,
+ 			"type":"1",
+	 		"telphone": obj.telphone,
+	        "roleName": obj.roleName,
+	        "status": obj.status,
+	        "userId": obj.userId,
+	        "orgId": obj.orgId,
+	        "userName": obj.userName,
+	        "trueName": obj.trueName,
+	        "email": obj.email
+ 		};
+ 		
+ 		$state.go("memberEdit", {
+ 			uiParams:params
+ 		});
+       
+    };
+
+    //人员注销
+    $scope.logOut = function(obj){
+        $('#logOutDialog2').center();
+        $('#logOutDialog2,.maskBg').show();
+        $scope.jsonObject = "{\"status\":\"" + "2" + "\",\"userId\":\"" + obj.userId + "\",\"trueName\":\"" + obj.trueName + "\",\"email\":\"" + obj.email + "\"}";
+    };
+    $scope.cancellation=function(){
+    	$http({
+            method: 'post',
+            url: cas + 'user/updateUser',
+            params: {
+                keyParams: getKeyParams($scope.jsonObject, keyParams),
+                jsonObject: getJsonObject($scope.jsonObject)
+            }
+       }).success(function(data, stauts, headers, config) {
+            if (data.code == 1) {
+                $scope.getUserListTB();
+                $('#logOutDialog2,.maskBg').hide();
+                alertmsg('注销人员成功');
+            } else {
+                alertmsg("注销人员失败", "error");
+            }
+       })
+    }
+
+	
+	
+	//重置密码	
+	$scope.resetPswd = function(obj){
+		$('#resetPwDialog,.maskBg').show();
+		$scope.jsonObject2 = "{\"userName\":\"" + obj.userName + "\",\"userId\":\"" + obj.userId + "\"}";			
+	}
+	   
+    $scope.resetPswdCnf = function(){
+    	$('#resetPwDialog,.maskBg').hide();
+    	$http({
+            method: 'post',
+            url: cas + 'user/resetPassWord',
+            params: {
+                keyParams: getKeyParams($scope.jsonObject2, keyParams),
+                jsonObject: getJsonObject($scope.jsonObject2)
+            }
+       }).success(function(data, stauts, headers, config) {
+            if (data.code == 1) {
+                $scope.getUserListTB();               
+                alertmsg('重置密码成功');
+            } else {
+                alertmsg("重置密码失败", "error");
+            }
+       })
+    }
+
+        //跳转添加人员页面  //1为代运，2为商户
+    $scope.goToAddMember = function(){
+    	var type = userInfo.orgType;
+        if(type=='6'){
+            $scope.roles=[{
+            	"roleId":"2",
+            	"roleName":"运营人员"},
+            	{
+            	"roleId":"5",
+            	"roleName":"商务人员"}]
+        }else if(type=='1'){
+            $scope.roles=[{
+            	"roleId":"4",
+            	"roleName":"商户人员"}]
+        }
+        var sourceArr=[{level:0,name:"memberMgt"}];
+		var params={
+			"source":sourceArr,
+			"type":"1",
+			"orgId":userInfo.orgId,
+			"roles":$scope.roles
+		};
+		
+		$state.go("memberAdd", {
+			uiParams:params
+		});
+         
+    }
+    
+}]);

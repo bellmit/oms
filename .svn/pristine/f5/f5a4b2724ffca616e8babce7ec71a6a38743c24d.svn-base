@@ -1,0 +1,169 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+
+<!-- 主要 -->
+<div class="wrapper" style="position: inherit;">
+<!--------------- Content start ----------------->
+    <!--<div class="content-wrapper" ng-hide="numA==1||numB==1||numC==1">-->
+    <div class="content-wrapper" >
+        <div class="col-md-11 pageTitl">
+            <h2 class="am-ft-16 fn-left">分类列表</h2>
+        </div>
+        <div class="fn-clear"></div>
+        <!-- content info start -->
+        <section class="container-fluid">
+           <div class="proList-nav classifyList-nav">
+            <div class="proTop">
+                <span class="fn-left">分类列表(共4条记录)</span>
+                <button  type="button" class="line-btn fn-right width100" ng-click="addClassifyPro()">添加分类</button>
+                <div class="fn-clear"></div>
+            </div>
+                <table width="100%" class="mgb0 table-hover table-condensed productTable" id='classifyAdd'> 
+                  <tr>
+                    <th width="20%"    valign="middle" scope="col">分类名称</th>
+                    <th width="16%" align="center" valign="middle" scope="col">商品数量</th>
+                    <th width="20%" align="center" valign="middle" scope="col">添加时间</th>
+                    <th width="22%" align="center" valign="middle" scope="col">操作</th>
+                   <th  align="center" valign="middle" scope="col">位置</th>
+                  </tr>
+                 <tr  ng-repeat='item in list track by $index'>
+                   <td width="2%">
+                  	<div class="editClassifyName" ng-if='item.status=="1"'>
+	                   	<input type="text" id="" data="" name="modelId" class="code_checkbox " value="" /><br />
+	                   	<span class="am-ft-d4" ng-click='classifyStatus("0",item)'>保存</span>
+	                   	<span  class="am-ft-d4">取消</span>
+                   	</div>
+                   	<div class=""  ng-if='item.status=="0"'>
+                   		<span>{{item.name}}</span>
+                   		<img src="../static/base/images/icon_edit.png" ng-click='classifyStatus("1",item)'/>
+                   	</div>
+                   </td>
+                    <td >
+                        32个
+                   </td>
+                    <td >
+                        2017-01-15
+                    </td>
+                    <td>
+                    	<span class="am-ft-d4 mgr15" ng-click='setClassifyPro()'>设置</span>
+                    	<span class="am-ft-gray">删除</span>
+                    </td>
+                    <td class="uptodown">
+                    	<img src='../static/base/images/Combined Shape1.png'  ng-click="uptodown('1',$index,item)"/>
+                    	<img src='../static/base/images/Combined Shape Copy 2.png' ng-click="uptodown('2',$index,item)"/>
+                    	<img src='../static/base/images/Combined Shape Copy 3.png' ng-click="uptodown('3',$index,item)"/>
+                    	<img src='../static/base/images/Combined Shape Copy 4.png' ng-click="uptodown('4',$index,item)"/>
+                    </td>
+                  </tr>
+                  <!--<tr >
+                   <td width="2%">
+                  	<div class="editClassifyName" ng-if='model.status=="1"'>
+	                   	<input type="text" id="" data="" name="modelId" class="code_checkbox " value="" /><br />
+	                   	<span class="am-ft-d4" ng-click='classifyStatus("0")'>保存</span>
+	                   	<span  class="am-ft-d4">取消</span>
+                   	</div>
+                   	<div class=""  ng-if='model.status=="0"'>
+                   		<span>分类名称</span>
+                   		<img src="../static/base/images/icon_edit.png" ng-click='classifyStatus("1")'/>
+                   	</div>
+                   </td>
+                    <td >
+                        32个
+                   </td>
+                    <td >
+                        2017-01-15
+                    </td>
+                    <td>
+                    	<span class="am-ft-d4 mgr15">设置</span>
+                    	<span class="am-ft-gray">删除</span>
+                    </td>
+                    <td class="uptodown">
+                    	<img src='../static/base/images/Combined Shape1.png' />
+                    	<img src='../static/base/images/Combined Shape Copy 2.png' />
+                    	<img src='../static/base/images/Combined Shape Copy 3.png' />
+                    	<img src='../static/base/images/Combined Shape Copy 4.png' />
+                    </td>
+                  </tr>-->
+                  <tr ng-if='model.addClassify=="1"'>
+                   <td width="2%">
+                  	<div class="editClassifyName">
+	                   	<input type="text" id="" data="" name="modelId" class="code_checkbox " value="" /><br />
+	                   	<span class="am-ft-d4" ng-click='classifyStatus("0")'>保存</span>
+	                   	<span  class="am-ft-d4">取消</span>
+                   	</div>
+                   	<div class="fn-hide" >
+                   		<span>分类名称</span>
+                   		<img src="../static/base/images/icon_edit.png" ng-click='classifyStatus("1")'/>
+                   	</div>
+                   </td>
+                    <td >
+                        32个
+                   </td>
+                    <td >
+                        2017-01-15
+                    </td>
+                    <td>
+                    	<span class="am-ft-d4 mgr15">设置</span>
+                    	<span class="am-ft-gray">删除</span>
+                    </td>
+                    <td class="uptodown">
+                    	<img src='../static/base/images/Combined Shape1.png' />
+                    	<img src='../static/base/images/Combined Shape Copy 2.png' />
+                    	<img src='../static/base/images/Combined Shape Copy 3.png' />
+                    	<img src='../static/base/images/Combined Shape Copy 4.png' />
+                    </td>
+                  </tr>
+              </table>
+              <!-- List end -->
+            <div class="fn-clear"></div>
+        </div>
+        </section>
+	    <!--分页 start-->
+	    <div class="pagelist priv-pagelist" style="width: 92.5% !important;">
+	    	<div id="paging"></div>    
+	    </div>
+	    <!--分页 end-->
+   </div>
+    <!--下架弹框-->
+    <div class="maskbgCover fn-hide" id="downProduct">
+	<div class="isTipsFrame ">
+		<div class="isTipsFrameTitle">
+			<span class="am-ft-14 am-ft-black">提示</span>
+			<img class="fn-right closeDia" ng-click="closeDia()" src="../static/base/images/closelogo.png" />
+		</div>
+		<div class="isTipsFrameContent am-ft-14 fn-clear">
+			<div class="fn-left wdpro-frameL">
+				<img src="../static/base/images/icon_cue.png" />
+			</div>
+			<div class="fn-left wdpro-frameR">
+				<p class="am-ft-black am-ft-14">确认下架</p>
+				<p class="am-ft-black am-ft-12">下架后，商品不对用户可见，是否确认下架？ </p>
+			</div>
+		</div>
+		<div class="isTipsFrameFooter">
+			<button class="closeDia whiteGroundBlueBtn" ng-click="">取消</button>
+			<button class="blueGroundWhiteBtn" ng-click="">下架</button>
+		</div>
+	</div>
+</div>
+    <!--/下架弹框-->
+<script type="text/javascript">
+    //搜索方式
+    $(".isTipsFrame").center();
+  //二维码尺寸滑块选择
+    $('.set-codeSize').click(function(){
+        $('.codeSize-dialog').toggle();
+    });
+    function DoSaveAsIMG(proModelid) {  
+        if (document.getElementById("IframeReportImg"+proModelid).src != "about:blank")  
+            document.frames["IframeReportImg"+proModelid].document.execCommand("SaveAs",true,"C://Users//时爽//Downloads//123.png");          
+    }
+	/* $('.searchtp').change(function(){
+	        if($(this).prop('checked') && $(this).attr('num')==1){
+	            $('.productSearch-type1').show();
+	            $('.productSearch-type2').hide();
+	        }else if($(this).prop('checked') && $(this).attr('num')==2 ){
+	            $('.productSearch-type2').show();
+	            $('.productSearch-type1').hide();
+	        }
+	 }); */
+</script>

@@ -1,0 +1,38 @@
+qyApp.controller("bWorkBenchController",  function($scope, $http, Upload, $compile,$route, $state, $stateParams) {
+	
+	/*获取工作台数据(合同、客户、销售额)*/
+	$scope.getWorkbenchData = function() {
+		$http({
+			method: 'post',
+			url: pos + 'contract/getWorkbenchData',
+			params: {
+				keyParams: getKeyParams("{}", keyParams),
+				jsonObject: getJsonObject("{}")
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.yearTotalprice = data.data.yearTotalprice;
+				$scope.nextTotalprice = data.data.nextTotalprice;
+				$scope.lastTotalprice = data.data.lastTotalprice;
+				$scope.totalprice = data.data.totalprice;
+				$scope.yearAddShop = data.data.yearAddShop;
+				$scope.monthAddShop = data.data.monthAddShop;
+				$scope.lastMonthAddShop = data.data.lastMonthAddShop;
+				$scope.monthAddContract = data.data.monthAddContract;
+				$scope.yearAddContract = data.data.yearAddContract;
+				$scope.lastMonthAddContract = data.data.lastMonthAddContract;
+			} else {
+				alertmsg(data.msg, "error");
+			}
+		})
+	}
+	$scope.getWorkbenchData();
+	
+	$scope.goRoute = function(routeName,type) {
+		params = {
+				"type": type
+			};
+		//跳转
+		$state.go(routeName, {uiParams:params});		
+	}
+});

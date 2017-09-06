@@ -1,0 +1,22 @@
+qyApp.controller('addClassifyProController', ['$scope', '$http', '$compile', 'Upload', function($scope, $http, $compile, Upload) {
+
+$scope.model={
+	'isShowFrame':'0'
+}
+/*添加商品*/
+$scope.addProduct=function(){
+	$scope.model.isShowFrame='1';
+	
+	
+}
+$scope.closeDia=function(){
+	$scope.model.isShowFrame='0';
+}
+
+
+
+
+
+
+
+}])

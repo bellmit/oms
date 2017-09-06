@@ -1,0 +1,460 @@
+qyApp.directive('constractSearch', function() {
+	return {
+		restrict: "EACM",
+		replace: true,
+		require: '?ngModel',
+		templateUrl: "../tb/saleMgt/saleManage/saleModel/saleSearch.html",
+		transclude: true
+	}
+});
+qyApp.controller("saleManageController", function($scope, $http, Upload, $compile, $route, $state, $stateParams) {
+	/*tab选项卡*/
+	
+	//	$scope.inputName = "客户名称";
+	//	$scope.placeholder = "请输入客户名称";
+	var from=0;
+	var pageSize=15;
+	var total=0;
+	$scope.from = "0";
+	$scope.pageSize = "10";
+	//	$scope.searchType = "1"; /*查询商户*/
+	$scope.orgId = (angular.fromJson(keyParams)).orgId;
+
+	//查询合同列表
+	$scope.getContracts =function(){
+		$scope.param=JSON.parse($('#search').serializeJson());
+		if($scope.param.inputId){
+			$scope.param.contractId=$scope.param.inputId.substring(6);
+		}		
+		$scope.param.roleId=JSON.parse(localStorage.userInfo).roleId;
+		$scope.param.departId=JSON.parse(localStorage.userInfo).departId;
+		//$scope.param=jsonObject.roleId;
+		
+		$scope.jsonPage={"nub":""+from+"","size":""+pageSize+""};
+		$.extend($scope.jsonPage,$scope.param);
+		$scope.jsonObject=JSON.stringify($scope.jsonPage);
+		
+		$http({
+			method: 'post',
+			url: pos + 'contract/getContract',
+			params: {
+				keyParams: getKeyParams($scope.jsonObject, keyParams),
+				jsonObject: getJsonObject($scope.jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				console.log(data)
+				if(data.data.contractList){
+					$scope.contractList = data.data.contractList;
+					$scope.createPagePlugin(data.data.count,pageSize);
+				}
+			} else {
+				alertmsg("查询失败", "error")
+			}
+		});
+	}
+	/*默认加载合同列表*/
+	if($stateParams.uiParams.productTab == "1"){
+		$scope.productTab = "1";
+		$scope.placeholder = "请输入客户名称";
+		$scope.searchType = "1"; /*查询商户*/
+		$scope.baseUrl = stat;
+		$scope.url = 'orgManage/getCustomerList';
+		$scope.loadOrgList();
+		$scope.inputName = "客户名称";
+	}else{
+		$scope.productTab = "2";
+		$scope.placeholder = "请输入合同编号";
+		$scope.inputName = "合同编号";
+		$scope.searchType = "2"; /*查询合同*/
+		$scope.url = 'contract/getContract';
+		$scope.baseUrl = pos;
+		$scope.getContracts();
+	} 
+	/*获取当前时间*/
+	var myDate = new Date();
+	$scope.data = myDate.getFullYear() + "-" + (1 + myDate.getMonth()) + "-" + myDate.getDate();
+	/*计算合同结束日期跟当前日期的差值*/
+	$scope.daysBetween = function(DateOne, DateTwo) {
+		var OneMonth = DateOne.substring(5, DateOne.lastIndexOf('-'));
+		var OneDay = DateOne.substring(DateOne.length, DateOne.lastIndexOf('-') + 1);
+		var OneYear = DateOne.substring(0, DateOne.indexOf('-'));
+		var TwoMonth = DateTwo.substring(5, DateTwo.lastIndexOf('-'));
+		var TwoDay = DateTwo.substring(DateTwo.length, DateTwo.lastIndexOf('-') + 1);
+		var TwoYear = DateTwo.substring(0, DateTwo.indexOf('-'));
+
+		var cha = ((Date.parse(OneMonth + '/' + OneDay + '/' + OneYear) - Date.parse(TwoMonth + '/' + TwoDay + '/' + TwoYear)) / 86400000);
+		return cha;
+	};
+	/*计算合同结束日期跟当前日期的差值*/
+	//	$scope.url = 'orgManage/getCustomerList';
+	//	$scope.baseUrl = stat;
+	$scope.shiftProductTab = function(index) {
+			$scope.contractNum = "";
+			$scope.productTab = index;
+			$scope.saler = "";
+			$scope.contractType = ""
+			if($scope.productTab == "1") {
+				$scope.placeholder = "请输入商户名称";
+				$scope.searchType = "1"; /*查询商户*/
+				$scope.baseUrl = stat;
+				$scope.url = 'orgManage/getCustomerList';
+				$scope.loadOrgList();
+				$scope.inputName = "商户名称";
+			} else if($scope.productTab == "2") {
+				
+				var roleId=JSON.parse(localStorage.userInfo).roleId;
+				/*if(roleId=="13"||roleId=="15"||roleId=="17"||roleId=="14"){
+					$scope.productTab='3'
+				}*/
+				//$scope.productTab='3'
+					
+				$scope.placeholder = "请输入合同编号";
+				$scope.inputName = "合同编号";
+				$scope.searchType = "2"; /*查询合同*/
+//				$scope.url = 'contract/getContract';
+//				$scope.baseUrl = pos;
+//				$scope.getContractList();
+				$scope.getContracts();
+			}
+		}
+		/*tab选项卡*/
+		/*查询查询模块的销售人员数据*/
+	$scope.loadSalers = function() {
+		var jsonObject = {
+			trueName: "",
+			roleIds: "",
+			roleId: "5",
+			manageOrgId: "",
+			orgId: "",
+			userName: "",
+			nub: "0",
+			size: "0"
+		};
+		jsonObject = angular.toJson(jsonObject);
+		$http({
+			method: 'post',
+			url: cas + 'user/getUserList',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.userLists = data.data.userList;
+				$scope.firstObj = {
+					appId: "",
+					count: "",
+					email: "",
+					manageOrgId: "",
+					orgId: "",
+					orgName: "",
+					roleId: "",
+					roleName: "",
+					status: "",
+					telphone: "",
+					trueName: "请选择",
+					userId: "",
+					userName: ""
+				};
+				$scope.userLists.unshift($scope.firstObj);
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		});
+	};
+	//$scope.loadSalers();
+	/*查询查询模块的销售人员数据*/
+	/*查询地区数据*/
+	$scope.loadAreaList = function() {
+		var jsonObject = {};
+		jsonObject = angular.toJson(jsonObject);
+		$http({
+			method: 'post',
+			url: pos + 'shop/getProvinceBypOrgId',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				$scope.provinceLists = data.data.provinceList;
+				$scope.firstObj = {
+					"province": "全部"
+				}
+				$scope.provinceLists.unshift($scope.firstObj);
+			} else {
+				alertmsg(data.msg, "error")
+			}
+		});
+	}
+	//$scope.loadAreaList();
+
+	/*查询地区数据*/
+	/*查询*/
+	/*查询全部*/
+	$scope.getContractList = function() {
+		var jsonObject = {
+			"province": "",
+			"pOrgId": $scope.orgId,
+			"orgId": "",
+			"userId": "",
+			"contractNum": "",
+			"contractType": "",
+			/*(0 服务中 1 已到期)*/
+			"nub": $scope.from,
+			"size": $scope.pageSize
+		};
+		jsonObject = angular.toJson(jsonObject);
+		$scope.loadContractList(jsonObject, "$scope.createPagePlugin($scope.count, $scope.pageSize,'paging1')");
+	}
+
+	$scope.loadContractList = function(jsonObject, createPage) {
+			$http({
+				method: 'post',
+				url: $scope.baseUrl + $scope.url,
+				//			url: "http://10.0.17.224:8080"+ $scope.url,
+				params: {
+					keyParams: getKeyParams(jsonObject, keyParams),
+					jsonObject: getJsonObject(jsonObject)
+				}
+			}).success(function(data, stauts, headers, config) {
+				if(data.code == 1) {
+					if(data.data.contractList) {
+						$scope.contractLists = data.data.contractList;
+						$scope.contractCount = data.data.contractCount;
+						$scope.shopCount = data.data.shopCount;
+						$scope.count = data.data.count;
+						angular.forEach($scope.contractLists, function(ele, index) {
+							if($scope.daysBetween($scope.data, ele.enddate) <= 0) {
+								ele.status = "服务中";
+							} else {
+								ele.status = "已到期";
+							}
+						});
+						if($scope.count > 10) {
+							eval(createPage);
+						} else {
+							$("#paging1").empty();
+						}
+					} else if(data.data.shopList) {
+						$scope.shopLists = data.data.shopList;
+						$scope.contractCount = data.data.contractCount;
+						$scope.shopCount = data.data.shopCount;
+						$scope.count = data.data.count;
+						angular.forEach($scope.shopLists, function(ele, index) {
+							if($scope.daysBetween($scope.data, ele.enddate) <= 0) {
+								ele.status = "服务中";
+							} else {
+								ele.status = "已到期";
+							}
+							if(ele.totalprice == "") {
+								ele.totalprice = "0";
+							}
+						});
+						if(createPage!=""){
+							if($scope.count > 5) {
+								$scope.createPagePlugin1($scope.count,'5','paging2');
+							} else {
+								$("#paging2").empty();
+							}
+						}
+					}
+				} else {
+					alertmsg(data.msg, "error")
+				}
+			});
+		}
+		//		$scope.getContractList();
+		/*点击查询按钮*/
+		/*加载商户列表*/
+	$scope.loadOrgList = function() {
+			var jsonObject = {
+				province: "",
+				shopName: "",
+				userId: "",
+				contractType: "",
+				/*合同状态(0 服务中 1 已到期)*/
+				nub: "0",
+				size: "5"
+			}
+			jsonObject = angular.toJson(jsonObject);
+			$scope.loadContractList(jsonObject, "$scope.createPagePlugin($scope.shopCount,'1','paging2')");
+		}
+		//	$scope.loadOrgList();
+		/*加载商户列表*/
+	$scope.searchData = function() {
+			if($scope.province == "全部") {
+				$scope.provincea = "";
+			}else{
+				$scope.provincea = $scope.province;
+			}
+			if($scope.searchType == "1") {
+				if($scope.contractNum == undefined || $scope.contractNum == "") {
+					$scope.contractNum = "";
+				}
+				var jsonObject = {
+					province: $scope.provincea,
+					shopName: $scope.contractNum,
+					userId: $scope.saler,
+					contractType: $scope.contractType,
+					/*合同状态(0 服务中 1 已到期)*/
+					nub: "0",
+					size: "2"
+				}
+				jsonObject = angular.toJson(jsonObject);
+				$scope.loadContractList(jsonObject, "$scope.createPagePlugin($scope.count,'1','paging2')");
+			} else if($scope.searchType == "2") { /*合同列表的查询*/
+//				if($scope.contractNum == undefined || $scope.contractNum == "") {
+//					$scope.contractNum = "";
+//				}
+//				var jsonObject = {
+//					province: $scope.provincea,
+//					pOrgId: $scope.orgId,
+//					orgId: "",
+//					userId: $scope.saler,
+//					contractNum: $scope.contractNum,
+//					contractType: $scope.contractType,
+//					/*(0 服务中 1 已到期)*/
+//					nub: $scope.from,
+//					size: $scope.pageSize
+//				}
+//				jsonObject = angular.toJson(jsonObject);
+//				$scope.loadContractList(jsonObject, "$scope.createPagePlugin($scope.count, $scope.pageSize,'paging1')");
+				$scope.getContracts();
+			}
+		}
+		/*点击查询按钮*/
+		/*查询*/
+		/*分页代码*/
+	$scope.createPagePlugin1 = function(total, pageSize, pageId) {
+		$("#" + pageId + "").empty();
+		paging = pagePlugin.createPaging({
+			renderTo: pageId,
+			total: total,
+			pageSize: pageSize
+		});
+		paging.goPage = function(from, to) {
+			$scope.page2(from - 1, pageSize);
+		}
+	};
+	$scope.page2 = function(from, pageSize) {
+			if($scope.searchType == "1") {
+				if($scope.contractNum == undefined || $scope.contractNum == "") {
+					$scope.contractNum = "";
+				}
+				var jsonObject = {
+					shopName: $scope.contractNum,
+					userId: $scope.saler,
+					contractType: $scope.contractType,
+					/*合同状态(0 服务中 1 已到期)*/
+					nub: from + '',
+					size: pageSize
+				}
+			}
+			jsonObject = angular.toJson(jsonObject);
+			$scope.loadContractList(jsonObject, "");
+		}
+		/*分页代码*/
+	
+	$scope.createPagePlugin = function(total, pageSize) {
+		$("#paging1").empty();
+		paging = pagePlugin.createPaging({
+			renderTo: 'paging1',
+			total: total,
+			pageSize: pageSize
+		});
+		paging.goPage = function(from, to) {
+			$scope.page(from - 1, pageSize);
+		}
+	};
+	//$scope.param="";
+	$scope.page = function(from, pageSize) {
+		$scope.jsonPage={"nub":""+from+"","size":""+pageSize+""};
+		$.extend($scope.jsonPage,$scope.param);
+		$scope.jsonObject=JSON.stringify($scope.jsonPage);
+		//$scope.froma = from;
+		$http({
+			method: 'post',
+			url: pos + 'contract/getContract',
+			params: {
+				keyParams: getKeyParams($scope.jsonObject, keyParams),
+				jsonObject: getJsonObject($scope.jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			if(data.code == 1) {
+				if(data.data.contractList){
+					$scope.contractList = data.data.contractList;
+				}
+			} else {
+				alertmsg("查询失败", "error")
+			}
+		});
+	}
+		/*选择商户的代码*/
+		/*点击添加按钮*/
+	$scope.pageInfo = {};
+	$scope.rootArr = [];
+	$scope.addData = function(rootName, rootGoname, obj, productTab) {
+			$scope.pageInfo = obj;
+			$scope.rootPage = {
+				level: 0,
+				name: rootName
+			};
+			$scope.rootArr.push($scope.rootPage)
+			$stateParams.uiParams = {
+				orgInfo: $scope.pageInfo,
+				source: $scope.rootArr,
+				type: "1",
+				productTab: productTab
+			};
+			$state.go(rootGoname, {
+				uiParams: $stateParams.uiParams
+			})
+		}
+		/*点击添加按钮*/
+		/*查看合同详情*/
+	$scope.contractInfo = function(obj) {
+			$scope.pageInfo = obj;
+			$scope.rootPage = {
+				level: 0,
+				name: "saleManage"
+			};
+			$scope.rootArr.push($scope.rootPage)
+			$stateParams.uiParams = {
+				orgInfo: $scope.pageInfo,
+				source: $scope.rootArr,
+				type: "1",
+				productTab: "2"
+			};
+			$state.go("contractInfo", {
+				uiParams: $stateParams.uiParams
+			})
+
+		}
+		/*查看客户详情*/
+	$scope.clientInfo = function(obj) {
+		$state.go("orgInfo", {
+				uiParams: $stateParams.uiParams
+			})
+	}
+	
+
+	//路由跳转的时候type为1,不是路由跳转的时候为0
+	$scope.type = "0";
+	//判读是否路由跳转
+	if($stateParams.uiParams.tabtype!=undefined) {
+		$scope.type = "1";
+		$scope.shiftProductTab($stateParams.uiParams.tabtype);
+	}
+	
+	//跳转回工作台
+	$scope.gobWorkBench = function() {
+		//跳转
+		$state.go("bWorkBench", {});		
+	}
+	
+	/********************new**************************/
+
+
+});

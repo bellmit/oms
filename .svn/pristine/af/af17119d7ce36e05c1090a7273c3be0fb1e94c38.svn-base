@@ -1,0 +1,77 @@
+qyApp.controller("bWorkBenchController",  function($scope, $http, Upload, $compile,$route, $state, $stateParams,$timeout) {
+	var departId=JSON.parse(localStorage.userInfo).departId;
+	var roleId=JSON.parse(localStorage.userInfo).roleId;
+	/*获取工作台数据(合同、客户、销售额)*/
+	$scope.model={};
+	/*是否显示待处理显示框*/
+	$scope.isShow='0';
+	$scope.getWorkbenchData = function() {
+		console.log(keyParams);
+		var jsonObject={
+			departId:departId
+		};
+		jsonObject=JSON.stringify(jsonObject);
+		$http({
+			method: 'post',
+			url: pos + 'contract/getWorkbenchDataNew',
+			params: {
+				keyParams: getKeyParams(jsonObject, keyParams),
+				jsonObject: getJsonObject(jsonObject)
+			}
+		}).success(function(data, stauts, headers, config) {
+			console.log(data);
+			if(data.code == 1) {
+				$scope.model=data.data;
+				/*roleId 11 CEO 没有代办
+						12 财务人员 待审核
+						13 商务主管 没有代办
+						14 普通商务人员 没有代办
+						15 美工部主管 待分配
+						16 普通美工人员 待确认/服务中都算
+						17 运营主管 待分配
+						18 运营人员 待确认/服务中都算*/
+				if(roleId==11||roleId==13||roleId==14){
+					$scope.isShow='0';
+				}else{
+					$scope.isShow='1';
+//					roleId=12;
+					if(roleId==12){
+//						$scope.undeal=15;
+						$scope.undeal=$scope.model.checkContract;
+					}else if(roleId==15||roleId==17){
+							$scope.undeal=$scope.model.taskContract;
+					}else if(roleId==16||roleId==18){
+							$scope.undeal=Number($scope.model.serverContract)+ Number($scope.model.receiveContract);
+					}
+						/*测试权限*/
+//					else{
+//						console.log(roleId)
+//						$scope.undeal=$scope.model.checkContract;
+//					}
+				}
+			} else {
+				alertmsg(data.msg, "error");
+			}
+		})
+	}
+	$scope.getWorkbenchData();
+	/*页面跳转*/
+	$scope.goRoute = function(routeName,type) {
+		params = {
+				"tabtype": type
+			};
+		//跳转
+		if(type == "1" || type == "2"){
+			secMenu(378,"销售管理");
+			$timeout(function() {
+				secNode(379,0);
+	         }, 50);
+		}else{
+			secMenu(378,"销售管理");
+			$timeout(function() {
+				secNode(380,0);
+	         }, 50);
+		}
+		$state.go(routeName, {uiParams:params});		
+	}
+});
